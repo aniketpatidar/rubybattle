@@ -8,14 +8,12 @@
   </p>
 
   <p class="text-sm">
-    Posted by: <%= post.user.full_name %>
+    <%= link_to post.user.full_name, "/#{post.user.slug}", class: "underline" %>
   </p>
 
-  <% if action_name != "show" %>
-    <%= link_to "Show this post", post, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-    <% if current_user == post.user %>
-      <%= link_to "Edit this post", edit_post_path(post), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
-    <hr class="mt-6">
-    <% end %>
+  <%= link_to "Show this post", post, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+  <% if current_user == post.user %>
+    <%= link_to "Edit this post", edit_post_path(post), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
+  <hr class="mt-6">
   <% end %>
 </div>

@@ -1,0 +1,8 @@
+<div class="w-full flex flex-col items-center">
+  <h1 class="text-4xl"><%= @user.full_name %></h1>
+  <div class="w-full flex flex-col gap-4">
+    <% @user.posts.each do |post| %>
+      <%= render "posts/post", post: post %>
+    <% end %>
+  </div>
+</div>

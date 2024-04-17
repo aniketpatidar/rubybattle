@@ -13,7 +13,7 @@
     </p>
 
     <p class="text-sm">
-      Posted by: <%= @post.user.full_name %>
+      <%= link_to @post.user.full_name, "/#{@post.user.slug}", class: "underline" %>
     </p>
 
     <% if current_user == @post.user %>
