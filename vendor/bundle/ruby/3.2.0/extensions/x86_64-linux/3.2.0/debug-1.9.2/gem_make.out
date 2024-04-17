@@ -1,0 +1,19 @@
+current directory: /home/dev08/battle/vendor/bundle/ruby/3.2.0/gems/debug-1.9.2/ext/debug
+/home/dev08/.asdf/installs/ruby/3.2.2/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /home/dev08/battle/vendor/bundle/ruby/3.2.0/gems/debug-1.9.2/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20240416-4584-18q1h4 sitelibdir\=./.gem.20240416-4584-18q1h4 clean
+
+current directory: /home/dev08/battle/vendor/bundle/ruby/3.2.0/gems/debug-1.9.2/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20240416-4584-18q1h4 sitelibdir\=./.gem.20240416-4584-18q1h4
+compiling debug.c
+compiling iseq_collector.c
+linking shared-object debug/debug.so
+
+current directory: /home/dev08/battle/vendor/bundle/ruby/3.2.0/gems/debug-1.9.2/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20240416-4584-18q1h4 sitelibdir\=./.gem.20240416-4584-18q1h4 install
+/usr/bin/install -c -m 0755 debug.so ./.gem.20240416-4584-18q1h4/debug
+
+current directory: /home/dev08/battle/vendor/bundle/ruby/3.2.0/gems/debug-1.9.2/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20240416-4584-18q1h4 sitelibdir\=./.gem.20240416-4584-18q1h4 clean
