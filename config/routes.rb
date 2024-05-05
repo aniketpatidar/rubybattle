@@ -8,6 +8,12 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Defines the root path route ("/")
-  root "posts#index"
+  root "invitations#index"
+  resources :invitations, only: [:index, :create] do
+    member do
+      post :accept
+      post :decline
+    end
+  end
   get "/:slug", to: "profile#show"
 end

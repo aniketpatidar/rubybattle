@@ -1,0 +1,60 @@
+<!-- app/views/invitations/index.html.erb -->
+<div class="grid grid-cols-4 gap-4">
+  <div class="col-span-2">
+    <div>
+      <h1 class="text-2xl font-bold mb-4">Friends</h1>
+      <ul id="friendsList">
+        <% current_user.friends.each do |friend| %>
+          <li class="px-4 py-2 text-gray-300 bg-gray-700 rounded-md w-40 mb-4">
+            <%= link_to friend.slug, "/#{friend.slug}", class: "underline" %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+  <div class="col-span-2">
+    <div>
+      <h1 class="text-2xl font-bold mb-4">Make friends</h1>
+      <ul>
+        <% @users.each do |user| %>
+          <% unless current_user == user || current_user.friend_with?(user) || Invitation.reacted?(current_user.id, user.id) %>
+            <li class="flex items-center justify-between mb-4">
+              <%= link_to user.slug, "/#{user.slug}", class: "underline" %>
+              <%= form_with(url: invitations_path, method: :post, local: true) do |form| %>
+                <%= form.hidden_field :user_id, value: user.id %>
+                <%= form.submit "Connect", class: "px-4 py-2 text-gray-300 bg-gray-700 rounded-md cursor-pointer" %>
+              <% end %>
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+    <div>
+      <ul>
+        <% current_user.received_invitations.each do |invitation| %>
+          <div class="flex space-x-2">
+            <li class="flex items-center justify-between mb-4">
+              <%= link_to invitation.user.slug, "/#{invitation.user.slug}", class: "underline" %> sent you an invitation
+              <%= button_to "Accept", accept_invitation_path(invitation), method: :post, class: "px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600" %>
+              <%= button_to "Decline", decline_invitation_path(invitation), method: :post, class: "px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600" %>
+            </li>
+          </div>
+        <% end %>
+      </ul>
+    </div>
+    <div>
+      <ul>
+        <% current_user.sent_invitations.each do |invitation| %>
+          <div class="flex space-x-2">
+            <li class="text-lg mb-4">
+              You sent an invitation to <%= link_to invitation.friend.slug, "/#{invitation.friend.slug}", class: "underline" %>
+              <span class="px-4 py-2 bg-gray-400 text-white rounded-md">
+                Pending
+              </span>
+            </li>
+          </div>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>
