@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.59.4/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.59.4/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.59.4/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.59.4/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.59.4/mode/ruby/ruby.min.js"></script>
+    <style>
+      button[data-action="click->codemirror#run"] {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      button[data-action="click->codemirror#run"]:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+<body>
+  <div class="flex flex-row min-h-screen">
+    <!-- CodeMirror Editor Section -->
+    <div data-controller="codemirror" class="flex-1 p-4">
+      <textarea data-target="codemirror.editor" class="w-full h-full"></textarea>
+      <button data-action="click->codemirror#run" class="mt-2">Run</button>
+    </div>
+
+    <!-- Output Section -->
+    <div id="output" class="flex-1 p-4">
+      <h2 class="text-lg font-semibold text-gray-900">Execution Output:</h2>
+      <pre id="executionResult" class="text-sm text-gray-800 overflow-auto h-full"></pre>
+    </div>
+  </div>
+</body>
+</html>

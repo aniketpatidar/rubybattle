@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'home/index'
   resources :posts
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -15,5 +16,7 @@ Rails.application.routes.draw do
       post :decline
     end
   end
+  get "dashboard", to: "home#index"
+  post 'execute_ruby', to: 'ruby_execution#execute'
   get "/:slug", to: "profile#show"
 end
