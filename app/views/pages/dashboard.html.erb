@@ -1,0 +1,26 @@
+<div class="container mx-auto">
+  <table class="table-auto w-full">
+    <thead>
+      <tr>
+        <th class="px-4 py-2"></th>
+        <th class="px-4 py-2">Email</th>
+        <th class="px-4 py-2">Username</th>
+      </tr>
+    </thead>
+    <tbody class="text-center">
+      <% @users.each do |user| %>
+        <tr>
+          <td class="border px-4 py-2">
+            <% if user.avatar&.present? %>
+              <div class="flex justify-center">
+                <%= image_tag user.avatar, class: "h-16 w-16 object-cover rounded-full" %>
+              </div>
+            <% end %>
+          </td>
+          <td class="border px-4 py-2"><%= user.email %></td>
+          <td class="border px-4 py-2"><%= user.slug %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

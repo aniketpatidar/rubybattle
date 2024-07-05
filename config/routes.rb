@@ -9,14 +9,20 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Defines the root path route ("/")
-  root "invitations#index"
+  authenticated  do
+    root "pages#dashboard"
+  end
+
+  unauthenticated do
+    root "pages#home", as: :unauthenticated_root
+  end
   resources :invitations, only: [:index, :create] do
     member do
       post :accept
       post :decline
     end
   end
-  get "dashboard", to: "home#index"
+  # get "dashboard", to: "home#index"
   post 'execute_ruby', to: 'ruby_execution#execute'
   get "/:slug", to: "profile#show"
 end

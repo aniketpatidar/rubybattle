@@ -22,6 +22,15 @@
         </div>
 
         <div class="field mb-4">
+          <%= f.label :avatar, class: "mb-2 text-lg" %><br />
+          <%= f.select :avatar,
+             [["Cooool Cactus", "cool-cactus.png"], ["DOGE", "cool-doge.png"], ["Funky Duck", "cool-duck.png"], ["Coolest duck", "coolest-duck.jpg"]],
+             { include_blank: false },
+             class: "w-full rounded-lg bg-gray-50"
+          %>
+        </div>
+
+        <div class="field mb-4">
           <%= f.label :password, class: "mb-2 text-lg" %>
           <% if @minimum_password_length %>
           <em>(<%= @minimum_password_length %> characters minimum)</em>

@@ -3,9 +3,15 @@
   <div data-controller="dropdown" data-action="click@window->dropdown#closeDropdown" class="relative">
     <% if current_user %>
       <%= link_to '#', data: { action: 'dropdown#toggle' } do %>
-        <div class="px-3 py-3 rounded-full bg-gray-700 text-gray-300 border-double border-4 border-gray-300">
-          <%= current_user.initials %>
-        </div>
+        <% if current_user.avatar&.present? %>
+          <div class="flex justify-center">
+            <%= image_tag current_user.avatar, class: "h-16 w-16 object-cover rounded-full" %>
+          </div>
+        <% else %>
+          <div class="px-3 py-3 rounded-full bg-gray-700 text-gray-300 border-double border-4 border-gray-300">
+            <%= current_user.initials %>
+          </div>
+        <% end %>
       <% end %>
 
       <div class="w-56 h-56 text-gray-300 bg-gray-700 rounded-lg absolute top-16 hidden -left-[12rem]", data-dropdown-target="menu">
