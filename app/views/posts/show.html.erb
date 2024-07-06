@@ -1,27 +1,30 @@
-<div class="mx-auto md:w-2/3 w-full flex">
-  <div class="mx-auto">
-    <% if notice.present? %>
-      <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
-    <% end %>
-
-    <p class="my-5 text-xl font-semibold">
-      <%= @post.title %>
-    </p>
-
-    <p class="my-5">
-      <%= @post.body %>
-    </p>
-
-    <p class="text-sm">
-      <%= link_to @post.user.full_name, "/#{@post.user.slug}", class: "underline" %>
-    </p>
-
-    <% if current_user == @post.user %>
-    <%= link_to "Edit this post", edit_post_path(@post), class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-    <div class="inline-block ml-2">
-      <%= button_to "Destroy this post", post_path(@post), method: :delete, class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
+<div class="mx-auto md:w-2/3 w-full flex flex-col items-center">
+  <% if notice.present? %>
+    <div class="py-2 px-4 bg-green-100 text-green-700 rounded-lg mb-4" id="notice">
+      <%= notice %>
     </div>
-    <% end %>
-    <%= link_to "Back to posts", posts_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+  <% end %>
+
+  <h1 class="text-2xl font-bold my-4">
+    <%= @post.title %>
+  </h1>
+
+  <div class="my-4 text-gray-800">
+    <%= @post.body %>
   </div>
+
+  <a href="/<%= @post.user.slug %>" class="text-sm underline mb-4">
+    <div class="flex items-center gap-2">
+      <%= image_tag @post.user.avatar, class: "h-16 w-16 object-cover rounded-full" %>
+      <%= @post.user.full_name %>
+    </div>
+  </a>
+
+  <% if current_user == @post.user %>
+    <div class="flex space-x-2 my-2">
+      <%= link_to "Edit this post", edit_post_path(@post), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+      <%= button_to "Destroy this post", post_path(@post), method: :delete, data: { confirm: "Are you sure?" }, class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" %>
+    </div>
+  <% end %>
+  <%= link_to "Back to posts", posts_path, class: "bg-gray-200 hover:bg-gray-300 text-black py-2 px-4 rounded my-2" %>
 </div>

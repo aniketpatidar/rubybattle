@@ -1,19 +1,18 @@
-<div id="<%= dom_id post %>">
-  <p class="my-5 text-xl font-semibold">
-    <%= post.title %>
-  </p>
-
-  <p class="my-5">
-    <%= post.body.body.to_plain_text.first(35) %>...
-  </p>
-
-  <p class="text-sm">
-    <%= link_to post.user.full_name, "/#{post.user.slug}", class: "underline" %>
-  </p>
-
-  <%= link_to "Show this post", post, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-  <% if current_user == post.user %>
-    <%= link_to "Edit this post", edit_post_path(post), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
-  <hr class="mt-6">
-  <% end %>
+<div id="<%= dom_id post %>" class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
+  <div class="md:flex">
+    <div class="p-8">
+      <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold"><%= post.title %></div>
+      <a href="/<%= post.user.slug %>" class="block mt-1 text-lg leading-tight font-medium text-black hover:underline"><%= post.user.full_name %></a>
+      <p class="mt-2 text-gray-500"><%= truncate(post.body.body.to_plain_text, length: 100) %></p>
+      <div class="mt-4">
+        <%= link_to 'Read more', post, class: "text-indigo-600 hover:text-indigo-900" %>
+      </div>
+    </div>
+  </div>
+  <div class="px-6 pt-4 pb-2">
+    <%= link_to "Show this post", post, class: "text-sm bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+    <% if current_user == post.user %>
+      <%= link_to "Edit this post", edit_post_path(post), class: "text-sm bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-2" %>
+    <% end %>
+  </div>
 </div>

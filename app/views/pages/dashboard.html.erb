@@ -18,7 +18,9 @@
             <% end %>
           </td>
           <td class="border px-4 py-2"><%= user.email %></td>
-          <td class="border px-4 py-2"><%= user.slug %></td>
+          <td class="border px-4 py-2">
+            <%= link_to user.slug, "/#{user.slug}", class: "underline" %>
+          </td>
         </tr>
       <% end %>
     </tbody>

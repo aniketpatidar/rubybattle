@@ -1,8 +1,66 @@
-<div class="w-full flex flex-col items-center">
-  <h1 class="text-4xl"><%= @user.full_name %></h1>
+<div class="flex flex-col gap-4">
+  <div class="flex justify-between gap-10">
+    <div class="w-full flex flex-col items-center gap-4">
+      <% if @user.avatar&.present? %>
+        <div class="flex justify-center">
+          <%= image_tag @user.avatar, class: "h-16 w-16 object-cover rounded-full" %>
+          <div class="flex flex-col ml-4">
+            <h1 class="text-4xl"><%= @user.full_name %></h1>
+            <p class="text-gray-500">@<%= @user.slug %></p>
+          </div>
+          <div class="flex flex-col items-center ml-4 justify-center">
+            <% is_friends = current_user.friend_with?(@user) %>
+            <% sent_invitation = current_user.sent_invitations.find { |inv| inv.user_id == @user.id } %>
+            <% received_invitation = current_user.received_invitations.find { |inv| inv.user_id == @user.id } %>
+
+            <% unless current_user == @user %>
+              <% if !is_friends && !sent_invitation && !received_invitation %>
+                <%= form_with(url: invitations_path, method: :post, local: true) do |form| %>
+                  <%= form.hidden_field :user_id, value: @user.id %>
+                  <%= form.submit "Connect", class: "px-4 py-2 text-gray-300 bg-gray-700 rounded-md cursor-pointer" %>
+                <% end %>
+              <% elsif sent_invitation %>
+                <span class="px-4 py-2 bg-gray-400 text-white rounded-md">Pending</span>
+              <% elsif received_invitation %>
+                <div class="flex space-x-2">
+                  <%= button_to "Accept", accept_invitation_path(received_invitation), method: :post, class: "px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600" %>
+                  <%= button_to "Decline", decline_invitation_path(received_invitation), method: :post, class: "px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600" %>
+                </div>
+              <% elsif is_friends %>
+                <span class="px-4 py-2 bg-green-500 text-white rounded-md">Connected</span>
+              <% end %>
+            <% end %>
+
+            <p class="text-gray-500 ml-4">Joined <%= time_ago_in_words(@user.created_at) %> ago</p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="flex space-x-2">
+      <h1 class="text-2xl font-bold">Friends</h1>
+      <ul id="friendsList" class="flex gap-4">
+        <% @user.friends.each do |friend| %>
+          <li class="px-4 py-2 text-gray-300 bg-gray-700 rounded-md w-40 mb-4">
+            <%= link_to friend.slug, "/#{friend.slug}", class: "underline" %>
+            <%= image_tag friend.avatar, class: "h-16 w-16 object-cover rounded-full" %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
   <div class="w-full flex flex-col gap-4">
     <% @user.posts.each do |post| %>
-      <%= render "posts/post", post: post %>
+      <div class="max-w-sm rounded overflow-hidden shadow-lg">
+        <div class="px-6 py-4">
+          <div class="font-bold text-xl mb-2"><%= post.title %></div>
+          <p class="text-gray-700 text-base">
+            <%= truncate(post.body.body.to_plain_text, length: 100) %>
+          </p>
+        </div>
+        <div class="px-6 pt-4 pb-2">
+          <%= link_to 'Read more', post, class: "inline-block bg-blue-500 rounded-full px-3 py-1 text-sm font-semibold text-white mr-2 mb-2" %>
+        </div>
+      </div>
     <% end %>
   </div>
 </div>

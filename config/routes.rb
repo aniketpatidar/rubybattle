@@ -22,7 +22,7 @@ Rails.application.routes.draw do
       post :decline
     end
   end
-  # get "dashboard", to: "home#index"
+  get "dashboard", to: "home#index"
   post 'execute_ruby', to: 'ruby_execution#execute'
   get "/:slug", to: "profile#show"
 end
