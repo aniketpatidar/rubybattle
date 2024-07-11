@@ -45,14 +45,12 @@
     <div>
       <ul>
         <% current_user.sent_invitations.each do |invitation| %>
-          <div class="flex space-x-2">
-            <li class="text-lg mb-4">
-              You sent an invitation to <%= link_to invitation.friend.slug, "/#{invitation.friend.slug}", class: "underline" %>
-              <span class="px-4 py-2 bg-gray-400 text-white rounded-md">
-                Pending
-              </span>
-            </li>
-          </div>
+          <li class="flex items-center justify-between mb-4">
+            <%= link_to invitation.friend.slug, "/#{invitation.friend.slug}", class: "underline" %>
+            <span class="px-4 py-2 bg-gray-400 text-white rounded-md">
+              Pending
+            </span>
+          </li>
         <% end %>
       </ul>
     </div>

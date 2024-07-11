@@ -10,7 +10,7 @@
           </div>
           <div class="flex flex-col items-center ml-4 justify-center">
             <% is_friends = current_user.friend_with?(@user) %>
-            <% sent_invitation = current_user.sent_invitations.find { |inv| inv.user_id == @user.id } %>
+            <% sent_invitation = current_user.sent_invitations.find { |inv| inv.friend_id == @user.id } %>
             <% received_invitation = current_user.received_invitations.find { |inv| inv.user_id == @user.id } %>
 
             <% unless current_user == @user %>
@@ -40,6 +40,7 @@
       <h1 class="text-2xl font-bold">Friends</h1>
       <ul id="friendsList" class="flex gap-4">
         <% @user.friends.each do |friend| %>
+          <%= next if @user == friend %>
           <li class="px-4 py-2 text-gray-300 bg-gray-700 rounded-md w-40 mb-4">
             <%= link_to friend.slug, "/#{friend.slug}", class: "underline" %>
             <%= image_tag friend.avatar, class: "h-16 w-16 object-cover rounded-full" %>

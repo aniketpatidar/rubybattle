@@ -12,8 +12,8 @@ export default class extends Controller {
       theme: "monokai",
       lineNumbers: true
     });
-    this.setEditorSize('600px', '500px');
-    this.setOutputSectionHeight('600px', '500px');
+    this.setEditorSize('1525px', '400px');
+    this.setOutputSectionHeight('1525px', '200px');
   }
 
   setEditorSize(width, height) {
