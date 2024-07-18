@@ -13,9 +13,13 @@
 
   <body class="bg-gray-300">
     <%= render "layouts/navbar" %>
-    <%= render "layouts/alerts" %>
     <main class="container mx-auto mt-28 px-5 flex">
       <%= yield %>
     </main>
+    <div id="flash-container">
+      <% flash.each do |key, value| %>
+        <%= render "shared/flash", level: key, content: value %>
+      <% end %>
+    </div>
   </body>
 </html>

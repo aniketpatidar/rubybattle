@@ -72,3 +72,4 @@ end
 
 gem "devise", "~> 4.9"
 gem "tailwind_devise", "~> 0.0.1"
+gem "inline_svg", "~> 1.9"
