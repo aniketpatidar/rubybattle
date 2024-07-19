@@ -1,0 +1,1 @@
+{"version":3,"file":"submitFinder.js","sourceRoot":"","sources":["../src/submitFinder.ts"],"names":[],"mappings":"AAQA,MAAM,UAAU,aAAa,CAAE,KAA0B;IACvD,0BAA0B;IAC1B,IAAI,KAAK,CAAC,SAAS,YAAY,WAAW,EAAE;QAC1C,OAAO,KAAK,CAAC,SAAS,CAAA;KACvB;IAED,yDAAyD;IACzD,OAAO,KAAK,CAAC,MAAM,CAAC,SAAS,CAAA;AAC/B,CAAC"}

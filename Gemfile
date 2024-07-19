@@ -73,3 +73,5 @@ end
 gem "devise", "~> 4.9"
 gem "tailwind_devise", "~> 0.0.1"
 gem "inline_svg", "~> 1.9"
+gem "stimulus_reflex", "~> 3.5"
+gem "redis-session-store", "~> 0.11.5"

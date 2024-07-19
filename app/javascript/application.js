@@ -4,3 +4,13 @@ import "controllers"
 
 import "trix"
 import "@rails/actiontext"
+import "config"
+import "channels"
+import { CableCar } from "mrujs/plugins"
+import mrujs from "mrujs"
+
+mrujs.start({
+  plugins: [
+    new CableCar(CableReady)
+  ]
+})

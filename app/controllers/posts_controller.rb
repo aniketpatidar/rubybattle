@@ -12,7 +12,10 @@ class PostsController < ApplicationController
 
   # GET /posts/new
   def new
-    @post = Post.new
+    html = render_to_string(partial: 'form', locals: { post: Post.new })
+    render operations: cable_car
+      .inner_html('#slideover-content', html: html)
+      .text_content('#slideover-header', text: 'New post')
   end
 
   # GET /posts/1/edit

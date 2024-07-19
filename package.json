@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "codemirror": "^6.0.1"
+    "codemirror": "^6.0.1",
+    "mrujs": "^0.3.0-beta.22"
   }
 }

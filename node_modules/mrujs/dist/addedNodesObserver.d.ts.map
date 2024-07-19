@@ -1,0 +1,1 @@
+{"version":3,"file":"addedNodesObserver.d.ts","sourceRoot":"","sources":["../src/addedNodesObserver.ts"],"names":[],"mappings":"AAEA;;GAEG;AACH,qBAAa,kBAAkB;IAC7B,QAAQ,CAAC,QAAQ,EAAE,gBAAgB,CAAA;IACnC,QAAQ,CAAC,eAAe,EAAE,oBAAoB,CAAA;gBAEjC,QAAQ,EAAE,gBAAgB;IASvC,OAAO,IAAK,IAAI;IAIhB,UAAU,IAAK,IAAI;CAGpB"}

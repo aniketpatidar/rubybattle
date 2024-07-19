@@ -1,0 +1,1 @@
+{"version":3,"file":"clickHandler.d.ts","sourceRoot":"","sources":["../src/clickHandler.ts"],"names":[],"mappings":"AAEA,OAAO,EAAE,mBAAmB,EAAE,MAAM,SAAS,CAAA;AAE7C,qBAAa,YAAY;IACvB,MAAM,KAAK,OAAO,IAAK,mBAAmB,EAAE,CAW3C;IAED,OAAO,IAAK,IAAI;IAUhB,UAAU,IAAK,IAAI;IAUnB,gBAAgB,CAAE,QAAQ,EAAE,QAAQ,GAAG,IAAI;CAe5C"}

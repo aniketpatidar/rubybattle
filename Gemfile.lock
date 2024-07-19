@@ -84,6 +84,13 @@ GEM
     bootsnap (1.18.3)
       msgpack (~> 1.2)
     builder (3.2.4)
+    cable_ready (5.0.5)
+      actionpack (>= 5.2)
+      actionview (>= 5.2)
+      activesupport (>= 5.2)
+      observer (~> 0.1)
+      railties (>= 5.2)
+      thread-local (>= 1.1.0)
     capybara (3.40.0)
       addressable
       matrix
@@ -169,6 +176,9 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.4-x86_64-linux)
       racc (~> 1.4)
+    nokogiri-html5-inference (0.3.0)
+      nokogiri (~> 1.14)
+    observer (0.1.2)
     orm_adapter (0.5.0)
     pg (1.5.6)
     pry (0.14.2)
@@ -224,6 +234,9 @@ GEM
       redis-client (>= 0.22.0)
     redis-client (0.22.1)
       connection_pool
+    redis-session-store (0.11.5)
+      actionpack (>= 6, < 8)
+      redis (>= 3, < 6)
     regexp_parser (2.9.0)
     reline (0.5.2)
       io-console (~> 0.5)
@@ -248,6 +261,17 @@ GEM
       sprockets (>= 3.0.0)
     stimulus-rails (1.3.3)
       railties (>= 6.0.0)
+    stimulus_reflex (3.5.2)
+      actioncable (>= 5.2, < 8)
+      actionpack (>= 5.2, < 8)
+      actionview (>= 5.2, < 8)
+      activesupport (>= 5.2, < 8)
+      cable_ready (~> 5.0)
+      nokogiri (~> 1.0)
+      nokogiri-html5-inference (~> 0.3)
+      rack (>= 2, < 4)
+      railties (>= 5.2, < 8)
+      redis (>= 4.0, < 6.0)
     stringio (3.1.0)
     tailwind_devise (0.0.1)
       rails (>= 6.0)
@@ -264,6 +288,7 @@ GEM
     tailwindcss-rails (2.4.0-x86_64-linux)
       railties (>= 6.0.0)
     thor (1.3.1)
+    thread-local (1.1.0)
     timeout (0.4.1)
     turbo-rails (2.0.5)
       actionpack (>= 6.0.0)
@@ -309,9 +334,11 @@ DEPENDENCIES
   puma (>= 5.0)
   rails (~> 7.1.3, >= 7.1.3.2)
   redis (>= 4.0.1)
+  redis-session-store (~> 0.11.5)
   selenium-webdriver
   sprockets-rails
   stimulus-rails
+  stimulus_reflex (~> 3.5)
   tailwind_devise (~> 0.0.1)
   tailwindcss-rails
   turbo-rails
