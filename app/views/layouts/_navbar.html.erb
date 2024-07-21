@@ -6,9 +6,8 @@
     <%= link_to "/posts", class: "" do %>
       <%= image_tag "icon.png" %>
     <% end %>
-    <%= link_to "/invitations", class: "w-12 h-12" do %>
-      <%= image_tag "notification.png" %>
-    <% end %>
+    <%= turbo_stream_from current_user, :notifications %>
+    <%= render "nav/notifications", user: current_user %>
   <% end %>
 
   <div data-controller="dropdown" data-action="click@window->dropdown#closeDropdown" class="relative">

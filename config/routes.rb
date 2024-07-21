@@ -24,5 +24,6 @@ Rails.application.routes.draw do
   end
   get "dashboard", to: "home#index"
   post 'execute_ruby', to: 'ruby_execution#execute'
+  resources :notifications, only: [:index]
   get "/:slug", to: "profile#show"
 end

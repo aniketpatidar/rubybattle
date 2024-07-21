@@ -11,7 +11,9 @@ class InvitationsController < ApplicationController
   def create
     @user = User.find(params[:user_id])
     current_user.send_invitation(@user)
-    redirect_to invitations_path, notice: 'Invitation sent successfully.'
+    respond_to do |format|
+      turbo_stream.append("friendsList", partial: "friend", locals: { friend: @user })
+    end
   end
 
   def accept
@@ -28,6 +30,8 @@ class InvitationsController < ApplicationController
   def decline
     invitation = current_user.received_invitations.find(params[:id])
     invitation.destroy
-    redirect_to invitations_path, notice: "Invitation declined"
+    respond_to do |format|
+      render turbo_stream: turbo_stream.remove(invitation)
+    end
   end
 end

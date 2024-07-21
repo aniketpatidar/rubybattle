@@ -1,6 +1,7 @@
 class Invitation < ApplicationRecord
   belongs_to :user
   belongs_to :friend, class_name: 'User'
+  after_create_commit :create_notification
 
   def self.reacted?(id1, id2)
     case1 = !Invitation.where(user_id: id1, friend_id: id2).empty?
@@ -20,5 +21,9 @@ class Invitation < ApplicationRecord
     else
       Invitation.where(user_id: id1, friend_id: id2, confirmed: true)[0].id
     end
+  end
+
+  def create_notification
+    InvitationNotification.create(user: friend, params: { user_id: user.id, friend_id: friend.id, first_name: user.first_name, slug: user.slug })
   end
 end
