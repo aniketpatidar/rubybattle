@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'discussions/index'
   get 'home/index'
   resources :posts
   devise_for :users
@@ -25,5 +26,6 @@ Rails.application.routes.draw do
   get "dashboard", to: "home#index"
   post 'execute_ruby', to: 'ruby_execution#execute'
   resources :notifications, only: [:index]
+  resources :discussions, only: [:index]
   get "/:slug", to: "profile#show"
 end

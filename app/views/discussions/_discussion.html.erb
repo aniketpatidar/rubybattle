@@ -1,0 +1,3 @@
+<div id="<%= dom_id(discussion) %>" class="mb-2">
+  <%= discussion.name %> | <%= discussion.description.body.to_plain_text %> | Pinned: <%= discussion.pinned %> | Closed: <%= discussion.closed %>
+</div>
