@@ -1,3 +1,14 @@
-<div id="<%= dom_id(discussion) %>" class="mb-2">
-  <%= discussion.name %> | <%= discussion.description.body.to_plain_text %> | Pinned: <%= discussion.pinned %> | Closed: <%= discussion.closed %>
+<div id="<%= dom_id discussion %>" class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl mb-5">
+  <div class="md:flex">
+    <div class="p-4">
+      <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold"><%= discussion.name %></div>
+      <p class="mt-2 text-gray-500"><%= discussion.description.body.to_plain_text %></p>
+    </div>
+  </div>
+  <div class="flex space-x-2 px-4 my-2">
+    <% if current_user == discussion.user %>
+      <%= link_to "Edit", edit_discussion_path(discussion), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+      <%= button_to "Destroy", discussion_path(discussion), method: :delete, data: { confirm: "Are you sure?" }, class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" %>
+    <% end %>
+  </div>
 </div>
