@@ -25,9 +25,18 @@
     <%= form.check_box :pinned, class: "mr-2" %><%= form.label :pinned %>
   </div>
 
-<div class="my-5">
-  <%= form.check_box :closed, class: "mr-2" %><%= form.label :closed %>
-</div>
+  <div class="my-5">
+    <%= form.check_box :closed, class: "mr-2" %><%= form.label :closed %>
+  </div>
+
+  <% if discussion.new_record? %>
+    <%= form.fields_for :posts do |post| %>
+      <div class="my-5">
+        <%= post.label :body %>
+        <%= post.rich_text_area :body, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+      </div>
+    <% end %>
+  <% end %>
 
   <div class="inline">
     <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>

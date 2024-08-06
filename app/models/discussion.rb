@@ -1,8 +1,11 @@
 class Discussion < ApplicationRecord
   belongs_to :user, default: -> { Current.user }
+  has_many :posts, dependent: :destroy
   has_rich_text :description
   validates :name, presence: true
   validates :description, presence: true
+
+  accepts_nested_attributes_for :posts
 
   after_create_commit -> { broadcast_prepend_to "discussions" }
   after_update_commit -> { broadcast_replace_to "discussions" }

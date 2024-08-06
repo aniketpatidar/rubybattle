@@ -1,0 +1,10 @@
+<%= turbo_frame_tag dom_id(@post) do %>
+  <div class="bg-white shadow-md rounded-lg my-4">
+    <div class="p-4">
+      <%= render(partial: "discussions/posts/header", locals: { post: @post }) %>
+      <%= render("form", post: @post) %>
+      <%= link_to 'Back', discussion_post_path(@post.discussion, @post), class: "text-blue-500 hover:text-blue-700 font-medium" %>
+    </div>
+  </div>
+<% end %>
+

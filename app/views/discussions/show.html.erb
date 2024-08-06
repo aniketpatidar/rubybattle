@@ -1,2 +1,11 @@
 <%= turbo_stream_from @discussion %>
-<%= render(partial: "discussions/header", locals: { discussion: @discussion }) %>
+<main class="container mx-auto mt-28 px-5 flex flex-col">
+  <%= render(partial: "discussions/header", locals: { discussion: @discussion }) %>
+  <div id="posts">
+    <%= render partial: "discussions/posts/post", collection: @posts %>
+  </div>
+
+  <div id="<%= dom_id(@new_post) %>" class="mt-4">
+    <%= render "discussions/posts/form", post: @new_post %>
+  </div>
+</main>
