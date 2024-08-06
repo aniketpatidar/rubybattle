@@ -1,7 +1,9 @@
 <div id="<%= dom_id discussion %>" class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl mb-5">
   <div class="md:flex">
     <div class="p-4">
-      <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold"><%= discussion.name %></div>
+      <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
+        <%= link_to discussion.name, discussion %>
+      </div>
       <p class="mt-2 text-gray-500"><%= discussion.description.body.to_plain_text %></p>
     </div>
   </div>

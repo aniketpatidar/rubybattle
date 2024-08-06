@@ -1,4 +1,5 @@
 <div class="w-full">
+  <%= turbo_stream_from 'discussions' %>
   <div class="flex justify-between items-center">
     <h1 class="font-bold text-4xl">Discussions</h1>
     <%= link_to "New Discussion", new_discussion_path, class: "rounded-lg py-3 px-5 bg-gray-700 text-white block font-medium" %>
