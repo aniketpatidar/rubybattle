@@ -1,5 +1,5 @@
 <div data-controller="notification" id="notifications-container" class="relative" data-action="click@window->notification#hide">
-  <button class="py-4 px-1 relative border-2 border-transparent text-gray-800 rounded-full" id="notifications-menu" data-action="click->notification#toggle" aria-expanded="false">
+  <button class="py-1 px-1 relative border-2 border-transparent text-gray-800 rounded-full" id="notifications-menu" data-action="click->notification#toggle" aria-expanded="false">
     <span class="sr-only">Notifications</span>
     <%= inline_svg_tag('bell.svg', class: "h-8 w-8") %>
     <% if user.notifications.unread.exists? %>

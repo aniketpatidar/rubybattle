@@ -1,37 +1,22 @@
-<div class="h-16 w-full flex items-center justify-between text-gray-300 bg-gray-700 px-4">
-  <%= link_to "/", class: "w-14 h-14" do %>
-    <%= image_tag "home.png" %>
-  <% end %>
-  <%= link_to "Discussions", discussions_path, class: "" %>
-  <% if current_user %>
-    <%= link_to "/posts", class: "" do %>
-      <%= image_tag "icon.png" %>
-    <% end %>
-    <%= turbo_stream_from current_user, :notifications %>
-    <%= render "nav/notifications", user: current_user %>
-  <% end %>
-
-  <div data-controller="dropdown" data-action="click@window->dropdown#closeDropdown" class="relative">
-    <% if current_user %>
-      <%= link_to '#', data: { action: 'dropdown#toggle' } do %>
-        <% if current_user.avatar&.present? %>
-          <div class="flex justify-center">
-            <%= image_tag current_user.avatar, class: "h-16 w-16 object-cover rounded-full" %>
-          </div>
-        <% else %>
-          <div class="px-3 py-3 rounded-full bg-gray-700 text-gray-300 border-double border-4 border-gray-300">
-            <%= current_user.initials %>
-          </div>
-        <% end %>
-      <% end %>
-
-      <div class="w-56 h-56 text-gray-300 bg-gray-700 absolute top-16 hidden -left-[9rem]", data-dropdown-target="menu">
-        <div class="flex flex-col gap-4 p-4">
-          <%= link_to "Profile", "/#{current_user.slug}" %>
-          <%= link_to "Settings", edit_user_registration_path %>
-          <%= link_to "Sign out", destroy_user_session_path, data: { turbo_method: "delete" } %>
+<header class="shadow-md max-w-4xl mx-auto py-3 px-6 mt-4" style=" margin-left: auto; margin-right: auto; background-color: hsl(224, 14%, 16%);">
+  <nav class="flex justify-between items-center">
+    <div class="text-2xl font-bold" style="color: #f70;">Ruby Battle</div>
+    <div class="space-x-4 flex items-center rounded-full px-6 py-3" style="background-color: hsl(224, 10%, 10%); color: hsl(224, 6%, 77%);">
+      <% if current_user %>
+        <%= link_to 'Home', "/", class: 'px-2 py-1' %>
+        <%= link_to 'Discussions', discussions_path, class: 'px-2 py-1' %>
+        <%= link_to 'Profile', "/#{current_user.slug}", class: 'px-2 py-1' %>
+        <%= link_to 'Settings', edit_user_registration_path, class: 'px-2 py-1' %>
+        <div class="rounded-full flex items-center justify-center" style="background-color: #f70;">
+          <%= turbo_stream_from current_user, :notifications %>
+          <%= render "nav/notifications", user: current_user %>
         </div>
-      </div>
+      <% end %>
+    </div>
+    <% if current_user %>
+      <%= link_to 'Logout', destroy_user_session_path, data: { turbo_method: "delete" }, class: 'text-black px-4 py-2 rounded-full', style: 'background-color: #f70;' %>
+    <% else %>
+      <%= link_to 'Login', new_user_session_path, class: 'text-black px-4 py-2 rounded-full', style: 'background-color: #f70;' %>
     <% end %>
-  </div>
-</div>
+  </nav>
+</header>

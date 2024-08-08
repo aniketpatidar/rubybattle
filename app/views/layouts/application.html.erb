@@ -11,9 +11,9 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="" data-controller="slideover">
+  <body class="" data-controller="slideover" style="background-color: hsl(224, 10%, 10%);">
     <%= render "layouts/navbar" %>
-    <main class="container mx-auto mt-28 px-5 flex">
+    <main class="container max-w-4xl mx-auto px-5 p-4" style="margin-top: 4rem;">
       <%= yield %>
     </main>
     <div id="flash-container">
