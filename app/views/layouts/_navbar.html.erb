@@ -1,22 +1,16 @@
-<header class="shadow-md max-w-4xl mx-auto py-3 px-6 mt-4" style=" margin-left: auto; margin-right: auto; background-color: hsl(224, 14%, 16%);">
+<header class="shadow-md max-w-4xl mx-auto py-3 px-6 mt-4 rounded-full">
   <nav class="flex justify-between items-center">
-    <div class="text-2xl font-bold" style="color: #f70;">Ruby Battle</div>
-    <div class="space-x-4 flex items-center rounded-full px-6 py-3" style="background-color: hsl(224, 10%, 10%); color: hsl(224, 6%, 77%);">
-      <% if current_user %>
-        <%= link_to 'Home', "/", class: 'px-2 py-1' %>
-        <%= link_to 'Discussions', discussions_path, class: 'px-2 py-1' %>
-        <%= link_to 'Profile', "/#{current_user.slug}", class: 'px-2 py-1' %>
-        <%= link_to 'Settings', edit_user_registration_path, class: 'px-2 py-1' %>
-        <div class="rounded-full flex items-center justify-center" style="background-color: #f70;">
-          <%= turbo_stream_from current_user, :notifications %>
-          <%= render "nav/notifications", user: current_user %>
-        </div>
-      <% end %>
+    <div class="text-2xl">RubyBattle</div>
+    <div class="space-x-4 flex items-center rounded-full px-6 py-3">
+      <%= link_to 'Home', "/", class: 'px-2 py-1' %>
+      <%= link_to 'Discussions', discussions_path, class: 'px-2 py-1' %>
+      <%= link_to 'Profile', "/#{current_user.slug}", class: 'px-2 py-1' %>
+      <%= link_to 'Settings', edit_user_registration_path, class: 'px-2 py-1' %>
+      <div class="rounded-full flex items-center justify-center">
+        <%= turbo_stream_from current_user, :notifications %>
+        <%= render "nav/notifications", user: current_user %>
+      </div>
     </div>
-    <% if current_user %>
-      <%= link_to 'Logout', destroy_user_session_path, data: { turbo_method: "delete" }, class: 'text-black px-4 py-2 rounded-full', style: 'background-color: #f70;' %>
-    <% else %>
-      <%= link_to 'Login', new_user_session_path, class: 'text-black px-4 py-2 rounded-full', style: 'background-color: #f70;' %>
-    <% end %>
+    <%= link_to 'Logout', destroy_user_session_path, data: { turbo_method: "delete" }, class: 'px-4 py-2 bg-blue-500 p-2 text-white rounded-lg cursor-pointer hover:bg-blue-700' %>
   </nav>
 </header>

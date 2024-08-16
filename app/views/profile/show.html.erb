@@ -1,67 +1,76 @@
-<div class="flex flex-col gap-4">
-  <div class="flex justify-between gap-10">
-    <div class="w-full flex flex-col items-center gap-4">
+<div class="profile-container p-8 rounded-lg shadow-lg max-w-4xl mx-auto">
+  <div class="profile-header flex flex-col sm:flex-row items-center">
+    <div class="profile-avatar bg-blue-500 text-center text-white text-4xl rounded-full w-24 h-24 flex items-center justify-center">
       <% if @user.avatar&.present? %>
-        <div class="flex justify-center">
-          <%= image_tag @user.avatar, class: "h-16 w-16 object-cover rounded-full" %>
-          <div class="flex flex-col ml-4">
-            <h1 class="text-4xl"><%= @user.full_name %></h1>
-            <p class="text-gray-500">@<%= @user.slug %></p>
-          </div>
-          <div class="flex flex-col items-center ml-4 justify-center">
-            <% is_friends = current_user.friend_with?(@user) %>
-            <% sent_invitation = current_user.sent_invitations.find { |inv| inv.friend_id == @user.id } %>
-            <% received_invitation = current_user.received_invitations.find { |inv| inv.user_id == @user.id } %>
-
-            <% unless current_user == @user %>
-              <% if !is_friends && !sent_invitation && !received_invitation %>
-                <%= form_with(url: invitations_path, method: :post, local: true) do |form| %>
-                  <%= form.hidden_field :user_id, value: @user.id %>
-                  <%= form.submit "Connect", class: "px-4 py-2 text-gray-300 bg-gray-700 rounded-md cursor-pointer" %>
-                <% end %>
-              <% elsif sent_invitation %>
-                <span class="px-4 py-2 bg-gray-400 text-white rounded-md">Pending</span>
-              <% elsif received_invitation %>
-                <div class="flex space-x-2">
-                  <%= button_to "Accept", accept_invitation_path(received_invitation), method: :post, class: "px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600" %>
-                  <%= button_to "Decline", decline_invitation_path(received_invitation), method: :post, class: "px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600" %>
-                </div>
-              <% elsif is_friends %>
-                <span class="px-4 py-2 bg-green-500 text-white rounded-md">Connected</span>
-              <% end %>
-            <% end %>
-
-            <p class="text-gray-500 ml-4">Joined <%= time_ago_in_words(@user.created_at) %> ago</p>
-          </div>
-        </div>
+        <%= image_tag @user.avatar, class: "h-16 w-16 object-cover rounded-full" %>
       <% end %>
     </div>
-    <div class="flex space-x-2">
-      <h1 class="text-2xl font-bold">Friends</h1>
-      <ul id="friendsList" class="flex gap-4">
-        <% @user.friends.each do |friend| %>
-          <%= next if @user == friend %>
-          <li class="px-4 py-2 text-gray-300 bg-gray-700 rounded-md w-40 mb-4">
-            <%= link_to friend.slug, "/#{friend.slug}", class: "underline" %>
-            <%= image_tag friend.avatar, class: "h-16 w-16 object-cover rounded-full" %>
-          </li>
-        <% end %>
-      </ul>
+    <% if current_user != @user %>
+      <%= render 'invitations/friendship', user: @user, current_user: current_user %>
+    <% end %>
+    <div class="profile-info mt-4 sm:mt-0 sm:ml-6 text-center sm:text-left">
+      <h1 class="text-3xl font-bold"><%= @user.full_name %></h1>
+      <p class="text-gray-400"><%= @user.email %></p>
+      <p class="text-sm text-gray-500 mt-1">Joined <%= time_ago_in_words(@user.created_at) %> ago</p>
     </div>
   </div>
-  <div class="w-full flex flex-col gap-4">
-    <% @user.posts.each do |post| %>
-      <div class="max-w-sm rounded overflow-hidden shadow-lg">
-        <div class="px-6 py-4">
-          <div class="font-bold text-xl mb-2"><%= post.title %></div>
-          <p class="text-gray-700 text-base">
-            <%= truncate(post.body.body.to_plain_text, length: 100) %>
-          </p>
+
+  <div class="profile-navigation mt-8 text-center sm:text-left">
+    <ul class="flex justify-center sm:justify-start space-x-4">
+      <li><%= link_to "Summary", '/', class: "bg-blue-500 text-white py-2 px-4 rounded-md" %></li>
+      <li><%= link_to "Questions", '/', class: "bg-blue-500 text-white py-2 px-4 rounded-md" %></li>
+      <li><%= link_to "Answers", '/', class: "bg-blue-500 text-white py-2 px-4 rounded-md" %></li>
+      <li><%= link_to "Votes", '/', class: "bg-blue-500 text-white py-2 px-4 rounded-md" %></li>
+    </ul>
+  </div>
+
+  <div class="profile-discussions mt-8">
+    <h2 class="text-xl font-bold"><%= pluralize(@user.discussions.count, "discussion") %></h2>
+    <% @user.discussions.each do |discussion| %>
+      <div class="bg-gray-900 p-4 mt-4 rounded-lg">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="font-bold text-blue-500"><%= link_to discussion.name, discussion_path(discussion), class: "hover:underline" %></p>
+            <div class="flex space-x-2 mt-1">
+              <span class="bg-gray-700 text-white px-3 py-2 rounded">#ruby</span>
+              <span class="bg-gray-700 text-white px-3 py-2 rounded">#backend</span>
+            </div>
+          </div>
+          <div class="text-sm">
+            <span class="text-gray-400"><%#= vote %></span>
+            <span class="text-gray-400 ml-2"><%= discussion.posts.count %> answers</span>
+          </div>
         </div>
-        <div class="px-6 pt-4 pb-2">
-          <%= link_to 'Read more', post, class: "inline-block bg-blue-500 rounded-full px-3 py-1 text-sm font-semibold text-white mr-2 mb-2" %>
+        <div class="flex items-center mt-2">
+          <span class="text-gray-400 text-sm">Asked <%= time_ago_in_words(discussion.created_at) %> ago.</span>
         </div>
       </div>
     <% end %>
   </div>
 </div>
+
+<style>
+  @media (min-width: 640px) {
+    .profile-container {
+      padding: 24px;
+    }
+  }
+
+  @media (max-width: 639px) {
+    .profile-avatar {
+      width: 64px;
+      height: 64px;
+      font-size: 1.5rem;
+    }
+    .profile-info h1 {
+      font-size: 1.75rem;
+    }
+    .profile-navigation ul {
+      flex-direction: column;
+      space-y-2;
+    }
+    .post-item, .discussion-item {
+      padding: 16px;
+    }
+  }
+</style>
