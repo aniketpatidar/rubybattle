@@ -5,22 +5,28 @@
 
       <ul>
         <% discussion.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+          <li><%= error.options[:message] %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
   <div class="my-5">
-    <%= form.label :name %>
+    <%= form.label :name, class: "block text-sm font-medium text-gray-700" do %>
+      <span class="font-semibold">Title</span>
+      <span class="block text-xs text-gray-600 mt-1">Be specific and imagine you’re asking a question to another person.</span>
+    <% end %>
     <%= form.text_field :name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
   </div>
-
+  <br>
   <div class="my-5">
-    <%= form.label :description %>
+    <%= form.label :description, class: "block text-sm font-medium text-gray-700" do %>
+      <span class="font-semibold">What are the details of your problem?</span>
+      <span class="block text-xs text-gray-600 mt-1">Introduce the problem and expand on what you put in the title. Minimum 20 characters.</span>
+    <% end %>
     <%= form.rich_text_area :description, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
   </div>
-
+  <br>
   <div class="my-5">
     <%= form.check_box :pinned, class: "mr-2" %><%= form.label :pinned %>
   </div>
@@ -29,7 +35,7 @@
     <%= form.check_box :closed, class: "mr-2" %><%= form.label :closed %>
   </div>
 
-  <% if discussion.new_record? %>
+  <% unless discussion.new_record? %>
     <%= form.fields_for :posts do |post| %>
       <div class="my-5">
         <%= post.label :body %>
@@ -39,6 +45,6 @@
   <% end %>
 
   <div class="inline">
-    <%= form.submit class: "rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700 cursor-pointer" %>
+    <%= form.submit "Post Your Question", class: "rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700 cursor-pointer" %>
   </div>
 <% end %>

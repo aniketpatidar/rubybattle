@@ -184,6 +184,8 @@ GEM
       nokogiri (~> 1.14)
     observer (0.1.2)
     orm_adapter (0.5.0)
+    pagy (5.10.1)
+      activesupport
     pg (1.5.6)
     pry (0.14.2)
       coderay (~> 1.1)
@@ -334,6 +336,7 @@ DEPENDENCIES
   inline_svg (~> 1.9)
   jbuilder
   kredis
+  pagy (~> 5.10)
   pg (~> 1.1)
   pry
   puma (>= 5.0)

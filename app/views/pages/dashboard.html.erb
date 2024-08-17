@@ -4,20 +4,16 @@
       <h2 class="font-semibold text-gray-700">User Accounts</h2>
       <span class="text-xs text-gray-500">View accounts of registered users</span>
     </div>
-    <div class="flex items-center justify-between">
-      <div class="ml-10 space-x-8 lg:ml-40">
-        <button class="flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m0 0l6.75-6.75M12 19.5l-6.75-6.75" />
-          </svg>
-
-          CSV
-        </button>
+    <%= form_tag users_path, method: :get, data: { turbo_frame: "search-results", turbo_action: "advance", controller: "search", action: "input->search#submit" } do |f| %>
+      <div class="flex items-center gap-2">
+        <%= text_field_tag "query", nil, placeholder: "Search...", class: "w-full max-w-xs px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700 placeholder-gray-500" %>
+        <%= submit_tag "Search", class: "rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700" %>
       </div>
-    </div>
+    <% end %>
   </div>
   <div class="overflow-y-hidden rounded-lg border">
     <div class="overflow-x-auto" id="users-list">
+    <%= turbo_frame_tag "search-results" do %>
       <table class="w-full">
         <thead>
           <tr class="bg-blue-600 text-left text-xs font-semibold uppercase tracking-widest text-white">
@@ -34,13 +30,10 @@
           <% end %>
         </tbody>
       </table>
+    <% end %>
     </div>
-    <div class="flex flex-col items-center border-t bg-white px-5 py-5 sm:flex-row sm:justify-between">
-      <span class="text-xs text-gray-600 sm:text-sm"> Showing 1 to 5 of 12 Entries </span>
-      <div class="mt-2 inline-flex sm:mt-0">
-        <button class="mr-2 h-12 w-12 rounded-full border text-sm font-semibold text-gray-600 transition duration-150 hover:bg-gray-100">Prev</button>
-        <button class="h-12 w-12 rounded-full border text-sm font-semibold text-gray-600 transition duration-150 hover:bg-gray-100">Next</button>
-      </div>
+    <div class="items-center border-t bg-white px-5 py-5 sm:flex-row sm:justify-between">
+      <%== pagy_nav(@pagy) %>
     </div>
   </div>
 </div>

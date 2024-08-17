@@ -1,4 +1,4 @@
-<tr id="<%= dom_id(user) %>">
+<tr id="<%= dom_id(user) %>" class="cursor-pointer" onclick="window.location='/<%= user.slug %>';">
   <td class="border-b border-gray-200 bg-white px-5 py-5 text-sm">
     <p class="whitespace-no-wrap"><%= user.id %></p>
   </td>
@@ -15,7 +15,7 @@
     </div>
   </td>
   <td class="border-b border-gray-200 bg-white px-5 py-5 text-sm">
-    <p class="whitespace-no-wrap underline"><%= link_to user.slug, user.slug %></p>
+    <p class="whitespace-no-wrap underline">@<%= user.slug %></p>
   </td>
   <td class="border-b border-gray-200 bg-white px-5 py-5 text-sm">
     <p class="whitespace-no-wrap"><%= user.created_at %></p>

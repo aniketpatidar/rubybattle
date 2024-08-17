@@ -23,6 +23,7 @@ class DiscussionsController < ApplicationController
       if @discussion.save
         format.html { redirect_to @discussion, notice: "Discussion created" }
       else
+        flash[:error] = format_error_messages(@discussion.errors)
         format.html { render :new, status: :unprocessable_entity }
       end
     end
@@ -55,5 +56,9 @@ class DiscussionsController < ApplicationController
 
   def set_discussion
     @discussion = Discussion.find(params[:id])
+  end
+
+  def format_error_messages(errors)
+    errors.map { |error| error.options[:message] }.join(", ")
   end
 end

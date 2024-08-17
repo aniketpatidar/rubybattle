@@ -40,7 +40,13 @@ class User < ApplicationRecord
   end
 
   def initials
-    [first_name[0], last_name[0]].join()
+    [first_name[0].upcase, last_name[0].upcase].join
+  end
+
+  def self.search(params)
+    params[:query].blank? ? all : where(
+      "slug LIKE ?", "%#{sanitize_sql_like(params[:query])}%"
+    )
   end
 
   private
