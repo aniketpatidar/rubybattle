@@ -1,6 +1,6 @@
 <div class="profile-container p-8 rounded-lg shadow-lg max-w-4xl mx-auto">
   <div class="profile-header flex flex-col sm:flex-row items-center">
-    <div class="profile-avatar bg-blue-500 text-center text-white text-4xl rounded-full w-24 h-24 flex items-center justify-center">
+    <div class="profile-avatar text-center text-white text-4xl rounded-full w-24 h-24 flex items-center justify-center">
       <% if @user.avatar&.present? %>
         <%= image_tag @user.avatar, class: "h-16 w-16 object-cover rounded-full" %>
       <% end %>
@@ -17,28 +17,23 @@
 
   <div class="profile-navigation mt-8 text-center sm:text-left">
     <ul class="flex justify-center sm:justify-start space-x-4">
-      <li><%= link_to "Summary", '/', class: "bg-blue-500 text-white py-2 px-4 rounded-md" %></li>
-      <li><%= link_to "Questions", '/', class: "bg-blue-500 text-white py-2 px-4 rounded-md" %></li>
-      <li><%= link_to "Answers", '/', class: "bg-blue-500 text-white py-2 px-4 rounded-md" %></li>
-      <li><%= link_to "Votes", '/', class: "bg-blue-500 text-white py-2 px-4 rounded-md" %></li>
+      <li><%= link_to "Summary", '#', class: "rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700" %></li>
+      <li><%= link_to "Questions", '#', class: "rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700" %></li>
+      <li><%= link_to "Answers", '#', class: "rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700" %></li>
+      <li><%= link_to "Votes", '#', class: "rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700" %></li>
     </ul>
   </div>
 
   <div class="profile-discussions mt-8">
-    <h2 class="text-xl font-bold"><%= pluralize(@user.discussions.count, "discussion") %></h2>
+    <h2 class="text-xl font-bold text-blue-600 focus:outline-none focus:ring hover:text-blue-700"><%= pluralize(@user.discussions.count, "discussion") %></h2>
     <% @user.discussions.each do |discussion| %>
-      <div class="bg-gray-900 p-4 mt-4 rounded-lg">
+      <div class="p-4 mt-4 rounded-lg">
         <div class="flex justify-between items-start">
           <div>
             <p class="font-bold text-blue-500"><%= link_to discussion.name, discussion_path(discussion), class: "hover:underline" %></p>
-            <div class="flex space-x-2 mt-1">
-              <span class="bg-gray-700 text-white px-3 py-2 rounded">#ruby</span>
-              <span class="bg-gray-700 text-white px-3 py-2 rounded">#backend</span>
-            </div>
           </div>
           <div class="text-sm">
-            <span class="text-gray-400"><%#= vote %></span>
-            <span class="text-gray-400 ml-2"><%= discussion.posts.count %> answers</span>
+            <span class="ml-2"><%= discussion.posts.count %> answers</span>
           </div>
         </div>
         <div class="flex items-center mt-2">

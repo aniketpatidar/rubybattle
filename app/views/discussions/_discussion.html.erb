@@ -1,14 +1,14 @@
-<div id="<%= dom_id discussion %>" class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl mb-5 mt-5">
+<div id="<%= dom_id discussion %>" class="max-w-md bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl mb-5 mt-5">
   <div class="md:flex">
     <div class="p-4 w-full">
-      <div class="text-xl underline">
+      <div class="text-xl text-blue-600 text-sm font-semibold focus:outline-none focus:ring hover:text-blue-700">
         <%= link_to discussion.name, discussion %>
       </div>
       <p class="mt-4 mb-4"><%= discussion.description %></p>
       <div class="flex justify-between items-start mt-2">
         <div class="flex space-x-2 mt-1">
-          <span class="text-xs px-3 py-2 rounded bg-gray-700 text-white">#ruby</span>
-          <span class="text-xs px-3 py-2 rounded bg-gray-700 text-white">#backend</span>
+          <span class="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700">#ruby</span>
+          <span class="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700">#backend</span>
         </div>
         <span class="ml-2"><%= discussion.posts.count %> answers</span>
       </div>

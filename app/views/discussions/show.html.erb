@@ -1,5 +1,5 @@
 <%= turbo_stream_from @discussion %>
-<main class="container mx-auto mt-28 px-5 flex flex-col">
+<main class="container mx-auto px-5 flex flex-col">
   <%= render(partial: "discussions/header", locals: { discussion: @discussion }) %>
   <div id="posts">
     <%= render partial: "discussions/posts/post", collection: @posts %>

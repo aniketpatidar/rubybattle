@@ -13,6 +13,7 @@
 
   <body class="" data-controller="slideover">
     <% if current_user %>
+      <%= turbo_stream_from "online_users", channel: OnlineChannel %>
       <%= render "layouts/navbar" %>
     <% end %>
     <main class="container max-w-4xl mx-auto px-5 p-4" style="margin-top: 4rem;">

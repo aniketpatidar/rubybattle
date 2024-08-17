@@ -11,7 +11,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   authenticated  do
-    root "pages#dashboard"
+    root "discussions#index"
   end
 
   unauthenticated do
@@ -29,5 +29,6 @@ Rails.application.routes.draw do
   resources :discussions, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
     resources :posts, only: [:create, :show, :edit, :update, :destroy], module: :discussions
   end
+  get "users", to: "pages#dashboard"
   get "/:slug", to: "profile#show"
 end

@@ -12,3 +12,6 @@
   transform: rotateX(0) translateX(-50%);
   visibility: visible;
 }
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
