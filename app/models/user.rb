@@ -12,6 +12,8 @@ class User < ApplicationRecord
   has_many :notifications, dependent: :destroy
   has_many :discussions, dependent: :destroy
 
+  acts_as_voter
+
   def friends
     friends_i_sent_invitation = Invitation.where(user_id: id, confirmed: true).pluck(:friend_id)
     friends_i_got_invitation = Invitation.where(friend_id: id, confirmed: true).pluck(:user_id)

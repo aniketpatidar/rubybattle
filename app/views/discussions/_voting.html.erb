@@ -1,0 +1,17 @@
+<div id="<%= dom_id(discussion, :voting) %>" class="flex flex-col items-center justify-center p-4">
+  <%= button_to upvote_discussion_path(discussion), method: :put, data: { turbo_stream: dom_id(discussion, :voting) }, class: "block text-center" do %>
+    <%= inline_svg "up-vote", 
+      title: "upvote", 
+      class: "fill-current #{upvote_icon(Current.user, discussion)} hover:text-blue-700 w-8 h-8" %>
+  <% end %>
+
+  <span class="text-gray-700 text-center block text-sm">
+    <%= discussion.total_vote_count %>
+  </span>
+
+  <%= button_to downvote_discussion_path(discussion), method: :put, data: { turbo_stream: dom_id(discussion, :voting) }, class: "block text-center" do %>
+    <%= inline_svg "down-vote", 
+          title: "downvote", 
+          class: "fill-current #{downvote_icon(Current.user, discussion)} hover:text-blue-700 w-8 h-8" %>
+  <% end %>
+</div>

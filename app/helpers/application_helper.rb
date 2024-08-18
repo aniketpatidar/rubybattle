@@ -15,4 +15,20 @@ module ApplicationHelper
       'bg-blue-900 border-blue-900'
     end
   end
+
+  def upvote_icon(user, discussion)
+    if user.voted_up_on? discussion, vote_scope: 'like'
+      'text-blue-600'
+    else
+      'text-gray-600'
+    end
+  end
+
+  def downvote_icon(user, discussion)
+    if user.voted_down_on? discussion, vote_scope: 'like'
+      'text-blue-600'
+    else
+      'text-gray-600'
+    end
+  end
 end

@@ -76,3 +76,4 @@ gem "inline_svg", "~> 1.9"
 gem "stimulus_reflex", "~> 3.5"
 gem "redis-session-store", "~> 0.11.5"
 gem "pagy", "~> 5.10"
+gem 'acts_as_votable', '~> 0.10.0'

@@ -1,6 +1,6 @@
 class DiscussionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_discussion, only: [:show, :edit, :update, :destroy]
+  before_action :set_discussion, only: [:show, :edit, :update, :destroy, :upvote, :downvote]
 
   def index
     @discussions = Discussion.order(updated_at: :desc)
@@ -48,6 +48,16 @@ class DiscussionsController < ApplicationController
     redirect_to discussions_path, notice: 'Discussion removed'
   end
 
+  def upvote
+    @discussion.upvote! current_user
+    respond_to_format
+  end
+  
+  def downvote
+    @discussion.downvote! current_user
+    respond_to_format
+  end
+
   private
 
   def discussion_params
@@ -60,5 +70,12 @@ class DiscussionsController < ApplicationController
 
   def format_error_messages(errors)
     errors.map { |error| error.options[:message] }.join(", ")
+  end
+
+  def respond_to_format
+    respond_to do |format|
+      format.html { redirect_to request.url }
+      format.turbo_stream
+    end
   end
 end

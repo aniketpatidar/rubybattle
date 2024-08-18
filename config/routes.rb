@@ -27,6 +27,10 @@ Rails.application.routes.draw do
   post 'execute_ruby', to: 'ruby_execution#execute'
   resources :notifications, only: [:index]
   resources :discussions, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
+    member do
+      put "upvote", to: "discussions#upvote"
+      put "downvote", to: "discussions#downvote"
+    end
     resources :posts, only: [:create, :show, :edit, :update, :destroy], module: :discussions
   end
   get "users", to: "pages#dashboard"
