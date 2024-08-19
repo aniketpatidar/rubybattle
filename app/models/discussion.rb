@@ -3,7 +3,10 @@ class Discussion < ApplicationRecord
 
   belongs_to :user, default: -> { Current.user }
   has_many :posts, dependent: :destroy
+  has_many :categories_discussions
+  has_many :categories, through: :categories_discussions
   has_rich_text :description
+
   validates :name, presence: { message: "Please provide a title for your problem." }
   validates :description, presence: { message: "Please provide the details of your problem." }
 

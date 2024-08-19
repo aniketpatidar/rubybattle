@@ -1,7 +1,9 @@
 <%= turbo_frame_tag dom_id(discussion) do %>
   <div class="bg-white shadow-md rounded-lg my-4">
     <div class="p-4 flex items-center justify-between border-b border-gray-200">
-      <div>
+      <div class="flex items-center">
+        <%= render "discussions/voting", discussion: discussion %>
+
         <h1 class="text-2xl font-bold text-gray-800"><%= discussion.name %></h1>
         <div class="mt-1 flex items-center space-x-2">
           <% if discussion.pinned %>

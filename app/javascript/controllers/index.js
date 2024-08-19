@@ -27,3 +27,6 @@ application.register("notifications", NotificationsController)
 
 import SlideoverController from "./slideover_controller"
 application.register("slideover", SlideoverController)
+
+import Select2Controller from "./select2_controller"
+application.register("select2", Select2Controller)

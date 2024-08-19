@@ -28,21 +28,20 @@
   </div>
   <br>
   <div class="my-5">
+    <%= form.label :categories, class: "block text-sm font-medium text-gray-700" do %>
+      <span class="font-semibold">Tags</span>
+      <span class="block text-xs text-gray-600 mt-1">Add up to 5 tags to describe what your question is about. Start typing to see suggestions.</span>
+    <% end %>
+    <%= form.collection_select :category_ids, Category.order(:name), :id, :name, {}, { class: "block shadow rounded-md border border-gray-200 outline-none mt-2 w-full select2", multiple: true, "data-controller": "select2" } %>
+  </div>
+  <br>
+  <div class="my-5">
     <%= form.check_box :pinned, class: "mr-2" %><%= form.label :pinned %>
   </div>
 
   <div class="my-5">
     <%= form.check_box :closed, class: "mr-2" %><%= form.label :closed %>
   </div>
-
-  <% unless discussion.new_record? %>
-    <%= form.fields_for :posts do |post| %>
-      <div class="my-5">
-        <%= post.label :body %>
-        <%= post.rich_text_area :body, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
-      </div>
-    <% end %>
-  <% end %>
 
   <div class="inline">
     <%= form.submit "Post Your Question", class: "rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700 cursor-pointer" %>

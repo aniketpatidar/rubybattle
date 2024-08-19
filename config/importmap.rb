@@ -41,3 +41,4 @@ pin "tailwindcss/colors", to: "tailwindcss--colors.js" # @3.4.6
 pin "tailwindcss/defaultTheme", to: "tailwindcss--defaultTheme.js" # @3.4.6
 pin "tailwindcss/plugin", to: "tailwindcss--plugin.js" # @3.4.6
 pin "debounce" # @2.1.0
+pin "tom-select" # @2.3.1

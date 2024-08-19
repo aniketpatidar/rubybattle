@@ -33,6 +33,7 @@ Rails.application.routes.draw do
     end
     resources :posts, only: [:create, :show, :edit, :update, :destroy], module: :discussions
   end
+  resources :categories
   get "users", to: "pages#dashboard"
   get "/:slug", to: "profile#show"
 end

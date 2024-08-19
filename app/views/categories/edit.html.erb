@@ -1,0 +1,6 @@
+<div class="mx-auto md:w-2/3 w-full">
+  <%= turbo_frame_tag dom_id(@category) do %>
+    <%= render "form", category: @category %>
+    <%= link_to "Cancel", @category, class: "ml-2" %>
+  <% end %>
+</div>

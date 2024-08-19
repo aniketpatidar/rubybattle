@@ -61,7 +61,7 @@ class DiscussionsController < ApplicationController
   private
 
   def discussion_params
-    params.require(:discussion).permit(:name, :description, :closed, :pinned, posts_attributes: :body)
+    params.require(:discussion).permit(:name, :description, :closed, :pinned, posts_attributes: :body, :category_ids => [])
   end
 
   def set_discussion
