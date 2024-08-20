@@ -3,7 +3,10 @@ class DiscussionsController < ApplicationController
   before_action :set_discussion, only: [:show, :edit, :update, :destroy, :upvote, :downvote]
 
   def index
-    @discussions = Discussion.order(updated_at: :desc)
+    # @discussions = Discussion.order(updated_at: :desc)
+    @pagy, @discussions = pagy(Discussion.order(updated_at: :desc).search(params), items: 5)
+    @hot_discussions = Discussion.ordered_by_votes
+    @categories = Category.all
   end
 
   def show

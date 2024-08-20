@@ -18,6 +18,8 @@ class Discussion < ApplicationRecord
 
   acts_as_votable
 
+  scope :ordered_by_votes, -> { sort_by(&:total_vote_count).reverse }
+
   def to_param
     "#{id}-#{name.downcase.to_s[0...100]}".parameterize
   end
@@ -36,5 +38,12 @@ class Discussion < ApplicationRecord
     else
       downvote_by user, vote_scope: 'like'
     end
+  end
+
+  def self.search(params)
+    return all if params[:query].blank?
+
+    joins(:rich_text_description)
+      .where("discussions.name LIKE :query OR action_text_rich_texts.body LIKE :query", query: "%#{sanitize_sql_like(params[:query])}%")
   end
 end

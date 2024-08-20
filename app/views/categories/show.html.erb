@@ -1,10 +1,10 @@
-<div class="w-full flex">
-  <div class="w-full">
+<div class="container mx-auto px-4 py-2 flex justify-between">
+  <div class="w-3/4 pr-8">
     <% if notice.present? %>
       <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
     <% end %>
     <%= turbo_stream_from @category %>
-    <main class="container max-w-4xl mx-auto px-5 flex flex-col inline-block">
+    <main class="container mx-auto px-5 flex flex-col inline-block">
       <%= turbo_frame_tag dom_id(@category) do %>
         <div class="bg-white shadow-md rounded-lg my-4">
           <div class="p-4 flex items-center justify-between border-b border-gray-200">
@@ -22,6 +22,12 @@
 
     <div class="inline-block ml-2 mt-2">
       <%= link_to "Back to categories", categories_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+    </div>
+  </div>
+  <div class="w-1/4">
+    <div class="bg-white rounded-lg shadow-md p-6 mb-4">
+      <h3 class="text-lg font-semibold mb-2">Related Tags</h3>
+      <ul class="flex flex-wrap gap-2"><%= render @categories %></ul>
     </div>
   </div>
 </div>

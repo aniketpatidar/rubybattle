@@ -1,7 +1,41 @@
-<div class="w-full">
+<div class="container mx-auto px-4 py-2 flex justify-between">
+<div class="w-3/4 pr-8">
   <%= turbo_stream_from 'discussions' %>
-  <h1 class="font-bold text-4xl">Discussions</h1>
+  <div class="flex items-center justify-between">
+    <h1 class="font-bold text-4xl">Questions</h1>
+    <%= form_tag discussions_path, method: :get, data: { turbo_frame: "search-results", turbo_action: "advance", controller: "search", action: "input->search#submit" } do |f| %>
+      <div class="flex items-center gap-2">
+        <%= text_field_tag "query", nil, placeholder: "Search...", class: "w-full max-w-xs px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700 placeholder-gray-500" %>
+        <%= submit_tag "Search", class: "rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700" %>
+      </div>
+    <% end %>
+    <%= link_to new_discussion_path do %>
+      <button class="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700">
+        Ask a question
+      </button>
+    <% end %>
+  </div>
   <div id="discussions">
-    <%= render @discussions %>
+    <%= turbo_frame_tag "search-results" do %>
+      <%= render @discussions %>
+    <% end %>
+    <%== pagy_nav(@pagy) %>
+  </div>
+</div>
+  <div class="w-1/4">
+    <div class="bg-white rounded-lg shadow-md p-6 mb-4">
+      <h3 class="text-lg font-semibold mb-2">Related Tags</h3>
+      <ul class="flex flex-wrap gap-2"><%= render @categories %></ul>
+    </div>
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h3 class="text-lg font-semibold mb-2">Hot Network Questions</h3>
+      <ul class="list-disc list-inside">
+        <% @hot_discussions.each do |discussion| %>
+          <li class="mb-2">
+            <%= link_to discussion.name, discussion_path(discussion), class: "text-blue-600 hover:text-blue-800" %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
   </div>
 </div>
