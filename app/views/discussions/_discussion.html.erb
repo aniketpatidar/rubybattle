@@ -4,7 +4,7 @@
 
     <div class="md:flex-grow p-4">
       <div class="text-xl text-blue-600 font-semibold focus:outline-none focus:ring hover:text-blue-700">
-        <%= link_to discussion.name, discussion %>
+        <%= link_to discussion.name, discussion, data: { turbo: false } %>
       </div>
       <p class="mt-4 mb-4"><%= discussion.description %></p>
 
