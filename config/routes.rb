@@ -23,7 +23,7 @@ Rails.application.routes.draw do
       post :decline
     end
   end
-  get "dashboard", to: "home#index"
+  get "practice/:room_id", to: "home#index", as: "practice"
   post 'execute_ruby', to: 'ruby_execution#execute'
   resources :notifications, only: [:index]
   resources :discussions, only: [:index, :show, :new, :create, :edit, :update, :destroy] do

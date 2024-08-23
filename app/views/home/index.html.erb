@@ -1,45 +1,48 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.59.4/codemirror.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.59.4/theme/monokai.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.59.4/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.59.4/mode/javascript/javascript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.59.4/mode/ruby/ruby.min.js"></script>
-    <style>
-      button[data-action="click->codemirror#run"] {
-        background-color: #4CAF50;
-        border: none;
-        color: white;
-        padding: 15px 30px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        cursor: pointer;
-      }
+<body class="h-screen m-0 p-0 font-sans">
+  <div class="flex h-full">
+    <div class="flex-grow flex flex-col">
+      <div class="bg-gray-800 text-white p-2 flex justify-between items-center">
+        <div class="font-semibold text-2xl p-3">Practice</div>
+        <div class="bg-gray-700 px-3 py-1 rounded-full mr-2">36 points</div>
+      </div>
 
-      button[data-action="click->codemirror#run"]:hover {
-        background-color: #45a049;
-      }
-      #output {
-        background-color: #272822;
-      }
-    </style>
-  </head>
-<body>
-  <div class="min-h-screen">
-    <!-- CodeMirror Editor Section -->
-    <div data-controller="codemirror" class="relative">
-      <textarea data-target="codemirror.editor" class="w-full h-full"></textarea>
-      <button data-action="click->codemirror#run" class="absolute top-0 right-0 m-2 py-2 px-4 rounded" style="z-index:10;">Run</button>
+      <div class="flex flex-grow">
+        <div class="w-96 bg-gray-700 text-white p-5">
+          <h2 class="text-xl mb-4"><%= simple_format @challenge.name %></h2>
+          <h3 class="text-lg mb-2">Instructions</h3>
+          <p class="mb-4"><%= simple_format @challenge.description %></p>
+        </div>
+
+        <div class="flex-grow flex flex-col"
+          id="code-editor"
+          data-controller="codemirror"
+          data-method-template="<%= @challenge.method_template %>"
+          data-tests="<%= @challenge.tests %>"
+          data-challenge-id="<%= @challenge.id %>"
+          data-room-id="<%= @room_id %>"
+        >
+          <div class="bg-gray-700 text-white p-2 flex justify-between items-center">
+            <div>😎 <%= Current.user.slug %></div>
+            <button data-action="click->codemirror#run" class="py-2 px-4 bg-blue-600 text-sm font-semibold text-white rounded-md focus:outline-none focus:ring hover:bg-blue-700 cursor-pointer" style="z-index:10;">Submit</button>
+          </div>
+          <textarea class="flex-grow w-full" data-target="codemirror.editor"></textarea>
+        </div>
+      </div>
+      <div id="output" class="bg-gray-800 p-4 h-32 overflow-auto">
+        <h2 class="text-lg font-semibold text-white">Test results</h2>
+        <pre id="executionResult" class="text-sm text-white">Awaiting code submission</pre>
+      </div>
     </div>
 
-    <!-- Output Section -->
-    <div id="output" class="flex-1 p-4">
-      <h2 class="text-lg font-semibold text-white">Execution Output:</h2>
-      <pre id="executionResult" class="text-sm text-white overflow-auto h-full"></pre>
+    <div class="w-16 bg-gray-800 flex flex-col items-center pt-5">
+      <button 
+        class="w-10 h-10 mb-2 bg-white flex justify-center items-center rounded-lg"
+        data-controller="copy-to-clipboard"
+        data-action="copy-to-clipboard#copy"
+        data-url="<%= "http://localhost:3000/practice/#{@room_id}--#{@challenge.id}" %>">
+        <%= inline_svg_tag('copy-paste.svg', class: "h-6 w-6") %>
+      </button>
+      <span class="text-white hidden" id="message">Copied!</span>
     </div>
   </div>
 </body>
-</html>

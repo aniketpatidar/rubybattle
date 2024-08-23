@@ -30,3 +30,6 @@ application.register("slideover", SlideoverController)
 
 import Select2Controller from "./select2_controller"
 application.register("select2", Select2Controller)
+
+import CopyToClipboardController from "./copy_to_clipboard_controller"
+application.register("copy-to-clipboard", CopyToClipboardController)
