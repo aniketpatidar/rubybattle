@@ -83,4 +83,4 @@ test:
 production:
   <<: *default
   database: battle_production
-
+  url: <%= ENV['DATABASE_URL'] %>
