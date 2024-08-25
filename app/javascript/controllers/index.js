@@ -33,3 +33,6 @@ application.register("select2", Select2Controller)
 
 import CopyToClipboardController from "./copy_to_clipboard_controller"
 application.register("copy-to-clipboard", CopyToClipboardController)
+
+import TabsController from "./tabs_controller"
+application.register("tabs", TabsController)

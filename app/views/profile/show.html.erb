@@ -1,4 +1,4 @@
-<div class="profile-container p-8 rounded-lg shadow-lg max-w-4xl mx-auto">
+<div class="profile-container p-8 rounded-lg shadow-lg mx-auto">
   <div class="profile-header flex flex-col sm:flex-row items-center">
     <div class="profile-avatar text-center text-white text-4xl rounded-full w-24 h-24 flex items-center justify-center">
       <% if @user.avatar&.present? %>
@@ -15,32 +15,72 @@
     </div>
   </div>
 
-  <div class="profile-navigation mt-8 text-center sm:text-left">
+  <div
+    class="profile-navigation mt-8 text-center sm:text-left"
+    data-controller="tabs"
+    data-tabs-active-class="bg-blue-600 text-white"
+    data-tabs-default-tab-value="summary"
+  >
     <ul class="flex justify-center sm:justify-start space-x-4">
-      <li><%= link_to "Summary", '#', class: "rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700" %></li>
-      <li><%= link_to "Questions", '#', class: "rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700" %></li>
-      <li><%= link_to "Answers", '#', class: "rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700" %></li>
-      <li><%= link_to "Votes", '#', class: "rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700" %></li>
+      <li><button data-tabs-target="btn" data-action="click->tabs#select" id="summary" class="rounded-md px-4 py-2 text-sm font-semibold focus:outline-none focus:ring hover:bg-blue-700 hover:text-white">Summary</button></li>
+      <li><button data-tabs-target="btn" data-action="click->tabs#select" id="questions" class="rounded-md px-4 py-2 text-sm font-semibold focus:outline-none focus:ring hover:bg-blue-700 hover:text-white">Questions</button></li>
+      <li><button data-tabs-target="btn" data-action="click->tabs#select" id="answers" class="rounded-md px-4 py-2 text-sm font-semibold focus:outline-none focus:ring hover:bg-blue-700 hover:text-white">Answers</button></li>
+      <li><button data-tabs-target="btn" data-action="click->tabs#select" id="votes" class="rounded-md px-4 py-2 text-sm font-semibold focus:outline-none focus:ring hover:bg-blue-700 hover:text-white">Votes</button></li>
     </ul>
-  </div>
 
-  <div class="profile-discussions mt-8">
-    <h2 class="text-xl font-bold text-blue-600 focus:outline-none focus:ring hover:text-blue-700"><%= pluralize(@user.discussions.count, "discussion") %></h2>
-    <% @user.discussions.each do |discussion| %>
-      <div class="p-4 mt-4 rounded-lg">
-        <div class="flex justify-between items-start">
-          <div>
-            <p class="font-bold text-blue-500"><%= link_to discussion.name, discussion_path(discussion), class: "hover:underline" %></p>
-          </div>
-          <div class="text-sm">
-            <span class="ml-2"><%= discussion.posts.count %> answers</span>
-          </div>
-        </div>
-        <div class="flex items-center mt-2">
-          <span class="text-gray-400 text-sm">Asked <%= time_ago_in_words(discussion.created_at) %> ago.</span>
+    <div class="rounded-lg border p-4 mt-4">
+      <div data-tabs-target="tab" id="summary">
+        Summary
+      </div>
+
+      <div data-tabs-target="tab" id="questions" class='hidden'>
+        <div class="profile-discussions">
+          <h2 class="text-xl font-bold text-blue-600 focus:outline-none focus:ring hover:text-blue-700"><%= pluralize(@user.discussions.count, "question") %></h2>
+          <% @user.discussions.each do |discussion| %>
+            <div class="p-4 mt-4 rounded-lg">
+              <div class="flex justify-between items-start">
+                <div>
+                  <p class="font-bold text-blue-500"><%= link_to discussion.name, discussion_path(discussion), class: "hover:underline" %></p>
+                </div>
+                <div class="text-sm">
+                  <span class="ml-2"><%= discussion.posts.count %> answers</span>
+                </div>
+              </div>
+              <div class="flex items-center mt-2 gap-4">
+                <span class="text-gray-700 text-sm">Asked <span class="font-semibold"><%= time_ago_in_words(discussion.created_at) %> ago.</span></span>
+                <span class="text-gray-700 text-sm">Modified <span class="font-semibold"><%= time_ago_in_words(discussion.updated_at) %> ago.</span></span>
+              </div>
+            </div>
+          <% end %>
         </div>
       </div>
-    <% end %>
+
+      <div data-tabs-target="tab" id="answers" class='hidden'>
+        <div class="profile-discussions">
+          <h2 class="text-xl font-bold text-blue-600 focus:outline-none focus:ring hover:text-blue-700"><%= pluralize(@user.posts.count, "answer") %></h2>
+          <% @user.posts.each do |post| %>
+            <div class="p-4 mt-4 rounded-lg">
+              <div>
+                <p class="font-bold text-blue-500"><%= link_to post.discussion.name, discussion_path(post.discussion), class: "hover:underline" %></p>
+              </div>
+              <div class="px-2">
+                <div>
+                  <p class="text-gray-700 mt-2"><%= post.body %></p>
+                </div>
+                <div class="flex items-center mt-2 gap-4">
+                  <span class="text-gray-700 text-sm">Answered <span class="font-semibold"><%= time_ago_in_words(post.created_at) %> ago.</span></span>
+                  <span class="text-gray-700 text-sm">Modified <span class="font-semibold"><%= time_ago_in_words(post.updated_at) %> ago.</span></span>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div data-tabs-target="tab" id="votes" class='hidden'>
+        Votes
+      </div>
+    </div>
   </div>
 </div>
 
