@@ -2,37 +2,37 @@
 // Run that command whenever you add a new controller or create them with
 // ./bin/rails generate stimulus controllerName
 
-import { application } from "./application"
+import { application } from "application"
 
-import AlertController from "./alert_controller"
+import AlertController from "alert_controller"
 application.register("alert", AlertController)
 
-import ApplicationController from "./application_controller"
+import ApplicationController from "application_controller"
 application.register("application", ApplicationController)
 
-import CodemirrorController from "./codemirror_controller"
+import CodemirrorController from "codemirror_controller"
 application.register("codemirror", CodemirrorController)
 
-import DropdownController from "./dropdown_controller"
+import DropdownController from "dropdown_controller"
 application.register("dropdown", DropdownController)
 
-import HelloController from "./hello_controller"
+import HelloController from "hello_controller"
 application.register("hello", HelloController)
 
-import NotificationController from "./notification_controller"
+import NotificationController from "notification_controller"
 application.register("notification", NotificationController)
 
-import NotificationsController from "./notifications_controller"
+import NotificationsController from "notifications_controller"
 application.register("notifications", NotificationsController)
 
-import SlideoverController from "./slideover_controller"
+import SlideoverController from "slideover_controller"
 application.register("slideover", SlideoverController)
 
-import Select2Controller from "./select2_controller"
+import Select2Controller from "select2_controller"
 application.register("select2", Select2Controller)
 
-import CopyToClipboardController from "./copy_to_clipboard_controller"
+import CopyToClipboardController from "copy_to_clipboard_controller"
 application.register("copy-to-clipboard", CopyToClipboardController)
 
-import TabsController from "./tabs_controller"
+import TabsController from "tabs_controller"
 application.register("tabs", TabsController)
