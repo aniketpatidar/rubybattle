@@ -4,35 +4,5 @@
 
 import { application } from "application"
 
-import AlertController from "alert_controller"
-application.register("alert", AlertController)
-
-import ApplicationController from "application_controller"
-application.register("application", ApplicationController)
-
-import CodemirrorController from "codemirror_controller"
-application.register("codemirror", CodemirrorController)
-
-import DropdownController from "dropdown_controller"
-application.register("dropdown", DropdownController)
-
-import HelloController from "hello_controller"
-application.register("hello", HelloController)
-
-import NotificationController from "notification_controller"
-application.register("notification", NotificationController)
-
-import NotificationsController from "notifications_controller"
-application.register("notifications", NotificationsController)
-
-import SlideoverController from "slideover_controller"
-application.register("slideover", SlideoverController)
-
-import Select2Controller from "select2_controller"
-application.register("select2", Select2Controller)
-
-import CopyToClipboardController from "copy_to_clipboard_controller"
-application.register("copy-to-clipboard", CopyToClipboardController)
-
-import TabsController from "tabs_controller"
-application.register("tabs", TabsController)
+import { eagerLoadControllersFrom } from "@hotwired/stimulus-loading"
+eagerLoadControllersFrom("controllers", application)
