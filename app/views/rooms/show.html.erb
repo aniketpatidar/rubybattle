@@ -1,0 +1,163 @@
+<%= content_for :head do %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/ruby/ruby.min.js"></script>
+<% end %>
+
+<div 
+  class="min-h-screen bg-[#121418] text-white" 
+  data-controller="battle" 
+  data-battle-target="container"
+  data-current-user-id="<%= current_user.id %>"
+  data-room-id="<%= @room.id %>"
+>
+  <div class="container mx-auto px-4 py-8" id="participants-container">
+    <% if !@room.can_start_battle? %>
+      <div class="max-w-2xl mx-auto text-center">
+        <div class="bg-gray-800 p-8 rounded-lg shadow-xl">
+          <h2 class="text-2xl font-bold mb-4">Waiting for Opponent</h2>
+          <div class="flex justify-center items-center space-x-4">
+            <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-blue-500"></div>
+            <p class="text-gray-300">
+              Searching for an opponent to join the room...
+            </p>
+          </div>
+          <p class="mt-4 text-sm text-gray-400">
+            Room Code: <span class="font-mono"><%= @room.code %></span>
+          </p>
+          <div class="mt-6">
+            <p class="text-yellow-500">
+              Please wait while another player joins the room.
+            </p>
+            <p class="text-xs text-gray-500 mt-2">
+              Current participants: <%= @room.room_participants.count %>/2
+            </p>
+            <div class="mt-4 text-sm text-gray-400">
+              Participants:
+              <% @room.room_participants.each do |participant| %>
+                <span class="ml-2 px-2 py-1 bg-gray-700 rounded">
+                  <%= participant.user.email %>
+                </span>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% else %>
+      <div class="max-w-6xl mx-auto">
+        <!-- Participants Section -->
+        <div class="mt-4 md:mt-6 grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6">
+          <div class="md:col-span-12 bg-[#1e2329] rounded-lg p-4 md:p-5 border border-gray-800">
+            <h2 class="text-lg md:text-xl font-bold mb-3 md:mb-4 text-white">Battle Participants</h2>
+            <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+              <% @room.users.each_with_index do |user, index| %>
+                <div class="flex items-center gap-3 
+                  w-full md:w-auto
+                  <%= user == @room.winner ? 'bg-green-500/10 border-green-500/30' : 'bg-[#121418]' %> 
+                  rounded-lg border border-gray-700 p-3">
+                  <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 
+                    flex items-center justify-center text-sm font-medium text-white">
+                    <%= user.initials %>
+                  </div>
+                  <div>
+                    <div class="text-sm font-medium <%= user == @room.winner ? 'text-green-400' : 'text-gray-300' %>">
+                      <%= user.email %>
+                    </div>
+                    <div class="text-xs text-gray-500">
+                      <%= @room.player_ready?(user) ? 'Ready ✓' : 'Waiting...' %>
+                    </div>
+                  </div>
+                  <% if user == @room.winner %>
+                    <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.285 1.05A3.989 3.989 0 0115 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.715-5.349L11 6.477V16h2a1 1 0 110 2H7a1 1 0 110-2h2V6.477L6.237 7.582l1.715 5.349a1 1 0 01-.285 1.05A3.989 3.989 0 015 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.738-5.42-1.233-.616a1 1 0 01.894-1.79l1.599.8L9 4.323V3a1 1 0 011-1z" clip-rule="evenodd"/>
+                    </svg>
+                  <% end %>
+                </div>
+                <% if index < @room.users.count - 1 %>
+                  <div class="hidden md:block text-gray-500 mx-4 text-xl font-light">VS</div>
+                  <div class="block md:hidden w-full text-center text-gray-500 text-xl font-light my-2">VS</div>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Battle Content Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-12">
+          <!-- Instructions Panel -->
+          <div class="md:col-span-4 bg-[#1e2329] rounded-lg p-4 md:p-5 border border-gray-800">
+            <div class="flex items-center gap-4">
+              <h1 class="text-xl md:text-2xl font-bold">
+                <%= @challenge.name %>
+                <span class="ml-2 px-2 py-1 bg-blue-500/20 text-blue-400 text-xs rounded-full">
+                  <%= @challenge.difficulty.titleize %>
+                </span>
+              </h1>
+            </div>
+            <br>
+            <div class="text-gray-400 prose prose-invert text-sm md:text-base">
+              <%= @challenge.description %>
+            </div>
+          </div>
+
+          <!-- Code Editor Panel -->
+          <div class="md:col-span-8 bg-[#1e2329] rounded-lg p-4 md:p-5 border border-gray-800">
+            <h2 class="text-lg md:text-xl font-bold mb-3 md:mb-4 text-white">Your Solution</h2>
+            <div class="mb-4">
+              <textarea 
+                data-battle-target="editor" 
+                data-method-template="<%= @challenge.method_template.gsub('"', '&quot;').gsub("\n", '\\n') %>"
+                class="w-full bg-[#121418] text-white p-2 md:p-3 rounded-lg font-mono text-xs md:text-sm border border-gray-700"
+                rows="10"
+                placeholder="Write your Ruby solution here..."
+              ><%= @challenge.method_template.gsub('\\n', "\n") %></textarea>
+            </div>
+            <div class="flex justify-end space-x-2">
+              <button 
+                data-battle-target="submit"
+                class="px-4 md:px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2 text-sm md:text-base"
+              >
+                <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Submit Solution
+              </button>
+            </div>
+
+            <!-- Test Results Panel -->
+            <div class="bg-[#1e2329] rounded-lg p-4 md:p-5 border border-gray-800">
+              <h2 class="text-lg md:text-xl font-bold text-white">Test Results</h2>
+              <div data-battle-target="testResults" class="mt-4 rounded-lg text-white p-4 md:p-5">
+                <!-- Test results will be dynamically populated here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    try {
+      window.battleEditor = CodeMirror.fromTextArea(document.querySelector('[data-battle-target="editor"]'), {
+        mode: 'ruby',
+        theme: 'monokai',
+        lineNumbers: true,
+        tabSize: 2,
+        indentUnit: 2,
+        autofocus: true
+      });
+    } catch (error) {
+      console.error('Error initializing CodeMirror:', error);
+    }
+  });
+</script>
+
+<script>
+  console.log('Room Can Start Battle:', <%= @room.can_start_battle? %>);
+  console.log('Room Participants Count:', <%= @room.room_participants.count %>);
+  console.log('Waiting for Opponent:', <%= !@room.can_start_battle? %>);
+</script>

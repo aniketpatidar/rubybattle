@@ -9,11 +9,6 @@
         <%= submit_tag "Search", class: "rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700" %>
       </div>
     <% end %>
-    <%= link_to new_discussion_path do %>
-      <button class="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700">
-        Ask a question
-      </button>
-    <% end %>
   </div>
   <div id="discussions">
     <%= turbo_frame_tag "search-results" do %>
