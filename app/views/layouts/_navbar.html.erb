@@ -1,12 +1,11 @@
-<header class="shadow-md mx-auto py-1 px-3">
+<header class="py-1 px-3">
   <nav class="flex justify-between items-center">
-    <div class="text-2xl">RubyBattle</div>
+    <div class="text-2xl"></div>
     <div class="space-x-8 flex items-center rounded-full px-3 py-1">
-      <%= link_to 'Home', "/", class: 'px-2 py-1' %>
-      <% room_id = SecureRandom.uuid %>
-      <%= link_to 'Practice', practice_path(room_id: room_id), class: 'px-2 py-1' %>
+      <%= link_to 'RubyBattle', "/", class: 'px-2 py-1' %>
+      <%= link_to 'Challenges', challenges_path, class: 'px-2 py-1' %>
       <%= link_to 'Users', users_path, class: 'px-2 py-1' %>
-      <%= link_to 'Categories', categories_path, class: 'px-2 py-1' %>
+      <%#= link_to 'Categories', categories_path, class: 'px-2 py-1' %>
       <div class="">
         <div class="dropdown inline-block relative">
           <button class="py-2 px-4 rounded inline-flex items-center">
@@ -37,5 +36,6 @@
         </button>
       <% end %>
     </div>
+    <div class="text-2xl"></div>
   </nav>
 </header>

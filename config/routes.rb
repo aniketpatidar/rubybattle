@@ -24,6 +24,18 @@ Rails.application.routes.draw do
     end
   end
   get "practice/:room_id", to: "home#index", as: "practice"
+  get 'challenges', to: 'challenges#index'
+  resources :challenges, only: [:index, :show] do
+    member do
+      post :invite_user
+    end
+  end
+  resources :rooms, param: :code, only: [:show] do
+    member do
+      post :start_battle
+      post :submit_solution
+    end
+  end
   post 'execute_ruby', to: 'ruby_execution#execute'
   resources :notifications, only: [:index]
   resources :discussions, only: [:index, :show, :new, :create, :edit, :update, :destroy] do

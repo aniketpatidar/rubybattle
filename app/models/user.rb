@@ -1,6 +1,4 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   has_many :posts, dependent: :destroy
@@ -11,6 +9,8 @@ class User < ApplicationRecord
   has_many :pending_invitations, -> { where confirmed: false }, class_name: 'Invitation', foreign_key: "friend_id"
   has_many :notifications, dependent: :destroy
   has_many :discussions, dependent: :destroy
+  has_many :room_participants, dependent: :destroy
+  has_many :rooms, through: :room_participants
 
   acts_as_voter
 

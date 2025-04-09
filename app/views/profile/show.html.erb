@@ -1,17 +1,37 @@
-<div class="profile-container p-8 rounded-lg shadow-lg mx-auto">
-  <div class="profile-header flex flex-col sm:flex-row items-center">
-    <div class="profile-avatar text-center text-white text-4xl rounded-full w-24 h-24 flex items-center justify-center">
-      <% if @user.avatar&.present? %>
-        <%= image_tag @user.avatar, class: "h-16 w-16 object-cover rounded-full" %>
-      <% end %>
+<div class="profile-container p-8 rounded-lg shadow-lg mx-auto <%= current_user == @user ? 'bg-blue-50 border-2 border-blue-200' : 'bg-white' %>">
+  <div class="profile-header flex flex-col sm:flex-row items-center justify-between w-full">
+    <div class="flex flex-col sm:flex-row items-center">
+      <div class="profile-avatar bg-gradient-to-r from-blue-500 to-purple-500 text-center text-white text-4xl rounded-full w-24 h-24 flex items-center justify-center shadow-lg">
+        <% if @user.avatar&.present? %>
+          <%= image_tag @user.avatar, class: "h-24 w-24 object-cover rounded-full" %>
+        <% else %>
+          <%= @user.initials %>
+        <% end %>
+      </div>
+
+      <div class="profile-info mt-4 sm:mt-0 sm:ml-6 text-center sm:text-left">
+        <div class="flex items-center gap-2">
+          <h1 class="text-3xl font-bold"><%= @user.full_name %></h1>
+          <% if current_user == @user %>
+            <span class="px-2 py-1 text-sm bg-blue-100 text-blue-800 rounded-full">You</span>
+          <% end %>
+        </div>
+        <p class="text-gray-600"><%= @user.email %></p>
+        <p class="text-sm text-gray-500 mt-1">Joined <%= time_ago_in_words(@user.created_at) %> ago</p>
+      </div>
     </div>
-    <% if current_user != @user %>
-      <%= render 'invitations/friendship', user: @user, current_user: current_user %>
-    <% end %>
-    <div class="profile-info mt-4 sm:mt-0 sm:ml-6 text-center sm:text-left">
-      <h1 class="text-3xl font-bold"><%= @user.full_name %></h1>
-      <p class="text-gray-400"><%= @user.email %></p>
-      <p class="text-sm text-gray-500 mt-1">Joined <%= time_ago_in_words(@user.created_at) %> ago</p>
+
+    <div class="mt-4 sm:mt-0">
+      <% if current_user == @user %>
+        <%= link_to edit_user_registration_path, class: "inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+          </svg>
+          Edit Profile
+        <% end %>
+      <% else %>
+        <%= render 'invitations/friendship', user: @user, current_user: current_user %>
+      <% end %>
     </div>
   </div>
 
@@ -25,12 +45,36 @@
       <li><button data-tabs-target="btn" data-action="click->tabs#select" id="summary" class="rounded-md px-4 py-2 text-sm font-semibold focus:outline-none focus:ring hover:bg-blue-700 hover:text-white">Summary</button></li>
       <li><button data-tabs-target="btn" data-action="click->tabs#select" id="questions" class="rounded-md px-4 py-2 text-sm font-semibold focus:outline-none focus:ring hover:bg-blue-700 hover:text-white">Questions</button></li>
       <li><button data-tabs-target="btn" data-action="click->tabs#select" id="answers" class="rounded-md px-4 py-2 text-sm font-semibold focus:outline-none focus:ring hover:bg-blue-700 hover:text-white">Answers</button></li>
-      <li><button data-tabs-target="btn" data-action="click->tabs#select" id="votes" class="rounded-md px-4 py-2 text-sm font-semibold focus:outline-none focus:ring hover:bg-blue-700 hover:text-white">Votes</button></li>
     </ul>
 
-    <div class="rounded-lg border p-4 mt-4">
-      <div data-tabs-target="tab" id="summary">
-        Summary
+    <div class="rounded-lg border p-6 mt-4 <%= current_user == @user ? 'bg-white' : 'bg-gray-50' %>">
+      <div data-tabs-target="tab" id="summary" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="p-4 bg-white rounded-lg shadow">
+            <h3 class="text-lg font-semibold text-gray-700">Battles</h3>
+            <p class="text-3xl font-bold text-blue-600"><%= @user.rooms.count %></p>
+          </div>
+          <div class="p-4 bg-white rounded-lg shadow">
+            <h3 class="text-lg font-semibold text-gray-700">Wins</h3>
+            <p class="text-3xl font-bold text-green-600">0</p>
+          </div>
+          <div class="p-4 bg-white rounded-lg shadow">
+            <h3 class="text-lg font-semibold text-gray-700">Questions</h3>
+            <p class="text-3xl font-bold text-purple-600"><%= @user.discussions.count %></p>
+          </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-lg shadow">
+          <h3 class="text-lg font-semibold text-gray-700 mb-4">Recent Activity</h3>
+          <div class="space-y-4">
+            <% @user.discussions.order(created_at: :desc).limit(5).each do |discussion| %>
+              <%= link_to discussion_path(discussion), class: "block hover:bg-gray-50 p-3 rounded-lg transition-colors" do %>
+                <h4 class="font-medium text-blue-600"><%= discussion.name %></h4>
+                <p class="text-sm text-gray-500"><%= time_ago_in_words(discussion.created_at) %> ago</p>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
       </div>
 
       <div data-tabs-target="tab" id="questions" class='hidden'>
@@ -76,36 +120,6 @@
           <% end %>
         </div>
       </div>
-
-      <div data-tabs-target="tab" id="votes" class='hidden'>
-        Votes
-      </div>
     </div>
   </div>
 </div>
-
-<style>
-  @media (min-width: 640px) {
-    .profile-container {
-      padding: 24px;
-    }
-  }
-
-  @media (max-width: 639px) {
-    .profile-avatar {
-      width: 64px;
-      height: 64px;
-      font-size: 1.5rem;
-    }
-    .profile-info h1 {
-      font-size: 1.75rem;
-    }
-    .profile-navigation ul {
-      flex-direction: column;
-      space-y-2;
-    }
-    .post-item, .discussion-item {
-      padding: 16px;
-    }
-  }
-</style>

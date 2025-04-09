@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_19_075049) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_23_001448) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,10 +52,23 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_19_075049) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "battle_invitations", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "opponent_id"
+    t.bigint "room_id"
+    t.boolean "confirmed", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["opponent_id"], name: "index_battle_invitations_on_opponent_id"
+    t.index ["room_id"], name: "index_battle_invitations_on_room_id"
+    t.index ["user_id"], name: "index_battle_invitations_on_user_id"
+  end
+
   create_table "categories", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "discussions_count", default: 0, null: false
   end
 
   create_table "categories_discussions", id: false, force: :cascade do |t|
@@ -116,6 +129,26 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_19_075049) do
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
+  create_table "room_participants", force: :cascade do |t|
+    t.bigint "room_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "subscription_status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["room_id"], name: "index_room_participants_on_room_id"
+    t.index ["user_id"], name: "index_room_participants_on_user_id"
+  end
+
+  create_table "rooms", force: :cascade do |t|
+    t.string "code"
+    t.integer "status"
+    t.bigint "challenge_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["challenge_id"], name: "index_rooms_on_challenge_id"
+    t.index ["code"], name: "index_rooms_on_code"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -150,9 +183,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_19_075049) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "battle_invitations", "rooms"
+  add_foreign_key "battle_invitations", "users"
+  add_foreign_key "battle_invitations", "users", column: "opponent_id"
   add_foreign_key "discussions", "users"
   add_foreign_key "invitations", "users"
   add_foreign_key "notifications", "users"
   add_foreign_key "posts", "discussions"
   add_foreign_key "posts", "users"
+  add_foreign_key "room_participants", "rooms"
+  add_foreign_key "room_participants", "users"
+  add_foreign_key "rooms", "challenges"
 end

@@ -1,0 +1,38 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-4xl mx-auto">
+    <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+      <div class="p-8">
+        <h1 class="text-3xl font-bold mb-4"><%= @challenge.name %></h1>
+        
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="px-3 py-1 rounded-full text-sm font-medium <%= @challenge.difficulty_badge_color %>">
+            <%= @challenge.difficulty.titleize %>
+          </span>
+        </div>
+
+        <div class="prose max-w-none mb-8">
+          <%= @challenge.description %>
+        </div>
+
+        <div class="mb-8">
+          <h2 class="text-xl font-bold mb-4">Online Users</h2>
+          <div class="flex flex-wrap gap-2">
+            <% @online_users.each do |user| %>
+              <%= button_to invite_user_challenge_path(@challenge, user_id: user.id),
+                  class: "group inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-blue-50 text-gray-700 hover:text-blue-600 rounded-full transition-all",
+                  form: { class: "inline-block" } do %>
+                <span class="w-6 h-6 flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs font-medium rounded-full">
+                  <%= user.initials %>
+                </span>
+                <span class="text-sm font-medium"><%= user.email %></span>
+                <svg class="w-4 h-4 text-gray-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
