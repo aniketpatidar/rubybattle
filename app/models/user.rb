@@ -1,8 +1,8 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  # :confirmable, :lockable, :timeoutable, :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable, :trackable
   has_many :posts, dependent: :destroy
   validates :slug, uniqueness: true
   before_validation :set_slug, if: -> { slug.nil? }
@@ -49,6 +49,10 @@ class User < ApplicationRecord
     params[:query].blank? ? all : where(
       "slug LIKE ?", "%#{sanitize_sql_like(params[:query])}%"
     )
+  end
+
+  def to_param
+    slug
   end
 
   private

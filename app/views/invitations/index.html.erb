@@ -6,7 +6,7 @@
       <ul id="friendsList">
         <% current_user.friends.each do |friend| %>
           <li class="px-4 py-2 text-gray-300 bg-gray-700 rounded-md w-40 mb-4">
-            <%= link_to friend.slug, "/#{friend.slug}", class: "underline" %>
+            <%= link_to friend.slug, "/users/#{friend.slug}", class: "underline" %>
           </li>
         <% end %>
       </ul>
@@ -19,7 +19,7 @@
         <% @users.each do |user| %>
           <% unless current_user == user || current_user.friend_with?(user) || Invitation.reacted?(current_user.id, user.id) %>
             <li class="flex items-center justify-between mb-4">
-              <%= link_to user.slug, "/#{user.slug}", class: "underline" %>
+              <%= link_to user.slug, "/users/#{user.slug}", class: "underline" %>
               <%= form_with(url: invitations_path, method: :post, local: true) do |form| %>
                 <%= form.hidden_field :user_id, value: user.id %>
                 <%= form.submit "Connect", class: "px-4 py-2 text-gray-300 bg-gray-700 rounded-md cursor-pointer" %>
@@ -34,7 +34,7 @@
         <% current_user.received_invitations.each do |invitation| %>
           <div class="flex space-x-2">
             <li class="flex items-center justify-between mb-4">
-              <%= link_to invitation.user.slug, "/#{invitation.user.slug}", class: "underline" %> sent you an invitation
+              <%= link_to invitation.user.slug, "/users/#{invitation.user.slug}", class: "underline" %> sent you an invitation
               <%= button_to "Accept", accept_invitation_path(invitation), method: :post, class: "px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600" %>
               <%= button_to "Decline", decline_invitation_path(invitation), method: :post, class: "px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600" %>
             </li>
@@ -46,7 +46,7 @@
       <ul>
         <% current_user.sent_invitations.each do |invitation| %>
           <li class="flex items-center justify-between mb-4">
-            <%= link_to invitation.friend.slug, "/#{invitation.friend.slug}", class: "underline" %>
+            <%= link_to invitation.friend.slug, "/users/#{invitation.friend.slug}", class: "underline" %>
             <span class="px-4 py-2 bg-gray-400 text-white rounded-md">
               Pending
             </span>

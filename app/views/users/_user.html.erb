@@ -1,4 +1,4 @@
-<tr id="<%= dom_id(user) %>" class="cursor-pointer" onclick="window.location='/<%= user.slug %>';">
+<tr id="<%= dom_id(user) %>" class="cursor-pointer" onclick="window.location='/users/<%= user.slug %>';">
   <td class="border-b border-gray-200 bg-white px-5 py-5 text-sm">
     <p class="whitespace-no-wrap"><%= user.id %></p>
   </td>
@@ -22,7 +22,9 @@
   </td>
   <td class="border-b border-gray-200 bg-white px-5 py-5 text-sm">
     <span id="user_status_<%= user.id %>">
-      <%= render partial: 'pages/user_status', locals: { status: @active_users.include?(user) ? 'Active' : 'Inactive' } %>
+      <span class="rounded-full px-3 py-1 text-xs font-semibold <%= @active_users.include?(user) ? 'bg-green-200 text-green-900' : 'bg-red-200 text-red-900' %>">
+        <%= @active_users.include?(user) ? 'Active' : 'Inactive' %>
+      </span>
     </span>
   </td>
 </tr>

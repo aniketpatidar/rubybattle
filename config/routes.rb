@@ -34,6 +34,5 @@ Rails.application.routes.draw do
     resources :posts, only: [:create, :show, :edit, :update, :destroy], module: :discussions
   end
   resources :categories
-  get "users", to: "pages#dashboard"
-  get "/:slug", to: "profile#show"
+  resources :users, only: %i[index show], param: :slug
 end
