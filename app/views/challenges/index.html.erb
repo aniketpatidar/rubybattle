@@ -1,0 +1,57 @@
+<div class="mx-auto max-w-screen-lg px-4 py-8 sm:px-8">
+  <div class="flex items-center justify-between pb-6">
+    <div>
+      <h2 class="font-semibold text-gray-700">Challenges</h2>
+      <span class="text-xs text-gray-500">View challenges</span>
+    </div>
+    <%= form_tag challenges_path, method: :get, data: { turbo_frame: "search-results", turbo_action: "advance", controller: "search", action: "input->search#submit" } do |f| %>
+      <div class="flex items-center gap-2">
+        <%= text_field_tag "query", nil, placeholder: "Search...", class: "w-full max-w-xs px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700 placeholder-gray-500" %>
+        <%= submit_tag "Search", class: "rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700" %>
+      </div>
+    <% end %>
+  </div>
+  <div class="overflow-y-hidden rounded-lg border">
+    <div class="overflow-x-auto" id="challenges-list">
+    <%= turbo_frame_tag "search-results" do %>
+      <table class="w-full">
+        <thead>
+          <tr class="bg-blue-600 text-left text-xs font-semibold uppercase tracking-widest text-white">
+            <th class="px-5 py-3">ID</th>
+            <th class="px-5 py-3">Name</th>
+            <th class="px-5 py-3">Description</th>
+            <th class="px-5 py-3">Difficulty</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-500">
+          <% @challenges.each do |challenge| %>
+            <tr id="<%= dom_id(challenge) %>" class="cursor-pointer" onclick="window.location='/challenges/<%= challenge.name %>';">
+              <td class="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                <p class="whitespace-no-wrap"><%= challenge.id %></p>
+              </td>
+              <td class="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                <div class="flex items-center">
+                  <div class="ml-3">
+                    <p class="whitespace-no-wrap"><%= challenge.name %></p>
+                  </div>
+                </div>
+              </td>
+              <td class="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                <p class="whitespace-no-wrap"><%= challenge.description.truncate(50) %></p>
+              </td>
+              <td class="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                <span class="rounded-full px-3 py-1 text-xs font-semibold bg-green-200 text-green-900">
+                  <%= challenge.difficulty %>
+                </span>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+    </div>
+    <div class="items-center border-t bg-white px-5 py-5 sm:flex-row sm:justify-between">
+      <%== pagy_nav(@pagy) %>
+    </div>
+  </div>
+</div>

@@ -1,3 +1,4 @@
-<li class="px-4 py-2 text-gray-300 bg-gray-700 rounded-md w-40 mb-4">
-  <%= link_to friend.slug, "/users/#{friend.slug}", class: "underline" %>
+<li class="flex items-center justify-between py-3">
+  <%= link_to friend.full_name, user_path(friend),
+        class: "text-lg font-medium text-gray-800 hover:text-blue-600" %>
 </li>

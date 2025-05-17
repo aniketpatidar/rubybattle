@@ -52,7 +52,7 @@ export default class extends Controller {
     const code = this.getEditorCode();
     const id = this.codeEditor.dataset.challengeId;
     try {
-      fetch('/execute_ruby', {
+      fetch('/evaluate_code', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

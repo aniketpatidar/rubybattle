@@ -4,6 +4,6 @@ class InvitationNotification < Notification
   end
 
   def url
-    "/#{params['slug']}"
+    "/users/#{params['slug']}"
   end
 end

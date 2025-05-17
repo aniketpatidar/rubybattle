@@ -22,9 +22,7 @@
   </td>
   <td class="border-b border-gray-200 bg-white px-5 py-5 text-sm">
     <span id="user_status_<%= user.id %>">
-      <span class="rounded-full px-3 py-1 text-xs font-semibold <%= @active_users.include?(user) ? 'bg-green-200 text-green-900' : 'bg-red-200 text-red-900' %>">
-        <%= @active_users.include?(user) ? 'Active' : 'Inactive' %>
-      </span>
+      <%= render partial: 'users/status', locals: { status: @active_users.include?(user) ? 'Active' : 'Inactive' } %>
     </span>
   </td>
 </tr>

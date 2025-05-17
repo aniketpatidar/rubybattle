@@ -1,55 +1,65 @@
 <!-- app/views/invitations/index.html.erb -->
-<div class="grid grid-cols-4 gap-4">
-  <div class="col-span-2">
-    <div>
-      <h1 class="text-2xl font-bold mb-4">Friends</h1>
-      <ul id="friendsList">
-        <% current_user.friends.each do |friend| %>
-          <li class="px-4 py-2 text-gray-300 bg-gray-700 rounded-md w-40 mb-4">
-            <%= link_to friend.slug, "/users/#{friend.slug}", class: "underline" %>
-          </li>
-        <% end %>
-      </ul>
-    </div>
-  </div>
-  <div class="col-span-2">
-    <div>
-      <h1 class="text-2xl font-bold mb-4">Make friends</h1>
-      <ul>
-        <% @users.each do |user| %>
-          <% unless current_user == user || current_user.friend_with?(user) || Invitation.reacted?(current_user.id, user.id) %>
-            <li class="flex items-center justify-between mb-4">
-              <%= link_to user.slug, "/users/#{user.slug}", class: "underline" %>
-              <%= form_with(url: invitations_path, method: :post, local: true) do |form| %>
-                <%= form.hidden_field :user_id, value: user.id %>
-                <%= form.submit "Connect", class: "px-4 py-2 text-gray-300 bg-gray-700 rounded-md cursor-pointer" %>
-              <% end %>
+<div class="container mx-auto px-4 py-8">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- Your Network Column -->
+    <div class="space-y-8">
+      <!-- Friends Card -->
+      <div class="bg-white rounded-2xl shadow-lg p-6">
+        <h2 class="text-2xl font-semibold mb-4">Your Friends</h2>
+        <ul class="divide-y divide-gray-200">
+          <%= render partial: 'invitations/friend', collection: current_user.friends, as: :friend %>
+        </ul>
+      </div>
+
+      <!-- Received Invitations Card -->
+      <div class="bg-white rounded-2xl shadow-lg p-6">
+        <h2 class="text-2xl font-semibold mb-4">Received Invitations</h2>
+        <ul class="divide-y divide-gray-200">
+          <% current_user.received_invitations.each do |inv| %>
+            <li class="flex items-center justify-between py-3">
+              <%= link_to inv.user.full_name, user_path(inv.user),
+                    class: "text-lg font-medium text-gray-800 hover:text-blue-600" %>
+              <div class="flex space-x-2">
+                <%= button_to "Accept", accept_invitation_path(inv),
+                      method: :post,
+                      class: "px-3 py-1 bg-green-500 text-white rounded-xl hover:bg-green-600 text-sm" %>
+                <%= button_to "Decline", decline_invitation_path(inv),
+                      method: :post,
+                      class: "px-3 py-1 bg-red-500 text-white rounded-xl hover:bg-red-600 text-sm" %>
+              </div>
             </li>
           <% end %>
-        <% end %>
-      </ul>
-    </div>
-    <div>
-      <ul>
-        <% current_user.received_invitations.each do |invitation| %>
-          <div class="flex space-x-2">
-            <li class="flex items-center justify-between mb-4">
-              <%= link_to invitation.user.slug, "/users/#{invitation.user.slug}", class: "underline" %> sent you an invitation
-              <%= button_to "Accept", accept_invitation_path(invitation), method: :post, class: "px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600" %>
-              <%= button_to "Decline", decline_invitation_path(invitation), method: :post, class: "px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600" %>
+        </ul>
+      </div>
+
+      <!-- Pending Requests Card -->
+      <div class="bg-white rounded-2xl shadow-lg p-6">
+        <h2 class="text-2xl font-semibold mb-4">Pending Requests</h2>
+        <ul class="divide-y divide-gray-200">
+          <% current_user.sent_invitations.each do |inv| %>
+            <li class="flex items-center justify-between py-3">
+              <%= link_to inv.friend.full_name, user_path(inv.friend),
+                    class: "text-lg font-medium text-gray-800 hover:text-blue-600" %>
+              <span class="px-3 py-1 bg-gray-300 text-gray-700 rounded-xl text-sm">Pending</span>
             </li>
-          </div>
-        <% end %>
-      </ul>
+          <% end %>
+        </ul>
+      </div>
     </div>
-    <div>
-      <ul>
-        <% current_user.sent_invitations.each do |invitation| %>
-          <li class="flex items-center justify-between mb-4">
-            <%= link_to invitation.friend.slug, "/users/#{invitation.friend.slug}", class: "underline" %>
-            <span class="px-4 py-2 bg-gray-400 text-white rounded-md">
-              Pending
-            </span>
+
+    <!-- Find & Connect Column -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 space-y-6">
+      <h2 class="text-2xl font-semibold">Find People</h2>
+      <ul class="divide-y divide-gray-200">
+        <% @users.reject { |u| u == current_user || current_user.friend_with?(u) || Invitation.reacted?(current_user.id, u.id) }.each do |user| %>
+          <li class="flex items-center justify-between py-3">
+            <%= link_to user.full_name, user_path(user),
+                  class: "text-lg font-medium text-gray-800 hover:text-blue-600" %>
+            <%= form_with url: invitations_path, method: :post, local: true, class: "m-0" do |f| %>
+              <%= f.hidden_field :user_id, value: user.id %>
+              <%= f.submit "Connect",
+                    class: "px-3 py-1 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-sm" %>
+            <% end %>
           </li>
         <% end %>
       </ul>

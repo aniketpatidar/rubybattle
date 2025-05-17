@@ -7,7 +7,7 @@ class OnlineChannel < Turbo::StreamsChannel
     Turbo::StreamsChannel.broadcast_update_to(
       verified_stream_name_from_params,
       target: "user_status_#{current_user.id}",
-      partial: 'pages/user_status',
+      partial: 'users/status',
       locals: { user: current_user, status: 'Active' }
     )
   end
@@ -19,7 +19,7 @@ class OnlineChannel < Turbo::StreamsChannel
     Turbo::StreamsChannel.broadcast_update_to(
       verified_stream_name_from_params,
       target: "user_status_#{current_user.id}",
-      partial: 'pages/user_status',
+      partial: 'users/status',
       locals: { user: current_user, status: 'Inactive' }
     )
   end

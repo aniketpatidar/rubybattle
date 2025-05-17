@@ -1,10 +1,11 @@
-import { Controller } from "@hotwired/stimulus"
+import ApplicationController from "controllers/application_controller"
 
-export default class extends Controller {
+export default class extends ApplicationController {
   static targets = ["content"]
 
   connect() {
     console.log("Notification controller connected")
+    StimulusReflex.register(this)
     this.open = false
   }
 
@@ -32,5 +33,16 @@ export default class extends Controller {
     if (this.element.contains(event.target) === false && this.open) {
       this._hide()
     }
+  }
+
+  read() {
+    this.stimulate("Notification#read", this.element)
+  }
+
+  beforeRead(element) {
+    element.classList.add("opacity-0")
+    setTimeout(() => {
+      element.remove()
+    }, 150);
   }
 }

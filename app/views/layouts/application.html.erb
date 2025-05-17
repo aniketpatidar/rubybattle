@@ -20,7 +20,7 @@
       <%= turbo_stream_from "online_users", channel: OnlineChannel %>
       <%= render "layouts/navbar" %>
     <% end %>
-    <main class="container mx-auto px-5 p-4" style="margin-top: 4rem;">
+    <main class="container mx-auto px-5 p-4">
       <%= yield %>
     </main>
     <div id="flash-container">

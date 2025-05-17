@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   get 'discussions/index'
-  get 'home/index'
   resources :posts
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -14,17 +13,18 @@ Rails.application.routes.draw do
     root "discussions#index"
   end
 
-  unauthenticated do
-    root "pages#home", as: :unauthenticated_root
+  devise_scope :user do
+    unauthenticated do
+      root "devise/sessions#new", as: :unauthenticated_root
+    end
   end
+
   resources :invitations, only: [:index, :create] do
     member do
       post :accept
       post :decline
     end
   end
-  get "practice/:room_id", to: "home#index", as: "practice"
-  post 'execute_ruby', to: 'ruby_execution#execute'
   resources :notifications, only: [:index]
   resources :discussions, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
     member do
@@ -35,4 +35,7 @@ Rails.application.routes.draw do
   end
   resources :categories
   resources :users, only: %i[index show], param: :slug
+  resources :challenges, only: %i[index show], param: :name
+  get 'challenges/:room_id/:name', to: 'challenges#room', as: :challenge_room
+  post 'evaluate_code', to: 'code_evaluations#evaluate'
 end

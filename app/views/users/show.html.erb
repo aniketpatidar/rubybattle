@@ -5,13 +5,15 @@
         <%= image_tag @user.avatar, class: "h-16 w-16 object-cover rounded-full" %>
       <% end %>
     </div>
-    <% if current_user != @user %>
-      <%= render 'invitations/friendship', user: @user, current_user: current_user %>
-    <% end %>
     <div class="profile-info mt-4 sm:mt-0 sm:ml-6 text-center sm:text-left">
       <h1 class="text-3xl font-bold"><%= @user.full_name %></h1>
       <p class="text-gray-400"><%= @user.email %></p>
       <p class="text-sm text-gray-500 mt-1">Joined <%= time_ago_in_words(@user.created_at) %> ago</p>
+    </div>
+    <div class="flex items-center ml-auto p-4">
+      <% if current_user != @user %>
+        <%= render 'invitations/friendship', user: @user, current_user: current_user %>
+      <% end %>
     </div>
   </div>
 
