@@ -2,91 +2,85 @@ import { Controller } from "@hotwired/stimulus"
 import { createConsumer } from "@rails/actioncable"
 
 export default class extends Controller {
-  static targets = ["editor"];
+  static targets = ["editor", "output"]
 
   connect() {
-    this.codeEditor = document.querySelector(`#code-editor`);
-    this.textArea = CodeMirror.fromTextArea(this.editorTarget, {
+    this.editor = CodeMirror.fromTextArea(this.editorTarget, {
       mode: "ruby",
       lineNumbers: true,
       indentUnit: 2,
       tabSize: 2,
       lineWrapping: true,
       autofocus: true
-    });
-
+    })
+    this.codeEditor = document.querySelector(`#code-editor`);
     const methodTemplate = this.codeEditor.dataset.methodTemplate.replaceAll("\\n", "\n");
-    this.textArea.setValue(methodTemplate);
-    this.roomID = this.codeEditor.dataset.roomId;
-    this.consumer = createConsumer();
-    this.subscription = this.consumer.subscriptions.create(
-      { channel: "CollaborationChannel", room: this.roomID },
-      {
-        received: this.handleReceivedData.bind(this)
-      }
-    );
-    this.setEditorSize('550px');
-    this.textArea.on("change", this.handleEditorChange.bind(this));
+    this.editor.setValue(methodTemplate);
+    this.roomId = this.codeEditor.dataset.roomId;
+    this.challengeId = this.codeEditor.dataset.challengeId;
+    this.setSize("500px")
+    this.editor.on("change", () => this.syncContent())
+
+    this.subscription = createConsumer()
+      .subscriptions.create(
+        { channel: "CollaborationChannel", room: this.roomId },
+        { received: (data) => this.handleReceived(data) }
+      )
   }
 
-  setEditorSize(height) {
-    this.textArea.getWrapperElement().style.height = height;
+  disconnect() {
+    this.subscription.unsubscribe()
   }
 
-  handleReceivedData(data) {
-    if (this.getEditorCode() !== data.content) {
-      this.textArea.setValue(data.content);
-    }
+  setSize(height) {
+    this.editor.getWrapperElement().style.height = height
   }
 
-  handleEditorChange() {
-    const code = this.getEditorCode();
-    this.subscription.send({ content: code });
+  get code() {
+    return this.editor.getValue()
   }
 
-  getEditorCode() {
-    return this.textArea.getValue();
-  }
-
-  run() {
-    const code = this.getEditorCode();
-    const id = this.codeEditor.dataset.challengeId;
+  async run() {
     try {
-      fetch('/evaluate_code', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ code, id }),
+      const resp = await fetch("/evaluate_code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: this.code, id: this.challengeId })
       })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Response was not ok');
-        }
-        return response.json();
-      })
-      .then(result => {
-        const outputElement = document.getElementById('executionResult');
-        if (result.error) {
-          outputElement.innerText = 'Error: ' + result.error;
-        } else {
-          let output = '';
-          for (const [input, details] of Object.entries(result.output)) {
-            output += `Test case: ${input}\n`;
-            output += `Expected: ${details.expected}\n`;
-            output += `Actual: ${details.actual}\n`;
-            output += `Passed: ${details.passed ? '✅' : '❌'}\n\n`;
-          }
-          outputElement.innerText = output || 'No output';
-        }
-      })
-      .catch(error => {
-        console.error('Error running code:', error);
-        document.getElementById('executionResult').innerText = 'Error: ' + error.message;
-      });
-    } catch (error) {
-      console.error('Error running code:', error);
-      document.getElementById('executionResult').innerText = 'Error: ' + error.message;
+      if (!resp.ok) throw new Error(resp.statusText)
+      const result = await resp.json()
+      this.renderResult(result)
+      this.subscription.send({ type: "output", output: this.outputTarget.textContent })
+    } catch (err) {
+      this.renderError(err)
     }
+  }
+
+  syncContent() {
+    this.subscription.send({ content: this.code })
+  }
+
+  handleReceived(data) {
+    if (data.type === "output") {
+      this.outputTarget.textContent = data.output
+    } else if (data.content !== this.code) {
+      this.editor.setValue(data.content)
+    }
+  }
+
+  renderResult({ error, output }) {
+    if (error) return this.renderError(new Error(error))
+
+    const lines = Object.entries(output).map(
+      ([input, { expected, actual, passed }]) =>
+        `Test case: ${input}\nExpected: ${expected}\nActual: ${actual}\nPassed: ${passed ? "✅" : "❌"}\n`
+    ).join("\n")
+    this.outputTarget.textContent = lines || "No output"
+  }
+
+  renderError(err) {
+    console.error("Code eval error:", err)
+    this.outputTarget.textContent = `Error: ${err.message}`
+    this.subscription.send({ type: "output", output: this.outputTarget.textContent })
   }
 }

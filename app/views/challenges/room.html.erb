@@ -1,0 +1,34 @@
+<div class="container mx-auto max-w-5xl px-4 sm:px-6 py-10 space-y-6">
+  <!-- Challenge Title -->
+  <h1 class="text-3xl sm:text-4xl font-semibold text-gray-800">
+    <%= @challenge.name %>
+  </h1>
+
+  <!-- Challenge Description -->
+  <div class="bg-white border border-gray-200 p-6 rounded-xl shadow-sm text-gray-700">
+    <%= simple_format(@challenge.description) %>
+  </div>
+
+  <!-- Code Editor (Collaborative) -->
+  <div 
+    id="code-editor"
+    data-controller="codemirror"
+    data-method-template="<%= @challenge.method_template %>"
+    data-tests="<%= @challenge.tests %>"
+    data-challenge-id="<%= @challenge.id %>"
+    data-room-id="<%= @room_id %>"
+    class="bg-gray-900 text-white rounded-xl overflow-hidden shadow-md"
+  >
+    <textarea 
+      class="w-full h-[500px] resize-none outline-none bg-transparent p-4 font-mono text-sm leading-relaxed"
+      data-codemirror-target="editor"
+    ></textarea>
+
+    <!-- Output Panel -->
+    <div class="bg-gray-50 border border-gray-200 p-4 text-sm text-gray-800">
+      <!-- Test case output or logs -->
+      <h2 class="text-lg font-semibold">Test results</h2>
+      <pre class="text-sm" data-codemirror-target="output">Awaiting code submission</pre>
+    </div>
+  </div>
+</div>

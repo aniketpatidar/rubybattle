@@ -1,4 +1,4 @@
-    <div class="flex-grow flex flex-col">
+    <div class="flex-grow flex flex-col" data-controller="codemirror">
       <div class="flex flex-grow">
         <div class="w-96 bg-gray-700 text-white p-5">
           <h2 class="text-xl mb-4"><%= simple_format @challenge.name %></h2>
@@ -7,7 +7,6 @@
 
         <div class="flex-grow flex flex-col"
           id="code-editor"
-          data-controller="codemirror"
           data-method-template="<%= @challenge.method_template %>"
           data-tests="<%= @challenge.tests %>"
           data-challenge-id="<%= @challenge.id %>"
@@ -30,6 +29,6 @@
       </div>
       <div id="output" class="bg-gray-800 p-4 h-32 overflow-auto">
         <h2 class="text-lg font-semibold text-white">Test results</h2>
-        <pre id="executionResult" class="text-sm text-white">Awaiting code submission</pre>
+        <pre class="text-sm text-white" data-codemirror-target="output">Awaiting code submission</pre>
       </div>
     </div>
