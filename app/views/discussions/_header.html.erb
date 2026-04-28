@@ -1,12 +1,10 @@
 <%= turbo_frame_tag dom_id(discussion) do %>
   <div class="ck-card" style="border-radius: 10px; padding: 20px 24px;">
     <div class="flex gap-4">
-      <%# Voting column %>
       <div class="shrink-0">
         <%= render "discussions/voting", discussion: discussion %>
       </div>
 
-      <%# Content %>
       <div class="flex-1 min-w-0">
         <div class="flex items-start justify-between gap-4 mb-3">
           <h1 class="text-[20px] font-semibold leading-tight"><%= discussion.name %></h1>

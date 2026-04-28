@@ -36,7 +36,6 @@ class Judge0Service
   end
 
   def wrap_code_with_test(code, test, method_name)
-    # method_name is available for future use if needed to generate specific test wrappers
     test_input = test[:input]
     <<~RUBY
       #{code}

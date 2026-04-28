@@ -17,8 +17,14 @@ class Duel < ApplicationRecord
     challenger_id == user.id ? opponent : challenger
   end
 
-  def active?
-    status == "active"
+  def accept!
+    update!(status: :active, started_at: Time.current)
+  end
+
+  def resolve!(winner:)
+    rows = Duel.where(id: id, status: :active)
+               .update_all(status: :completed, winner_id: winner.id, completed_at: Time.current)
+    rows == 1
   end
 
   private

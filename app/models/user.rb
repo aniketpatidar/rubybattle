@@ -18,10 +18,9 @@ class User < ApplicationRecord
   acts_as_voter
 
   def friends
-    friends_i_sent_invitation = Invitation.where(user_id: id, confirmed: true).pluck(:friend_id)
-    friends_i_got_invitation = Invitation.where(friend_id: id, confirmed: true).pluck(:user_id)
-    ids = friends_i_sent_invitation + friends_i_got_invitation
-    User.where(id: ids)
+    sent     = Invitation.where(user_id: id, confirmed: true).select(:friend_id)
+    received = Invitation.where(friend_id: id, confirmed: true).select(:user_id)
+    User.where(id: sent).or(User.where(id: received))
   end
 
   def friend_with?(user)

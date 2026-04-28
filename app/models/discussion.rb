@@ -18,7 +18,7 @@ class Discussion < ApplicationRecord
 
   acts_as_votable
 
-  scope :ordered_by_votes, -> { sort_by(&:total_vote_count).reverse }
+  scope :ordered_by_votes, -> { includes(:votes_for).sort_by(&:total_vote_count).reverse }
 
   def to_param
     "#{id}-#{name.downcase.to_s[0...100]}".parameterize

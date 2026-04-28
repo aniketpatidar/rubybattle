@@ -20,7 +20,6 @@ class DuelsController < ApplicationController
       return redirect_to root_path, alert: "You can only duel friends." unless current_user.friend_with?(@opponent)
       @challenges = Challenge.order(:difficulty, :name)
     else
-      # Show friend selection
       @friends = current_user.friends
       @challenges = Challenge.order(:difficulty, :name)
     end
@@ -49,7 +48,7 @@ class DuelsController < ApplicationController
       return redirect_to duel_path(@duel)
     end
 
-    @duel.update!(status: :active, started_at: Time.current)
+    @duel.accept!
     ActionCable.server.broadcast("duel_#{@duel.id}", { type: "duel_started" })
     redirect_to duel_path(@duel)
   end

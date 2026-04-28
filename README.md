@@ -20,15 +20,15 @@ CodeKata is a platform for developers who want to sharpen their Ruby skills thro
 
 ## Tech stack
 
-- **Ruby on Rails 7** — backend, routing, models
-- **PostgreSQL** — primary database
-- **Redis** — real-time pub/sub, session storage
-- **Hotwire (Turbo + Stimulus)** — fast, SPA-like navigation without a JS framework
-- **ActionCable** — WebSocket layer powering the live editor and notifications
-- **StimulusReflex** — reactive server-side rendering
-- **CodeMirror 6** — in-browser code editor with Ruby syntax highlighting
-- **Judge0** — sandboxed code execution (no `eval`, no risk)
-- **Tailwind CSS** — styling
+- **Ruby on Rails 7**
+- **PostgreSQL**
+- **Redis**
+- **Hotwire (Turbo + Stimulus)**
+- **ActionCable**
+- **StimulusReflex**
+- **CodeMirror 6**
+- **Judge0**
+- **Tailwind CSS**
 
 ---
 
@@ -47,7 +47,6 @@ yarn install
 
 # Set up environment variables
 cp .env.example .env
-# Add your JUDGE0_API_KEY to .env
 
 # Set up the database
 rails db:create db:migrate db:seed
@@ -60,26 +59,16 @@ Then open `http://localhost:3000`.
 
 ---
 
-## Environment variables
-
-| Variable | Description |
-|---|---|
-| `JUDGE0_API_KEY` | Your Judge0 API key for sandboxed code execution |
-| `REDIS_URL` | Redis connection URL (defaults to `redis://localhost:6379`) |
-| `DATABASE_URL` | PostgreSQL connection string (optional, falls back to `database.yml`) |
-
----
-
 ## Project structure
 
 ```
 app/
 ├── channels/        # ActionCable WebSocket channels
 ├── controllers/     # Request handling
-├── javascript/      # Stimulus controllers, CodeMirror, ActionCable config
+├── javascript/      # Stimulus controllers
 ├── models/          # Core data models
 ├── reflexes/        # StimulusReflex handlers
-├── services/        # Business logic (Judge0 integration, etc.)
+├── services/        # Business logic
 └── views/           # ERB templates
 ```
 
@@ -91,8 +80,8 @@ app/
 - [x] Real-time collaborative editor
 - [x] Discussion forum with voting
 - [x] Friend connections and notifications
-- [ ] Head-to-head timed duels
-- [ ] AI-powered hints
+- [x] Head-to-head timed duels
+- [x] AI-powered hints
 - [ ] Leaderboards and duel history
 - [ ] Multi-language support
 

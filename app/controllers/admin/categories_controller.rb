@@ -2,25 +2,20 @@ module Admin
   class CategoriesController < BaseController
     before_action :set_category, only: %i[ show edit update destroy ]
 
-    # GET /admin/categories or /admin/categories.json
     def index
       @categories = Category.all
     end
 
-    # GET /admin/categories/1 or /admin/categories/1.json
     def show
     end
 
-    # GET /admin/categories/new
     def new
       @category = Category.new
     end
 
-    # GET /admin/categories/1/edit
     def edit
     end
 
-    # POST /admin/categories or /admin/categories.json
     def create
       @category = Category.new(category_params)
 
@@ -35,7 +30,6 @@ module Admin
       end
     end
 
-    # PATCH/PUT /admin/categories/1 or /admin/categories/1.json
     def update
       respond_to do |format|
         if @category.update(category_params)
@@ -48,7 +42,6 @@ module Admin
       end
     end
 
-    # DELETE /admin/categories/1 or /admin/categories/1.json
     def destroy
       @category.destroy!
 

@@ -1,4 +1,3 @@
-# Provides AI-powered hints for coding challenges using Google's Gemini API
 class GeminiService
   GEMINI_MODEL = "gemini-2.0-flash"
 

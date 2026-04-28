@@ -4,7 +4,6 @@
     <h1 class="ck-heading">Friends</h1>
   </div>
 
-  <!-- Tabs -->
   <div class="flex gap-1 mb-6 p-1 rounded-lg" style="background: var(--ck-raised);" id="invitation-tabs">
     <button class="inv-tab px-4 py-1.5 rounded-md text-[13px] font-medium transition-colors" data-target="received-content"
             style="color: var(--ck-ink); background: var(--ck-card);">
@@ -24,7 +23,6 @@
     </button>
   </div>
 
-  <!-- Received Invitations -->
   <div id="received-content" class="inv-panel">
     <% if current_user.received_invitations.any? %>
       <div class="space-y-2">
@@ -57,7 +55,6 @@
     <% end %>
   </div>
 
-  <!-- Sent Invitations -->
   <div id="sent-content" class="inv-panel hidden">
     <% if current_user.sent_invitations.any? %>
       <div class="space-y-2">
@@ -86,7 +83,6 @@
     <% end %>
   </div>
 
-  <!-- Friends -->
   <div id="friends-content" class="inv-panel hidden">
     <% if current_user.friends.any? %>
       <div class="space-y-2">
@@ -116,7 +112,6 @@
     <% end %>
   </div>
 
-  <!-- Find People -->
   <div id="find-content" class="inv-panel hidden">
     <% available_users = @users.reject { |u| u == current_user || current_user.friend_with?(u) || Invitation.reacted?(current_user.id, u.id) } %>
     <% if available_users.any? %>

@@ -1,5 +1,4 @@
 <div class="px-12 py-9">
-  <%# Profile header %>
   <div class="flex items-start justify-between mb-8">
     <div class="flex items-center gap-4">
       <div class="w-16 h-16 rounded-full flex items-center justify-center text-[20px] font-semibold shrink-0" style="background: var(--ck-raised); color: var(--ck-ink);">
@@ -23,7 +22,6 @@
     <% end %>
   </div>
 
-  <%# Stats %>
   <div class="ck-stat-grid grid-cols-3 mb-8">
     <div>
       <div class="ck-meta mb-1">Challenges Solved</div>
@@ -40,14 +38,12 @@
   </div>
 
   <div class="grid grid-cols-3 gap-6">
-    <%# Main content: tabs %>
     <div class="col-span-2">
       <div class="ck-card mb-4" style="border-radius: 10px;">
         <div class="ck-meta mb-2">About</div>
         <div class="text-[13px]" style="color: var(--ck-muted);"><strong style="color: var(--ck-ink);">Email:</strong> <%= @user.email %></div>
       </div>
 
-      <%# Tab bar %>
       <div class="flex gap-1 mb-4" style="border-bottom: 0.5px solid var(--ck-line); padding-bottom: 0;">
         <button id="questions-tab" class="ck-meta px-4 py-2 transition-colors" style="color: #a6d6ff; border-bottom: 2px solid #a6d6ff; margin-bottom: -0.5px;">
           Questions (<%= @user.discussions.count %>)
@@ -100,7 +96,6 @@
       </div>
     </div>
 
-    <%# Sidebar: actions + friends %>
     <div class="space-y-4">
       <% if current_user && current_user.id != @user.id %>
         <div class="ck-card space-y-2" style="border-radius: 10px;">

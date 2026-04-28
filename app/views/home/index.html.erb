@@ -1,5 +1,4 @@
 <div class="px-12 py-9">
-  <%# Page header %>
   <div class="mb-8">
     <div class="ck-meta mb-1">Dashboard · Your Stats</div>
     <div class="ck-heading">Welcome back<% if current_user %>, <%= current_user.first_name %><% end %></div>
@@ -15,7 +14,6 @@
     </div>
   <% end %>
 
-  <%# Stat row %>
   <div class="ck-stat-grid grid-cols-3 mb-8">
     <div>
       <div class="ck-meta mb-1">Challenges Solved</div>
@@ -70,7 +68,6 @@
     </div>
   <% end %>
 
-  <%# Featured Challenges %>
   <div class="mb-8">
     <div class="flex items-center justify-between mb-3">
       <div class="ck-meta">Featured Challenges</div>
@@ -91,7 +88,6 @@
     </div>
   </div>
 
-  <%# Friends %>
   <div>
     <div class="ck-meta mb-3">Friends</div>
     <% if @friends.any? %>

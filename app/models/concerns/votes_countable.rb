@@ -7,7 +7,7 @@ module VotesCountable
     def total_vote_count
       upvotes = self.get_upvotes(vote_scope: "like").size
       downvotes = self.get_downvotes(vote_scope: "like").size
-      (upvotes - downvotes).to_s
+      upvotes - downvotes
     end
   end
 end

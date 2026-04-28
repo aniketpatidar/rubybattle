@@ -1,5 +1,4 @@
 <div class="px-12 py-9">
-  <%# Page header + search %>
   <div class="flex items-end justify-between mb-8">
     <div>
       <div class="ck-meta mb-1">Challenges</div>
@@ -17,7 +16,6 @@
     <% end %>
   </div>
 
-  <%# Challenge list %>
   <div id="challenges-list">
     <%= turbo_frame_tag "search-results" do %>
       <div class="space-y-2">
@@ -50,7 +48,6 @@
     <% end %>
   </div>
 
-  <%# Pagination %>
   <div class="mt-6">
     <%== pagy_nav(@pagy) %>
   </div>

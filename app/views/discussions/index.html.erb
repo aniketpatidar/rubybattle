@@ -1,14 +1,11 @@
 <div class="px-12 py-9">
-  <%# Page header %>
   <div class="mb-8">
     <div class="ck-meta mb-1">Community</div>
     <div class="ck-heading">Discussions</div>
   </div>
 
   <div class="flex gap-8">
-    <%# Main content %>
     <div class="flex-1">
-      <%# Search + CTA %>
       <div class="flex gap-3 mb-6">
         <%= form_with url: discussions_path, method: :get, local: true, class: "flex-1 flex gap-3" do |f| %>
           <%= f.text_field :search,
@@ -20,7 +17,6 @@
         <%= link_to "Ask a Question", new_discussion_path, class: "ck-btn-primary" %>
       </div>
 
-      <%# Discussion cards %>
       <div class="space-y-3">
         <% @discussions.each do |discussion| %>
           <div class="ck-card" style="border-radius: 10px; padding: 18px 20px;">
@@ -61,7 +57,6 @@
       </div>
     </div>
 
-    <%# Sidebar %>
     <div class="w-60 shrink-0 space-y-4">
       <div class="ck-card">
         <div class="ck-meta mb-3">Hot Discussions</div>

@@ -34,32 +34,26 @@ Rails.application.routes.draw do
     resources :posts, only: [:create, :show, :edit, :update, :destroy], module: :discussions
   end
 
-  # Admin-only category management
   namespace :admin do
     resources :categories
   end
 
-  # Users can view categories
   resources :categories, only: [:index, :show]
   resources :users, only: %i[index show], param: :slug
   resources :challenges, only: %i[index show], param: :name
   get 'challenges/:room_id/:name', to: 'challenges#room', as: :challenge_room
   post 'evaluate_code', to: 'code_evaluations#evaluate'
 
-  # Home dashboard
   get 'home', to: 'home#index', as: 'home'
 
-  # Duels
   resources :duels, only: [:index, :new, :create, :show] do
     member do
       patch :accept
     end
   end
 
-  # AI Hints
   post 'hints', to: 'hints#create'
 
-  # Admin namespace
   namespace :admin do
     get 'settings', to: 'settings#show', as: 'settings'
     post 'settings', to: 'settings#update'

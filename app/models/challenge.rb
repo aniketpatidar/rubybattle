@@ -12,6 +12,10 @@ class Challenge < ApplicationRecord
     )
   end
 
+  def parsed_tests
+    tests.is_a?(String) ? JSON.parse(tests) : Array(tests)
+  end
+
   def to_param
     name
   end
