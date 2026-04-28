@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: chaiaurcode
+      POSTGRES_PASSWORD: chaiaurcode
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: bash -c "yarn install --frozen-lockfile && ./bin/rails db:prepare && ./bin/rails server -b 0.0.0.0"
+    volumes:
+      - .:/rails
+      - bundle:/usr/local/bundle
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://chaiaurcode:chaiaurcode@db:5432/battle_development
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
+
+  css:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: ./bin/rails tailwindcss:watch
+    volumes:
+      - .:/rails
+      - bundle:/usr/local/bundle
+    environment:
+      DATABASE_URL: postgresql://chaiaurcode:chaiaurcode@db:5432/battle_development
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
+  bundle:
