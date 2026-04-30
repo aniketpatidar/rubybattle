@@ -4,9 +4,9 @@ A competitive coding platform for Ruby developers. Solve challenges, compete in 
 
 ## Stack
 
-- Ruby on Rails 7, PostgreSQL, Redis
+- Ruby on Rails 7, PostgreSQL
 - Hotwire (Turbo + Stimulus), ActionCable
-- CodeMirror 6, Judge0, Tailwind CSS
+- CodeMirror 6, Judge0
 
 ## Setup
 
@@ -14,12 +14,15 @@ A competitive coding platform for Ruby developers. Solve challenges, compete in 
 
 ```bash
 git clone https://github.com/aniketpatidar/codekata
+```
+```bash
 cd codekata
-bundle install
-yarn install
+```
+```bash
 cp .env.example .env
-rails db:create db:migrate db:seed
-bin/dev
+```
+```bash
+bin/setup
 ```
 
 Open `http://localhost:3000`.
