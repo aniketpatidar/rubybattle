@@ -7,8 +7,7 @@ class CodeEvaluationsController < ApplicationController
     result = CodeEvaluation.run(
       user: current_user,
       challenge: challenge,
-      code: params[:code],
-      duel_id: params[:duel_id]
+      code: params[:code]
     )
     render json: { output: result.test_results }
   rescue KeyError
