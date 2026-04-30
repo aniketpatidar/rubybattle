@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_04_30_182123) do
+ActiveRecord::Schema[7.1].define(version: 2026_04_30_191251) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -123,6 +123,37 @@ ActiveRecord::Schema[7.1].define(version: 2026_04_30_182123) do
     t.index ["winner_id"], name: "index_duels_on_winner_id"
   end
 
+  create_table "game_rounds", force: :cascade do |t|
+    t.bigint "game_id", null: false
+    t.bigint "challenge_id", null: false
+    t.bigint "round_winner_id"
+    t.text "challenger_code"
+    t.text "opponent_code"
+    t.integer "round_number", null: false
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["challenge_id"], name: "index_game_rounds_on_challenge_id"
+    t.index ["game_id"], name: "index_game_rounds_on_game_id"
+    t.index ["round_winner_id"], name: "index_game_rounds_on_round_winner_id"
+  end
+
+  create_table "games", force: :cascade do |t|
+    t.bigint "challenger_id", null: false
+    t.bigint "opponent_id", null: false
+    t.bigint "winner_id"
+    t.integer "status", default: 0, null: false
+    t.integer "round_count", null: false
+    t.integer "difficulty", null: false
+    t.datetime "started_at"
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["challenger_id"], name: "index_games_on_challenger_id"
+    t.index ["opponent_id"], name: "index_games_on_opponent_id"
+    t.index ["winner_id"], name: "index_games_on_winner_id"
+  end
+
   create_table "invitations", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.integer "friend_id"
@@ -198,6 +229,12 @@ ActiveRecord::Schema[7.1].define(version: 2026_04_30_182123) do
   add_foreign_key "duels", "users", column: "challenger_id"
   add_foreign_key "duels", "users", column: "opponent_id"
   add_foreign_key "duels", "users", column: "winner_id"
+  add_foreign_key "game_rounds", "challenges"
+  add_foreign_key "game_rounds", "games"
+  add_foreign_key "game_rounds", "users", column: "round_winner_id"
+  add_foreign_key "games", "users", column: "challenger_id"
+  add_foreign_key "games", "users", column: "opponent_id"
+  add_foreign_key "games", "users", column: "winner_id"
   add_foreign_key "invitations", "users"
   add_foreign_key "notifications", "users"
   add_foreign_key "posts", "discussions"
