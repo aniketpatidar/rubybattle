@@ -5,7 +5,7 @@
   </div>
 
   <div class="ck-card">
-    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, multipart: true }) do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
 
       <div class="space-y-4">
@@ -35,10 +35,12 @@
 
         <div>
           <%= f.label :avatar, class: "ck-meta block mb-1" %>
-          <%= f.select :avatar,
-               [["Cooool Cactus", "cool-cactus.png"], ["DOGE", "cool-doge.png"], ["Funky Duck", "cool-duck.png"], ["Coolest duck", "coolest-duck.jpg"]],
-               { include_blank: false },
-               class: "ck-input" %>
+          <% if resource.avatar.attached? %>
+            <div class="mb-2">
+              <%= image_tag resource.avatar, class: "w-16 h-16 object-cover rounded-full" %>
+            </div>
+          <% end %>
+          <%= f.file_field :avatar, accept: "image/*", class: "ck-input" %>
         </div>
 
         <div style="border-top: 1px solid var(--ck-line); padding-top: 16px; margin-top: 8px;">
