@@ -2,7 +2,7 @@
   <div class="flex items-start justify-between mb-8">
     <div class="flex items-center gap-4">
       <div class="w-16 h-16 rounded-full flex items-center justify-center text-[20px] font-semibold shrink-0" style="background: var(--ck-raised); color: var(--ck-ink);">
-        <% if @user.avatar&.present? %>
+        <% if @user.avatar.attached? %>
           <%= image_tag @user.avatar, class: "w-16 h-16 object-cover rounded-full" %>
         <% else %>
           <%= @user.initials %>
@@ -22,10 +22,14 @@
     <% end %>
   </div>
 
-  <div class="ck-stat-grid grid-cols-1 mb-8">
+  <div class="ck-stat-grid grid-cols-2 mb-8">
     <div>
       <div class="ck-meta mb-1">Challenges Solved</div>
       <div class="text-[22px] font-light tabular-nums" style="color: #a6d6ff;"><%= @user.challenge_completions.count %></div>
+    </div>
+    <div>
+      <div class="ck-meta mb-1">Score</div>
+      <div class="text-[22px] font-light tabular-nums" style="color: #a6d6ff;"><%= @user.score %></div>
     </div>
   </div>
 

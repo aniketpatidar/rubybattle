@@ -4,8 +4,14 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :trackable
   has_many :posts, dependent: :destroy
+  has_one_attached :avatar
   validates :slug, uniqueness: true
+  validate :avatar_must_be_image, if: -> { avatar.attached? && avatar.changed? }
+
+  IMAGE_CONTENT_TYPES = %w[image/jpeg image/png image/gif image/webp].freeze
   before_validation :set_slug, if: -> { slug.nil? }
+
+  scope :top_10_by_score, -> { order(score: :desc).limit(10) }
 
   has_many :invitations
   has_many :pending_invitations, -> { where confirmed: false }, class_name: 'Invitation', foreign_key: "friend_id"
@@ -65,6 +71,13 @@ class User < ApplicationRecord
       self.slug = full_name.parameterize + SecureRandom.hex(6)
     else
       self.slug = full_name.parameterize
+    end
+  end
+
+  def avatar_must_be_image
+    unless IMAGE_CONTENT_TYPES.include?(avatar.blob.content_type)
+      errors.add(:avatar, "must be an image (JPEG, PNG, GIF, or WebP)")
+      avatar.purge
     end
   end
 end
