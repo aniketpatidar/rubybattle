@@ -46,12 +46,6 @@ Rails.application.routes.draw do
 
   get 'home', to: 'home#index', as: 'home'
 
-  resources :duels, only: [:index, :new, :create, :show] do
-    member do
-      patch :accept
-    end
-  end
-
   post 'hints', to: 'hints#create'
 
   namespace :admin do

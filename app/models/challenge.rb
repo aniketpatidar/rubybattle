@@ -3,7 +3,6 @@ class Challenge < ApplicationRecord
 
   enum difficulty: { easy: 0, medium: 1, hard: 2 }
 
-  has_many :duels, dependent: :destroy
   has_many :challenge_completions, dependent: :destroy
 
   def self.search(params)
