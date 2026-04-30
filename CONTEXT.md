@@ -1,6 +1,6 @@
 # CodeKata — Domain Context
 
-CodeKata is a competitive code-learning platform where developers sharpen their Ruby skills through challenges, head-to-head duels, collaborative pair-programming, and a community discussion forum.
+CodeKata is a competitive code-learning platform where developers sharpen their Ruby skills through challenges, head-to-head multi-round games, collaborative pair-programming, and a community discussion forum.
 
 ---
 
@@ -8,7 +8,7 @@ CodeKata is a competitive code-learning platform where developers sharpen their 
 
 The platform has two primary loops:
 
-- **Competitive loop**: User → Challenge → Duel — a user finds a coding challenge and races a friend to solve it first
+- **Competitive loop**: User → Challenge → Game — a user picks a difficulty, challenges a friend to a multi-round Game, and earns score toward the leaderboard
 - **Social loop**: User → Discussion → Post — a user asks questions or shares solutions in the forum, voted on by the community
 
 ---
@@ -16,26 +16,40 @@ The platform has two primary loops:
 ## Glossary
 
 ### Challenge
-A Ruby coding problem with a difficulty tier (easy / medium / hard), a set of test cases, and a method template the solver must implement. Challenges are the unit of competition in Duels and the unit of completion in a user's profile.
+A Ruby coding problem with a difficulty tier (easy / medium / hard), a set of test cases, and a method template the solver must implement. Challenges are the unit of competition in Game Rounds and the unit of completion in a user's profile.
 
 - Avoid: "problem", "exercise", "kata" (reserved for the brand, not a model term)
 
-### Duel
-A timed, head-to-head competition between two users on the same Challenge. The first participant to pass all test cases wins. A Duel moves through three statuses: `pending` (invited, not yet started) → `active` (both players coding) → `completed` (winner determined).
+### Game
+A multi-round head-to-head competition between two Users. The Challenger picks a round count (1, 3, or 5) and a difficulty tier; the system randomly assigns one Challenge of that difficulty to each Round. A Game moves through three statuses: `pending` (invited, not yet started) → `active` (both players coding) → `completed` (winner determined).
 
-- **Challenger**: the user who initiates the Duel
-- **Opponent**: the user who accepts the Duel invitation
-- **Winner**: the User who completes the Challenge first (nullable until Duel is completed)
-- Avoid: "game", "match", "race" — use "Duel"
+- **Challenger**: the User who initiates the Game
+- **Opponent**: the User who accepts the Game invitation
+- **Winner**: the User who wins the majority of Rounds (nullable until Game is completed)
+- Avoid: "duel", "match", "race" — use "Game"
+
+### Game Round
+A single coding round within a Game. Each Round has one Challenge assigned at random (filtered by the Game's difficulty tier). The first player to pass all test cases wins the Round.
+
+- **Round Winner**: the User who passes all tests first in a given Round (nullable until Round is completed)
+- Avoid: "stage", "level" — use "Round" or "Game Round"
+
+### Score
+A numeric value on each User that accumulates across completed Games. Winning a Game earns: `rounds_won + 3 (bonus) + min(opponent_score / 20, 50) - rounds_lost`. Losing earns: `rounds_won` (floored at 0). Score never decreases below 0.
+
+- Avoid: "rating", "points", "rank" — use "Score"
+
+### Leaderboard
+A ranking of the top 10 Users by Score, displayed on the dashboard.
 
 ### Challenge Completion
 A record that a specific User has passed all tests for a specific Challenge. Unique per user per challenge — completing a Challenge twice does not create two records.
 
 ### Code Evaluation
-The act of submitting code to Judge0 for test execution. Triggered from the editor; results are streamed back in real time. A successful evaluation on all test cases triggers a Challenge Completion and may resolve a Duel.
+The act of submitting code to Judge0 for test execution. Triggered from the editor; results are streamed back in real time. A successful evaluation on all test cases wins the Round for that player.
 
 ### Collaborative Room
-A shared real-time code editor session for a given Challenge, identified by a `room_id`. Multiple users can edit simultaneously via ActionCable. Distinct from a Duel — no winner, no timer.
+A shared real-time code editor session for a given Challenge, identified by a `room_id`. Multiple users can edit simultaneously via ActionCable. Distinct from a Game — no winner, no score, no timer.
 
 - Avoid: "collaboration session", "pair room" — use "Collaborative Room" or just "Room"
 
@@ -60,7 +74,7 @@ A friend request from one User to another. Becomes a confirmed friendship once a
 - Avoid: "friend request", "connection" — use "Invitation"
 
 ### Notification
-An in-app alert delivered to a User. Uses STI for typed notifications (duel invites, duel results, discussion replies, etc.). Unread = `read_at` is nil.
+An in-app alert delivered to a User. Uses STI for typed notifications (game invites, game results, discussion replies, friend requests, etc.). Unread = `read_at` is nil.
 
 ### Hint
 An AI-generated 2–3 sentence nudge for a Challenge, produced by Gemini given the challenge description and the user's current code. Gated by the `ai_hints_enabled` AppSetting.
@@ -74,7 +88,9 @@ A key/value feature flag managed by admins. Currently controls `ai_hints_enabled
 
 - **Slug**: a unique, URL-safe username auto-generated from the user's full name. Used in profile URLs (`/users/:slug`) and as the primary public identifier.
 - **Admin**: `User#id == 1` is hardcoded as the admin. No role table.
+- **Score**: integer on `User`, accumulated across completed Games. Never decreases below 0.
 - **Online presence**: tracked via Kredis; broadcast over `OnlineChannel`.
+- **Avatar**: an image attached to a User via ActiveStorage.
 
 ---
 
@@ -83,7 +99,8 @@ A key/value feature flag managed by admins. Currently controls `ai_hints_enabled
 | Model | Field | Values |
 |-------|-------|--------|
 | Challenge | `difficulty` | `easy`, `medium`, `hard` |
-| Duel | `status` | `pending`, `active`, `completed` |
+| Game | `status` | `pending`, `active`, `completed` |
+| Game | `round_count` | `1`, `3`, `5` |
 
 ---
 
