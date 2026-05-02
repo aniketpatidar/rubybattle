@@ -110,6 +110,31 @@
         </div>
       <% end %>
 
+      <div class="ck-card mb-4" style="border-radius: 10px;">
+        <div class="ck-meta mb-3">Game History</div>
+        <% if @game_history.any? %>
+          <div class="space-y-3">
+            <% @game_history.each do |game| %>
+              <% opp = game.challenger == @user ? game.opponent : game.challenger %>
+              <% won = game.winner == @user %>
+              <a href="/games/<%= game.id %>" class="block" style="border-bottom: 0.5px solid var(--ck-line); padding-bottom: 10px; text-decoration: none;">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="text-[12px] font-medium" style="color: var(--ck-ink);">vs <%= opp.full_name %></div>
+                    <div class="ck-meta text-[10px]"><%= Game::ROUND_COUNT_NUM[game.round_count] %> rounds · <%= game.difficulty.capitalize %></div>
+                  </div>
+                  <span class="ck-chip text-[10px]" style="<%= won ? 'color: #4ade80; background: rgba(74,222,128,0.1);' : '' %>">
+                    <%= won ? "W" : "L" %>
+                  </span>
+                </div>
+              </a>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="ck-meta text-[11px]">No games played yet</p>
+        <% end %>
+      </div>
+
       <div class="ck-card" style="border-radius: 10px;">
         <div class="ck-meta mb-3">Friends (<%= @user.friends.count %>)</div>
         <% if @user.friends.any? %>

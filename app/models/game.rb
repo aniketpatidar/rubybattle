@@ -17,10 +17,12 @@ class Game < ApplicationRecord
   end
 
   def winner_of_game
-    wins   = game_rounds.where.not(round_winner_id: nil).group(:round_winner_id).count
+    wins = game_rounds.where.not(round_winner_id: nil).group(:round_winner_id).count
     target = ROUNDS_TO_WIN[round_count]
+
     winner_id, count = wins.max_by { |_, c| c }
     return nil if count.nil? || count < target
+
     [ challenger, opponent ].find { |u| u.id == winner_id }
   end
 
@@ -28,8 +30,9 @@ class Game < ApplicationRecord
     game_winner = winner_of_game
     return unless game_winner
 
-    loser         = game_winner == challenger ? opponent : challenger
-    completed     = game_rounds.where.not(round_winner_id: nil)
+    loser = game_winner == challenger ? opponent : challenger
+    completed = game_rounds.where.not(round_winner_id: nil)
+
     winner_rounds = completed.where(round_winner_id: game_winner.id).count
     loser_rounds  = completed.where(round_winner_id: loser.id).count
 

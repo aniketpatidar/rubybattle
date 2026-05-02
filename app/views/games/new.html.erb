@@ -1,69 +1,66 @@
 <div class="px-12 py-9">
   <div class="mb-8">
-    <div class="ck-meta mb-1">Games · New Challenge</div>
+    <div class="ck-meta mb-1">Games</div>
     <div class="ck-heading">Challenge a Friend</div>
-    <p class="ck-meta mt-1">First to pass all tests in a round wins it. Win the majority to win the Game.</p>
   </div>
 
-  <%= form_with url: games_path, method: :post do |f| %>
-    <div class="ck-card mb-4" style="border-radius: 10px;">
-      <div class="ck-meta mb-3">Select Opponent</div>
-      <% if @friends.any? %>
-        <div class="space-y-2">
-          <% @friends.each do |friend| %>
-            <label class="flex items-center gap-3 p-3 rounded-lg cursor-pointer" style="border: 0.5px solid var(--ck-line);">
-              <%= f.radio_button :opponent_id, friend.id, required: true %>
-              <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-semibold shrink-0" style="background: var(--ck-raised);">
-                  <% if friend.avatar.attached? %>
-                    <%= image_tag friend.avatar, class: "w-8 h-8 object-cover rounded-full" %>
-                  <% else %>
-                    <%= friend.initials %>
-                  <% end %>
-                </div>
-                <div>
-                  <div class="text-[14px] font-medium"><%= friend.full_name %></div>
-                  <div class="ck-meta text-[10px]">Score: <%= friend.score %></div>
-                </div>
-              </div>
-            </label>
-          <% end %>
-        </div>
-      <% else %>
-        <p class="ck-meta">
-          No friends yet.
-          <%= link_to "Send an invitation", invitations_path, style: "color: #a6d6ff;" %> to unlock Games.
-        </p>
+  <div class="ck-card" style="max-width: 480px;">
+    <%= form_with url: games_path, method: :post do |f| %>
+      <% if flash[:alert] %>
+        <div class="mb-4 text-[13px]" style="color: #f87171;"><%= flash[:alert] %></div>
       <% end %>
-    </div>
 
-    <div class="grid grid-cols-2 gap-4 mb-6">
-      <div class="ck-card" style="border-radius: 10px;">
-        <div class="ck-meta mb-3">Rounds</div>
-        <div class="space-y-2">
-          <% [["one", "1 Round"], ["three", "3 Rounds"], ["five", "5 Rounds"]].each do |(key, label)| %>
-            <label class="flex items-center gap-2 cursor-pointer">
-              <%= f.radio_button :round_count, key, required: true %>
-              <span class="text-[13px]"><%= label %></span>
+      <div class="mb-5">
+        <div class="ck-meta mb-2">Opponent</div>
+        <% if @friends.any? %>
+          <select name="opponent_id" class="w-full text-[13px] px-3 py-2 rounded-lg outline-none"
+                  style="background: var(--ck-raised); color: var(--ck-ink); border: 1px solid var(--ck-line);">
+            <% @friends.each do |friend| %>
+              <option value="<%= friend.id %>"><%= friend.full_name %></option>
+            <% end %>
+          </select>
+        <% else %>
+          <p class="text-[13px]" style="color: var(--ck-muted);">
+            No friends yet. <%= link_to "Send invitations", invitations_path, style: "color: #a6d6ff;" %> first.
+          </p>
+        <% end %>
+      </div>
+
+      <div class="mb-5">
+        <div class="ck-meta mb-2">Rounds</div>
+        <div class="flex gap-2">
+          <% [["1 Round", "one"], ["3 Rounds", "three"], ["5 Rounds", "five"]].each do |label, val| %>
+            <label class="flex-1 text-center text-[13px] px-3 py-2 rounded-lg cursor-pointer transition-colors"
+                   style="background: var(--ck-raised); color: var(--ck-muted); border: 1px solid var(--ck-line);"
+                   onmouseover="this.style.borderColor='#a6d6ff'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='var(--ck-line)'">
+              <input type="radio" name="round_count" value="<%= val %>" class="hidden"
+                     <%= "checked" if val == "one" %>
+                     onchange="document.querySelectorAll('[name=round_count]').forEach(r => { r.parentElement.style.color='var(--ck-muted)'; r.parentElement.style.borderColor='var(--ck-line)'; }); this.parentElement.style.color='#a6d6ff'; this.parentElement.style.borderColor='#a6d6ff';">
+              <%= label %>
             </label>
           <% end %>
         </div>
       </div>
-      <div class="ck-card" style="border-radius: 10px;">
-        <div class="ck-meta mb-3">Difficulty</div>
-        <div class="space-y-2">
-          <% [["easy", "Easy"], ["medium", "Medium"], ["hard", "Hard"]].each do |(key, label)| %>
-            <label class="flex items-center gap-2 cursor-pointer">
-              <%= f.radio_button :difficulty, key, required: true %>
-              <span class="ck-chip ck-chip--<%= key %>"><%= label %></span>
+
+      <div class="mb-6">
+        <div class="ck-meta mb-2">Difficulty</div>
+        <div class="flex gap-2">
+          <% [["Easy", "easy"], ["Medium", "medium"], ["Hard", "hard"]].each do |label, val| %>
+            <label class="flex-1 text-center text-[13px] px-3 py-2 rounded-lg cursor-pointer transition-colors"
+                   style="background: var(--ck-raised); color: var(--ck-muted); border: 1px solid var(--ck-line);"
+                   onmouseover="this.style.borderColor='#a6d6ff'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='var(--ck-line)'">
+              <input type="radio" name="difficulty" value="<%= val %>" class="hidden"
+                     <%= "checked" if val == "easy" %>
+                     onchange="document.querySelectorAll('[name=difficulty]').forEach(r => { r.parentElement.style.color='var(--ck-muted)'; r.parentElement.style.borderColor='var(--ck-line)'; }); this.parentElement.style.color='#a6d6ff'; this.parentElement.style.borderColor='#a6d6ff';">
+              <%= label %>
             </label>
           <% end %>
         </div>
       </div>
-    </div>
 
-    <% if @friends.any? %>
-      <%= f.submit "Send Challenge →", class: "ck-btn-primary", style: "cursor: pointer;" %>
+      <% if @friends.any? %>
+        <%= f.submit "Send Challenge", class: "ck-btn-primary w-full cursor-pointer" %>
+      <% end %>
     <% end %>
-  <% end %>
+  </div>
 </div>

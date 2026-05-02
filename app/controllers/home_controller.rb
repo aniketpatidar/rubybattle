@@ -6,6 +6,7 @@ class HomeController < ApplicationController
     @friends = current_user.friends
     @featured_challenges = Challenge.order(:difficulty).limit(3)
 
-    @new_user = @friends.empty? && @challenges_solved.zero?
+    @new_user    = @friends.empty? && @challenges_solved.zero?
+    @leaderboard = User.top_10_by_score
   end
 end
