@@ -40,6 +40,28 @@
     </div>
   </div>
 
+  <div class="mb-8">
+    <div class="ck-meta mb-3">Leaderboard</div>
+    <div class="ck-card" style="max-width: 400px;">
+      <% if @leaderboard.any? %>
+        <div class="space-y-3">
+          <% @leaderboard.each_with_index do |player, i| %>
+            <div class="flex items-center gap-3" style="<%= i < @leaderboard.size - 1 ? 'border-bottom: 0.5px solid var(--ck-line); padding-bottom: 10px;' : '' %>">
+              <div class="text-[12px] font-mono w-4 shrink-0" style="color: var(--ck-muted);"><%= i + 1 %></div>
+              <div class="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-semibold shrink-0" style="background: var(--ck-raised); color: var(--ck-ink);">
+                <%= player.initials %>
+              </div>
+              <%= link_to player.full_name, user_path(player), class: "text-[13px] flex-1 font-medium", style: "color: var(--ck-ink);" %>
+              <div class="text-[13px] font-light tabular-nums" style="color: #a6d6ff;"><%= player.score %></div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="ck-meta text-[12px]">No scores yet. Play some games!</p>
+      <% end %>
+    </div>
+  </div>
+
   <div>
     <div class="ck-meta mb-3">Friends</div>
     <% if @friends.any? %>
