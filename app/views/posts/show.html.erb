@@ -15,7 +15,7 @@
 
   <a href="/<%= @post.user.slug %>" class="text-sm underline mb-4">
     <div class="flex items-center gap-2">
-      <%= image_tag @post.user.avatar, class: "h-16 w-16 object-cover rounded-full" %>
+      <%= image_tag @post.user.avatar, class: "h-16 w-16 object-cover rounded-full" if @post.user.avatar.attached? %>
       <%= @post.user.full_name %>
     </div>
   </a>

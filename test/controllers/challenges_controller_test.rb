@@ -1,13 +1,19 @@
 require "test_helper"
 
 class ChallengesControllerTest < ActionDispatch::IntegrationTest
-  test "should get index" do
-    get challenges_index_url
+  include Devise::Test::IntegrationHelpers
+
+  setup do
+    sign_in users(:one)
+  end
+
+  test "index renders" do
+    get challenges_url
     assert_response :success
   end
 
-  test "should get show" do
-    get challenges_show_url
+  test "show renders" do
+    get challenge_url(name: challenges(:one).name)
     assert_response :success
   end
 end

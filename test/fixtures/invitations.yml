@@ -2,10 +2,10 @@
 
 one:
   user: one
-  friend_id: 2
+  friend: two
   confirmed: true
 
 two:
   user: two
-  friend_id: 1
+  friend: one
   confirmed: true
