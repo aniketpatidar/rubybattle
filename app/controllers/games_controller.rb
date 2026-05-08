@@ -63,7 +63,7 @@ class GamesController < ApplicationController
   def broadcast_code
     return head :forbidden unless @game.active? && @game.participant?(current_user)
     ActionCable.server.broadcast("game_#{@game.id}", {
-      type: "code_update", code: params[:code], user_id: current_user.id
+      type: "code_update", code: params[:code], user_id: current_user.id, user_name: current_user.full_name
     })
     head :ok
   end

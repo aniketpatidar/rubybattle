@@ -1,5 +1,4 @@
 <% if @game.pending? %>
-  <%# ── Pending lobby ─────────────────────────────────── %>
   <div
     id="game-lobby"
     data-controller="game"
@@ -55,7 +54,6 @@
   </div>
 
 <% elsif @game.completed? %>
-  <%# ── Completed ─────────────────────────────────────── %>
   <div class="px-12 py-9">
     <div class="mb-8">
       <div class="ck-meta mb-1">Game · Completed</div>
@@ -102,7 +100,6 @@
   </div>
 
 <% else %>
-  <%# ── Active game room ──────────────────────────────── %>
   <div
     id="game-room"
     data-controller="game"
@@ -112,10 +109,8 @@
     data-game-round-id-value="<%= @current_round&.id %>"
     class="px-12 py-9 space-y-4"
   >
-    <%# Score banner %>
     <div id="game-banner" class="hidden ck-card text-center text-[16px] font-semibold"></div>
 
-    <%# Header bar %>
     <div class="ck-card">
       <div class="flex items-center justify-between">
         <div>
@@ -128,62 +123,100 @@
             <div class="text-[18px] font-light tabular-nums" style="color: #a6d6ff;" data-game-target="myScore">
               <%= @rounds.count { |r| r.round_winner == current_user } %>
             </div>
+            <span id="user_status_<%= current_user.id %>">
+              <%= render partial: 'users/status', locals: { status: 'Active' } %>
+            </span>
           </div>
           <div class="ck-meta self-center">—</div>
           <div>
-            <div class="ck-meta mb-0.5"><%= @game.opponent == current_user ? @game.challenger.first_name : @game.opponent.first_name %></div>
+            <% opp = @game.opponent == current_user ? @game.challenger : @game.opponent %>
+            <div class="ck-meta mb-0.5"><%= opp.first_name %></div>
             <div class="text-[18px] font-light tabular-nums" style="color: var(--ck-muted);" data-game-target="opponentScore">
-              <% opp = @game.opponent == current_user ? @game.challenger : @game.opponent %>
               <%= @rounds.count { |r| r.round_winner == opp } %>
             </div>
+            <span id="user_status_<%= opp.id %>">
+              <%= render partial: 'users/status', locals: { status: 'Inactive' } %>
+            </span>
           </div>
         </div>
       </div>
     </div>
 
     <% if @current_round %>
-      <%# Challenge description %>
-      <details class="ck-card">
-        <summary class="text-[13px] font-semibold cursor-pointer select-none" style="color: var(--ck-ink);">
-          Challenge Description
-        </summary>
-        <div class="mt-3 text-[13px] leading-relaxed whitespace-pre-line" style="color: var(--ck-muted);">
-          <%= @current_round.challenge.description %>
-        </div>
-      </details>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="space-y-4">
+          <div class="ck-card">
+            <div class="text-[13px] font-semibold mb-2" style="color: var(--ck-ink);">Challenge Description</div>
+            <div class="text-[13px] leading-relaxed whitespace-pre-line" style="color: var(--ck-muted);">
+              <%= @current_round.challenge.description %>
+            </div>
+          </div>
 
-      <%# Code editor %>
-      <div
-        id="code-editor"
-        data-method-template="<%= @current_round.challenge.method_template %>"
-        class="ck-card"
-      >
-        <div class="flex items-center justify-between mb-3">
-          <div class="ck-meta">Ruby</div>
-          <div class="flex gap-2">
-            <% if AppSetting.ai_hints_enabled? %>
-              <button data-action="click->game#hint" class="ck-btn-outline text-[12px] px-3 py-1">
-                💡 Hint
-              </button>
-            <% end %>
-            <button
-              data-action="click->game#run"
-              data-game-target="runBtn"
-              class="ck-btn-primary text-[12px] px-4 py-1"
-            >
-              Run Tests ▶
-            </button>
+          <div class="ck-card">
+            <div class="ck-meta mb-2">Test Cases</div>
+            <div class="text-[12px] font-mono leading-relaxed whitespace-pre-line" style="color: var(--ck-muted);">
+              <% if @current_round.challenge.tests.present? %>
+                <%= @current_round.challenge.parsed_tests.map.with_index { |t, i| "Test #{i + 1}: #{t}" }.join("\n") %>
+              <% else %>
+                No test cases available.
+              <% end %>
+            </div>
+          </div>
+
+          <div class="ck-card">
+            <div class="ck-meta mb-2">Test Results</div>
+            <pre class="text-[12px] font-mono leading-relaxed whitespace-pre-wrap" style="color: var(--ck-muted); min-height: 80px;" data-game-target="output">Run your code to see results.</pre>
           </div>
         </div>
 
-        <textarea
-          class="hidden"
-          data-game-target="editor"
-        ></textarea>
+        <div class="space-y-4">
+          <div
+            id="code-editor"
+            data-method-template="<%= @current_round.challenge.method_template %>"
+            class="ck-card"
+          >
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-2">
+                <div class="ck-meta">Your Code</div>
+                <span class="text-[11px] ck-chip">Ruby</span>
+              </div>
+              <div class="flex gap-2">
+                <% if AppSetting.ai_hints_enabled? %>
+                  <button data-action="click->game#hint" class="ck-btn-outline text-[12px] px-3 py-1">
+                    💡 Hint
+                  </button>
+                <% end %>
+                <button
+                  data-action="click->game#run"
+                  data-game-target="runBtn"
+                  class="ck-btn-primary text-[12px] px-4 py-1"
+                >
+                  Run Tests ▶
+                </button>
+              </div>
+            </div>
 
-        <div class="mt-3" style="border-top: 0.5px solid var(--ck-line); padding-top: 12px;">
-          <div class="ck-meta mb-2">Test Results</div>
-          <pre class="text-[12px] font-mono leading-relaxed" style="color: var(--ck-muted);" data-game-target="output">Run your code to see results.</pre>
+            <textarea
+              class="hidden"
+              data-game-target="editor"
+            ></textarea>
+          </div>
+
+          <div class="ck-card" style="opacity: 0.85;">
+            <div class="flex items-center gap-2 mb-3">
+              <div class="ck-meta"><%= opp.first_name %>'s Code</div>
+              <span class="text-[11px] ck-chip">read-only</span>
+            </div>
+
+            <textarea
+              class="hidden"
+              data-game-target="opponentEditor"
+            ></textarea>
+
+            <div class="text-[11px]" style="color: var(--ck-muted);" data-game-target="opponentStatus">
+              Waiting for <%= opp.first_name %> to start coding…
+            </div>
+          </div>
         </div>
       </div>
     <% else %>

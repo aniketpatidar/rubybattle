@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 import { createConsumer } from "@rails/actioncable"
 
 export default class extends Controller {
-  static targets = ["editor", "output", "runBtn", "myScore", "opponentScore"]
+  static targets = ["editor", "opponentEditor", "output", "runBtn", "myScore", "opponentScore", "opponentStatus"]
   static values  = { gameId: String, currentUserId: Number, challengeId: String, roundId: String }
 
   connect() {
@@ -21,6 +21,21 @@ export default class extends Controller {
       this.editor.setValue(methodTemplate)
       this.editor.getWrapperElement().style.height = "360px"
       this.editor.on("change", () => this._debouncedBroadcast())
+    }
+
+    if (this.hasOpponentEditorTarget) {
+      this.opponentEditor = CodeMirror.fromTextArea(this.opponentEditorTarget, {
+        mode: "ruby",
+        lineNumbers: true,
+        indentUnit: 2,
+        tabSize: 2,
+        lineWrapping: true,
+        readOnly: true,
+        autofocus: false
+      })
+      this.opponentEditor.setValue("")
+      this.opponentEditor.getWrapperElement().style.height = "200px"
+      this.opponentEditor.getWrapperElement().style.opacity = "0.6"
     }
 
     this._broadcastTimer = null
@@ -89,7 +104,14 @@ export default class extends Controller {
   }
 
   handleBroadcast(data) {
-    if (data.type === "game_started") {
+    if (data.type === "code_update") {
+      if (data.user_id !== this.currentUserIdValue && this.opponentEditor) {
+        this.opponentEditor.setValue(data.code || "")
+        if (this.hasOpponentStatusTarget) {
+          this.opponentStatusTarget.textContent = `${data.user_name || "Opponent"} is coding…`
+        }
+      }
+    } else if (data.type === "game_started") {
       window.location.reload()
     } else if (data.type === "game_declined") {
       window.location.href = "/"
