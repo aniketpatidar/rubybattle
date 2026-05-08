@@ -21,7 +21,7 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
 
   test "leaderboard highlights signed-in user when they are in top 10" do
     get home_url
-    assert_select ".flex.items-center.gap-3[style*='ck-raised']", count: 1
+    assert_select ".flex.items-center.gap-3.bg-ck-accent", count: 1
   end
 
 end

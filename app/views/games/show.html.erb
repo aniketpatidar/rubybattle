@@ -1,118 +1,112 @@
+<% opp = @game.opponent == current_user ? @game.challenger : @game.opponent %>
+
 <% if @game.pending? %>
   <div
     id="game-lobby"
     data-controller="game"
     data-game-game-id-value="<%= @game.id %>"
     data-game-current-user-id-value="<%= current_user.id %>"
-    class="px-12 py-9"
+    class="ck-page"
   >
-    <div class="mb-8">
-      <div class="ck-meta mb-1">Game · Pending</div>
-      <div class="ck-heading">Waiting Room</div>
-    </div>
+    <section class="mb-8 border-4 border-black bg-ck-secondary p-5 shadow-[8px_8px_0_0_#000] sm:p-8 lg:p-10">
+      <div class="ck-sticker mb-5">Game / Pending</div>
+      <h1 class="ck-heading">Waiting room</h1>
+    </section>
 
-    <div class="ck-card" style="max-width: 480px;">
-      <div class="flex items-center gap-4 mb-6">
-        <div class="w-10 h-10 rounded-full flex items-center justify-center text-[13px] font-semibold shrink-0" style="background: var(--ck-raised); color: var(--ck-ink);">
-          <%= @game.challenger.initials %>
-        </div>
-        <div>
-          <div class="text-[14px] font-medium"><%= @game.challenger.full_name %></div>
-          <div class="ck-meta">Challenger</div>
-        </div>
-        <div class="mx-4 ck-meta">vs</div>
-        <div class="w-10 h-10 rounded-full flex items-center justify-center text-[13px] font-semibold shrink-0" style="background: var(--ck-raised); color: var(--ck-ink);">
-          <%= @game.opponent.initials %>
-        </div>
-        <div>
-          <div class="text-[14px] font-medium"><%= @game.opponent.full_name %></div>
-          <div class="ck-meta">Opponent</div>
-        </div>
+    <section class="ck-card ck-card--quiet max-w-3xl bg-white">
+      <div class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-[1fr_auto_1fr] sm:items-center">
+        <% [[@game.challenger, "Challenger", "bg-ck-accent"], [@game.opponent, "Opponent", "bg-ck-muted"]].each do |player, role, color_class| %>
+          <div class="border-4 border-black <%= color_class %> p-4 shadow-[4px_4px_0_0_#000]">
+            <div class="mb-3 flex h-14 w-14 items-center justify-center rounded-full border-4 border-black bg-white text-lg font-black"><%= player.initials %></div>
+            <div class="text-2xl font-black uppercase leading-none"><%= player.full_name %></div>
+            <div class="ck-meta mt-2"><%= role %></div>
+          </div>
+          <% if role == "Challenger" %>
+            <div class="justify-self-center border-4 border-black bg-ck-ink px-4 py-3 text-xl font-black uppercase text-white shadow-[4px_4px_0_0_#000]">vs</div>
+          <% end %>
+        <% end %>
       </div>
 
-      <div class="flex gap-3 ck-meta mb-6">
+      <div class="mb-6 flex flex-wrap gap-3">
         <span class="ck-chip"><%= Game::ROUND_COUNT_NUM[@game.round_count] %> rounds</span>
         <span class="ck-chip ck-chip--<%= @game.difficulty %>"><%= @game.difficulty.capitalize %></span>
       </div>
 
       <% if @game.opponent == current_user %>
-        <div class="flex gap-3">
-          <%= button_to "Accept Game", accept_game_path(@game), method: :post, class: "ck-btn-primary flex-1 cursor-pointer" %>
-          <%= button_to "Decline", decline_game_path(@game), method: :post, class: "ck-btn-outline flex-1 cursor-pointer",
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <%= button_to "Accept Game", accept_game_path(@game), method: :post, class: "ck-btn-primary w-full" %>
+          <%= button_to "Decline", decline_game_path(@game), method: :post, class: "ck-btn-outline w-full",
               data: { confirm: "Are you sure you want to decline?" } %>
         </div>
       <% else %>
-        <div class="flex items-center gap-2 ck-meta">
-          <svg class="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+        <div class="flex items-center gap-3 border-4 border-black bg-ck-muted p-4 text-lg font-black uppercase shadow-[4px_4px_0_0_#000]">
+          <svg class="h-6 w-6 animate-spin" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+            <path fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
           </svg>
-          Waiting for <%= @game.opponent.first_name %> to accept…
+          Waiting for <%= @game.opponent.first_name %> to accept
         </div>
       <% end %>
-    </div>
+    </section>
   </div>
 
 <% elsif @game.completed? %>
-  <div class="px-12 py-9">
-    <div class="mb-8">
-      <div class="ck-meta mb-1">Game · Completed</div>
-      <div class="ck-heading">Results</div>
-    </div>
+  <div class="ck-page">
+    <section class="mb-8 border-4 border-black bg-ck-accent p-5 shadow-[8px_8px_0_0_#000] sm:p-8 lg:p-10">
+      <div class="ck-sticker mb-5">Game / Completed</div>
+      <h1 class="ck-heading">Results</h1>
+    </section>
 
-    <div class="ck-card mb-6" style="max-width: 480px; text-align: center;">
-      <% if @game.winner == current_user %>
-        <div class="text-[40px] mb-3">🏆</div>
-        <div class="text-[20px] font-semibold mb-1" style="color: #a6d6ff;">You won!</div>
-        <div class="ck-meta">Great job beating <%= @game.opponent == current_user ? @game.challenger.first_name : @game.opponent.first_name %>.</div>
-      <% else %>
-        <div class="text-[40px] mb-3">😔</div>
-        <div class="text-[20px] font-semibold mb-1"><%= @game.winner.full_name %> won</div>
-        <div class="ck-meta">Better luck next time.</div>
-      <% end %>
-      <% deltas = @game.score_deltas %>
-      <% if deltas.present? %>
-        <div class="flex justify-center gap-8 mt-4 pt-4" style="border-top: 0.5px solid var(--ck-line);">
-          <div class="text-center">
-            <div class="ck-meta text-[11px] mb-0.5"><%= @game.challenger == current_user ? "You" : @game.challenger.first_name %></div>
-            <div class="text-[16px] font-semibold" style="color: <%= deltas[:winner_id] == @game.challenger.id ? '#4ade80' : 'var(--ck-muted)' %>;">
-              <%= deltas[:winner_id] == @game.challenger.id ? "+#{deltas[:winner_delta]}" : "+#{deltas[:loser_delta]}" %>
-            </div>
-          </div>
-          <div class="text-center">
-            <div class="ck-meta text-[11px] mb-0.5"><%= @game.opponent == current_user ? "You" : @game.opponent.first_name %></div>
-            <div class="text-[16px] font-semibold" style="color: <%= deltas[:winner_id] == @game.opponent.id ? '#4ade80' : 'var(--ck-muted)' %>;">
-              <%= deltas[:winner_id] == @game.opponent.id ? "+#{deltas[:winner_delta]}" : "+#{deltas[:loser_delta]}" %>
-            </div>
-          </div>
-        </div>
-      <% end %>
-    </div>
+    <div class="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,520px)_minmax(0,1fr)]">
+      <section class="ck-card ck-card--quiet bg-white text-center">
+        <% if @game.winner == current_user %>
+          <div class="mb-4 text-6xl font-black">WIN</div>
+          <div class="mb-2 text-3xl font-black uppercase leading-none">You won</div>
+          <div class="ck-meta">Beat <%= opp.first_name %></div>
+        <% else %>
+          <div class="mb-4 text-6xl font-black">LOSS</div>
+          <div class="mb-2 text-3xl font-black uppercase leading-none"><%= @game.winner.full_name %> won</div>
+          <div class="ck-meta">Run it back.</div>
+        <% end %>
 
-    <div class="ck-card" style="max-width: 480px;">
-      <div class="ck-meta mb-4">Round Summary</div>
-      <div class="space-y-3">
-        <% @rounds.each do |round| %>
-          <div class="flex items-center justify-between py-2" style="border-bottom: 0.5px solid var(--ck-line);">
-            <div>
-              <div class="text-[13px] font-medium">Round <%= round.round_number %> · <%= round.challenge.name %></div>
-              <div class="ck-meta"><%= round.challenge.difficulty.capitalize %></div>
-            </div>
-            <% if round.round_winner %>
-              <span class="ck-chip"
-                    style="<%= round.round_winner == current_user ? 'color: #4ade80; background: rgba(74,222,128,0.1);' : '' %>">
-                <%= round.round_winner == current_user ? "You" : round.round_winner.first_name %>
-              </span>
-            <% else %>
-              <span class="ck-chip" style="color: var(--ck-muted);">—</span>
+        <% deltas = @game.score_deltas %>
+        <% if deltas.present? %>
+          <div class="mt-6 grid grid-cols-2 gap-4 border-t-4 border-black pt-5">
+            <% [@game.challenger, @game.opponent].each do |player| %>
+              <div class="border-4 border-black bg-ck-secondary p-4 shadow-[4px_4px_0_0_#000]">
+                <div class="ck-meta mb-2"><%= player == current_user ? "You" : player.first_name %></div>
+                <div class="text-3xl font-black tabular-nums">
+                  <%= deltas[:winner_id] == player.id ? "+#{deltas[:winner_delta]}" : "+#{deltas[:loser_delta]}" %>
+                </div>
+              </div>
             <% end %>
           </div>
         <% end %>
-      </div>
-    </div>
+      </section>
 
-    <div class="mt-6">
-      <%= link_to "Back to Home", root_path, class: "ck-btn-outline" %>
+      <section class="ck-card ck-card--quiet bg-ck-muted">
+        <div class="ck-meta mb-4">Round Summary</div>
+        <div class="space-y-4">
+          <% @rounds.each do |round| %>
+            <div class="flex flex-col gap-3 border-4 border-black bg-white p-4 shadow-[4px_4px_0_0_#000] sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <div class="text-xl font-black uppercase leading-none">Round <%= round.round_number %> / <%= round.challenge.name %></div>
+                <div class="ck-meta mt-2"><%= round.challenge.difficulty.capitalize %></div>
+              </div>
+              <% if round.round_winner %>
+                <span class="ck-chip <%= round.round_winner == current_user ? 'ck-chip--completed' : '' %>">
+                  <%= round.round_winner == current_user ? "You" : round.round_winner.first_name %>
+                </span>
+              <% else %>
+                <span class="ck-chip ck-chip--outline">Open</span>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+        <div class="mt-6">
+          <%= link_to "Back to Home", root_path, class: "ck-btn-outline" %>
+        </div>
+      </section>
     </div>
   </div>
 
@@ -124,120 +118,91 @@
     data-game-current-user-id-value="<%= current_user.id %>"
     data-game-challenge-id-value="<%= @current_round&.challenge&.id %>"
     data-game-round-id-value="<%= @current_round&.id %>"
-    class="px-12 py-9 space-y-4"
+    class="ck-page space-y-6"
   >
-    <div id="game-banner" class="hidden ck-card text-center text-[16px] font-semibold"></div>
+    <div id="game-banner" class="ck-card hidden bg-ck-accent text-center text-2xl font-black uppercase"></div>
 
-    <div class="ck-card">
-      <div class="flex items-center justify-between">
+    <section class="ck-card ck-card--quiet bg-ck-secondary">
+      <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <div class="ck-meta mb-0.5">Round <span id="current-round-number"><%= @current_round&.round_number || @rounds.size %></span> of <%= Game::ROUND_COUNT_NUM[@game.round_count] %></div>
-          <div class="text-[14px] font-medium" id="current-challenge-name"><%= @current_round&.challenge&.name %></div>
+          <div class="ck-meta mb-2">Round <span id="current-round-number"><%= @current_round&.round_number || @rounds.size %></span> of <%= Game::ROUND_COUNT_NUM[@game.round_count] %></div>
+          <h1 class="text-4xl font-black uppercase leading-none"><%= @current_round&.challenge&.name %></h1>
         </div>
-        <div class="flex gap-6 text-center">
-          <div>
-            <div class="ck-meta mb-0.5">You</div>
-            <div class="text-[18px] font-light tabular-nums" style="color: #a6d6ff;" data-game-target="myScore">
-              <%= @rounds.count { |r| r.round_winner == current_user } %>
-            </div>
-            <span id="user_status_<%= current_user.id %>">
-              <%= render partial: 'users/status', locals: { status: 'Active' } %>
-            </span>
+        <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-3 text-center">
+          <div class="border-4 border-black bg-white p-3 shadow-[4px_4px_0_0_#000]">
+            <div class="ck-meta mb-1">You</div>
+            <div class="text-4xl font-black tabular-nums" data-game-target="myScore"><%= @rounds.count { |r| r.round_winner == current_user } %></div>
+            <span id="user_status_<%= current_user.id %>"><%= render partial: 'users/status', locals: { status: 'Active' } %></span>
           </div>
-          <div class="ck-meta self-center">—</div>
-          <div>
-            <% opp = @game.opponent == current_user ? @game.challenger : @game.opponent %>
-            <div class="ck-meta mb-0.5"><%= opp.first_name %></div>
-            <div class="text-[18px] font-light tabular-nums" style="color: var(--ck-muted);" data-game-target="opponentScore">
-              <%= @rounds.count { |r| r.round_winner == opp } %>
-            </div>
-            <span id="user_status_<%= opp.id %>">
-              <%= render partial: 'users/status', locals: { status: 'Inactive' } %>
-            </span>
+          <div class="font-black uppercase">vs</div>
+          <div class="border-4 border-black bg-ck-muted p-3 shadow-[4px_4px_0_0_#000]">
+            <div class="ck-meta mb-1"><%= opp.first_name %></div>
+            <div class="text-4xl font-black tabular-nums" data-game-target="opponentScore"><%= @rounds.count { |r| r.round_winner == opp } %></div>
+            <span id="user_status_<%= opp.id %>"><%= render partial: 'users/status', locals: { status: 'Inactive' } %></span>
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
     <% if @current_round %>
-      <div class="grid grid-cols-2 gap-4">
-        <div class="space-y-4">
-          <div class="ck-card">
-            <div class="text-[13px] font-semibold mb-2" style="color: var(--ck-ink);">Challenge Description</div>
-            <div class="text-[13px] leading-relaxed whitespace-pre-line" style="color: var(--ck-muted);">
-              <%= @current_round.challenge.description %>
-            </div>
-          </div>
+      <div class="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+        <aside class="space-y-6">
+          <section class="ck-card ck-card--quiet bg-white">
+            <div class="ck-meta mb-3">Challenge Description</div>
+            <div class="whitespace-pre-line text-lg font-bold leading-relaxed text-ck-ink"><%= @current_round.challenge.description %></div>
+          </section>
 
-          <div class="ck-card">
-            <div class="ck-meta mb-2">Test Cases</div>
-            <div class="text-[12px] font-mono leading-relaxed whitespace-pre-line" style="color: var(--ck-muted);">
+          <section class="ck-card ck-card--quiet bg-ck-muted">
+            <div class="ck-meta mb-3">Test Cases</div>
+            <div class="overflow-auto border-4 border-black bg-white p-4 font-mono text-sm font-bold leading-relaxed shadow-[4px_4px_0_0_#000]">
               <% if @current_round.challenge.tests.present? %>
                 <%= @current_round.challenge.parsed_tests.map.with_index { |t, i| "Test #{i + 1}: #{t}" }.join("\n") %>
               <% else %>
                 No test cases available.
               <% end %>
             </div>
-          </div>
+          </section>
 
-          <div class="ck-card">
-            <div class="ck-meta mb-2">Test Results</div>
-            <pre class="text-[12px] font-mono leading-relaxed whitespace-pre-wrap" style="color: var(--ck-muted); min-height: 80px;" data-game-target="output">Run your code to see results.</pre>
-          </div>
-        </div>
+          <section class="ck-card ck-card--quiet bg-ck-secondary">
+            <div class="ck-meta mb-3">Test Results</div>
+            <pre class="min-h-[120px] overflow-auto border-4 border-black bg-white p-4 font-mono text-sm font-bold leading-relaxed shadow-[4px_4px_0_0_#000]" data-game-target="output">Run your code to see results.</pre>
+          </section>
+        </aside>
 
-        <div class="space-y-4">
-          <div
-            id="code-editor"
-            data-method-template="<%= @current_round.challenge.method_template %>"
-            class="ck-card"
-          >
-            <div class="flex items-center justify-between mb-3">
-              <div class="flex items-center gap-2">
-                <div class="ck-meta">Your Code</div>
-                <span class="text-[11px] ck-chip">Ruby</span>
+        <section class="space-y-6">
+          <div id="code-editor" data-method-template="<%= @current_round.challenge.method_template %>" class="ck-card ck-card--quiet bg-white">
+            <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <div class="ck-meta mb-2">Your Code</div>
+                <h2 class="text-3xl font-black uppercase leading-none">Ruby editor</h2>
               </div>
-              <div class="flex gap-2">
+              <div class="flex flex-col gap-2 sm:flex-row">
                 <% if AppSetting.ai_hints_enabled? %>
-                  <button data-action="click->game#hint" class="ck-btn-outline text-[12px] px-3 py-1">
-                    💡 Hint
-                  </button>
+                  <button data-action="click->game#hint" class="ck-btn-outline">Hint</button>
                 <% end %>
-                <button
-                  data-action="click->game#run"
-                  data-game-target="runBtn"
-                  class="ck-btn-primary text-[12px] px-4 py-1"
-                >
-                  Run Tests ▶
-                </button>
+                <button data-action="click->game#run" data-game-target="runBtn" class="ck-btn-primary">Run Tests</button>
               </div>
             </div>
-
-            <textarea
-              class="hidden"
-              data-game-target="editor"
-            ></textarea>
+            <textarea class="hidden" data-game-target="editor"></textarea>
           </div>
 
-          <div class="ck-card" style="opacity: 0.85;">
-            <div class="flex items-center gap-2 mb-3">
-              <div class="ck-meta"><%= opp.first_name %>'s Code</div>
-              <span class="text-[11px] ck-chip">read-only</span>
+          <div class="ck-card ck-card--quiet bg-ck-muted">
+            <div class="mb-4 flex items-center justify-between gap-3">
+              <div>
+                <div class="ck-meta mb-2"><%= opp.first_name %>'s Code</div>
+                <h2 class="text-2xl font-black uppercase leading-none">Read only</h2>
+              </div>
+              <span class="ck-chip ck-chip--outline">Opponent</span>
             </div>
-
-            <textarea
-              class="hidden"
-              data-game-target="opponentEditor"
-            ></textarea>
-
-            <div class="text-[11px]" style="color: var(--ck-muted);" data-game-target="opponentStatus">
-              Waiting for <%= opp.first_name %> to start coding…
+            <textarea class="hidden" data-game-target="opponentEditor"></textarea>
+            <div class="mt-4 border-4 border-black bg-white p-3 text-sm font-black uppercase shadow-[4px_4px_0_0_#000]" data-game-target="opponentStatus">
+              Waiting for <%= opp.first_name %> to start coding
             </div>
           </div>
-        </div>
+        </section>
       </div>
     <% else %>
-      <div class="ck-card text-center py-8 ck-meta">All rounds complete.</div>
+      <div class="ck-card bg-ck-muted py-8 text-center text-2xl font-black uppercase">All rounds complete.</div>
     <% end %>
   </div>
 <% end %>

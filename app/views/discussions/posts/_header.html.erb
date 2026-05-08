@@ -1,2 +1,4 @@
-<p class="text-[13px] font-medium" style="color: var(--ck-ink);"><%= post.user.slug %></p>
-<p class="ck-meta mt-0.5 mb-3"><%= time_ago_in_words(post.created_at) %> ago</p>
+<div class="flex flex-wrap items-center gap-3">
+  <p class="text-base font-black uppercase text-ck-ink">@<%= post.user.slug %></p>
+  <p class="ck-meta text-[10px]"><%= time_ago_in_words(post.created_at) %> ago</p>
+</div>

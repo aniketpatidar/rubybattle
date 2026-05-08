@@ -2,12 +2,84 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-      /* Email styles need to be inline */
+      body {
+        background-color: #FFFDF5;
+        color: #000000;
+        font-family: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+        font-weight: 700;
+        line-height: 1.5;
+        margin: 0;
+        padding: 0;
+      }
+      .ck-email-wrap {
+        max-width: 560px;
+        margin: 0 auto;
+        padding: 40px 24px;
+      }
+      .ck-email-header {
+        background: #FFD93D;
+        border: 3px solid #000;
+        padding: 24px;
+        text-align: center;
+        margin-bottom: 24px;
+      }
+      .ck-email-header h1 {
+        font-size: 24px;
+        font-weight: 900;
+        text-transform: uppercase;
+        margin: 0;
+        color: #000;
+      }
+      .ck-email-body {
+        background: #FFFFFF;
+        border: 3px solid #000;
+        padding: 32px 24px;
+        margin-bottom: 24px;
+      }
+      .ck-email-body p {
+        font-size: 15px;
+        font-weight: 700;
+        color: #000;
+        margin: 0 0 16px 0;
+      }
+      .ck-email-btn {
+        display: inline-block;
+        background: #FF6B6B;
+        border: 3px solid #000;
+        color: #000 !important;
+        font-size: 14px;
+        font-weight: 900;
+        text-transform: uppercase;
+        text-decoration: none;
+        padding: 12px 24px;
+        margin: 8px 0;
+      }
+      .ck-email-footer {
+        text-align: center;
+        font-size: 12px;
+        font-weight: 700;
+        color: #C4B5FD;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+      }
+      .ck-email-footer a {
+        color: #000;
+      }
     </style>
   </head>
-
   <body>
-    <%= yield %>
+    <div class="ck-email-wrap">
+      <div class="ck-email-header">
+        <h1>CodeKata</h1>
+      </div>
+      <div class="ck-email-body">
+        <%= yield %>
+      </div>
+      <div class="ck-email-footer">
+        <p>CodeKata — Ruby Battle Arena</p>
+      </div>
+    </div>
   </body>
 </html>

@@ -1,11 +1,11 @@
-<%= turbo_frame_tag "#{dom_id(post)}_form", target: "_top" do %>
+<turbo-frame id="<%= "#{dom_id(post)}_form" %>" target="_top">
   <%= form_with(model: [post.discussion, post], class: "space-y-4") do |form| %>
     <% if post.errors.any? %>
-      <div class="ck-card mb-4" style="border-left: 2px solid #f87171;">
-        <p class="ck-meta mb-2" style="color: #f87171;"><%= pluralize(post.errors.count, "error") %> prevented this from saving</p>
+      <div class="ck-card mb-4 bg-ck-accent">
+        <p class="ck-meta mb-2"><%= pluralize(post.errors.count, "error") %> prevented this from saving</p>
         <ul class="space-y-0.5">
           <% post.errors.each do |error| %>
-            <li class="text-[13px]" style="color: var(--ck-ink);"><%= error.full_message %></li>
+            <li class="text-sm font-bold text-ck-ink"><%= error.full_message %></li>
           <% end %>
         </ul>
       </div>
@@ -16,6 +16,6 @@
       <%= form.rich_text_area :body, placeholder: "Reply to this discussion..." %>
     </div>
 
-    <%= form.submit "Post Your Answer", class: "ck-btn-primary", style: "cursor: pointer;" %>
+    <%= form.submit "Post Your Answer", class: "ck-btn-primary" %>
   <% end %>
-<% end %>
+</turbo-frame>

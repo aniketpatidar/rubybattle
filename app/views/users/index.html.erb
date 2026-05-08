@@ -1,39 +1,44 @@
-<div class="mx-auto max-w-screen-lg px-4 py-8 sm:px-8">
-  <div class="flex items-center justify-between pb-6">
-    <div>
-      <h2 class="font-semibold text-gray-700">User Accounts</h2>
-      <span class="text-xs text-gray-500">View accounts of registered users</span>
+<div class="ck-page overflow-hidden">
+  <section class="relative mb-8 border-4 border-black bg-ck-secondary p-5 shadow-[8px_8px_0_0_#000] sm:p-8 lg:p-10">
+    <div class="absolute -right-8 -top-8 hidden h-28 w-28 rotate-12 border-4 border-black bg-ck-accent shadow-[6px_6px_0_0_#000] lg:block"></div>
+    <div class="absolute -bottom-6 right-8 hidden rotate-3 border-4 border-black bg-white px-4 py-2 text-sm font-black uppercase shadow-[4px_4px_0_0_#000] md:block">
+      <%= @pagy.count %> Users
     </div>
-    <%= form_tag users_path, method: :get, data: { turbo_frame: "search-results", turbo_action: "advance", controller: "search", action: "input->search#submit" } do |f| %>
-      <div class="flex items-center gap-2">
-        <%= text_field_tag "query", nil, placeholder: "Search...", class: "w-full max-w-xs px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700 placeholder-gray-500" %>
-        <%= submit_tag "Search", class: "rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700" %>
+    <div class="relative grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_420px] xl:items-end">
+      <div>
+        <div class="ck-sticker mb-5">Community</div>
+        <h1 class="ck-heading max-w-4xl">All Users</h1>
       </div>
-    <% end %>
-  </div>
-  <div class="overflow-y-hidden rounded-lg border">
-    <div class="overflow-x-auto" id="users-list">
+      <%= form_tag users_path, method: :get, data: { turbo_frame: "search-results", turbo_action: "advance", controller: "search", action: "input->search#submit" } do %>
+        <div class="border-4 border-black bg-white p-4 shadow-[6px_6px_0_0_#000]">
+          <label for="query" class="ck-meta mb-3 block">Search Users</label>
+          <div class="flex flex-col gap-3 sm:flex-row">
+            <%= text_field_tag "query", nil, placeholder: "Search by name or username...", class: "ck-input min-w-0 flex-1" %>
+            <%= submit_tag "Search", class: "ck-btn-outline shrink-0" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </section>
+
+  <div id="users-list">
     <%= turbo_frame_tag "search-results" do %>
-      <table class="w-full">
-        <thead>
-          <tr class="bg-blue-600 text-left text-xs font-semibold uppercase tracking-widest text-white">
-            <th class="px-5 py-3">ID</th>
-            <th class="px-5 py-3">Full Name</th>
-            <th class="px-5 py-3">Username</th>
-            <th class="px-5 py-3">Created at</th>
-            <th class="px-5 py-3">Status</th>
-          </tr>
-        </thead>
-        <tbody class="text-gray-500">
-          <% (@active_users + @inactive_users).each do |user| %>
-            <%= render partial: 'users/user', locals: { user: } %>
+      <% users = @active_users + @inactive_users %>
+      <% if users.any? %>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <% users.each_with_index do |user, index| %>
+            <%= render partial: 'users/user', locals: { user:, index: } %>
           <% end %>
-        </tbody>
-      </table>
+        </div>
+        <div class="mt-8">
+          <%== pagy_nav(@pagy) %>
+        </div>
+      <% else %>
+        <div class="ck-card bg-ck-muted text-center">
+          <div class="ck-meta mb-3">No users found</div>
+          <p class="mb-5 text-xl font-black uppercase leading-snug">Try another search.</p>
+        </div>
+      <% end %>
     <% end %>
-    </div>
-    <div class="items-center border-t bg-white px-5 py-5 sm:flex-row sm:justify-between">
-      <%== pagy_nav(@pagy) %>
-    </div>
   </div>
 </div>

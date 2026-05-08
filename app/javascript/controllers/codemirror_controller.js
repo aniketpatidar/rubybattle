@@ -13,7 +13,7 @@ export default class extends Controller {
       lineWrapping: true,
       autofocus: true
     })
-    this.codeEditor = document.querySelector(`#code-editor`);
+    this.codeEditor = this.editorTarget.closest("[data-codemirror-context]") || this.editorTarget
     const methodTemplate = this.codeEditor.dataset.methodTemplate.replaceAll("\\n", "\n");
     this.editor.setValue(methodTemplate);
     this.roomId = this.codeEditor.dataset.roomId;

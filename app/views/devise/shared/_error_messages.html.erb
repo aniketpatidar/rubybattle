@@ -1,14 +1,13 @@
 <% if resource.errors.any? %>
-  <div id="error_explanation" data-turbo-cache="false">
-    <h2>
+  <div id="error_explanation" data-turbo-cache="false" class="ck-card mb-4" style="border-color: rgba(248,113,113,0.3);">
+    <div class="ck-meta mb-2" style="color: #f87171;">
       <%= I18n.t("errors.messages.not_saved",
                  count: resource.errors.count,
-                 resource: resource.class.model_name.human.downcase)
-       %>
-    </h2>
-    <ul>
+                 resource: resource.class.model_name.human.downcase) %>
+    </div>
+    <ul class="space-y-1">
       <% resource.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+        <li class="text-sm font-bold" style="color: #f87171;"><%= message %></li>
       <% end %>
     </ul>
   </div>

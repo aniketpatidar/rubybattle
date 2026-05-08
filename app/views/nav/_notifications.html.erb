@@ -1,11 +1,9 @@
-<a href="<%= notifications_path %>" class="relative p-1 rounded-lg transition-colors"
-   style="color: var(--ck-muted); display: inline-flex; align-items: center;"
-   onmouseover="this.style.color='var(--ck-ink)'" onmouseout="this.style.color='var(--ck-muted)'">
+<a href="<%= notifications_path %>" class="relative inline-flex h-11 w-11 items-center justify-center border-4 border-black bg-white text-ck-ink shadow-[3px_3px_0_0_#000] transition-transform duration-100 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[5px_5px_0_0_#000]">
   <span class="sr-only">Notifications</span>
-  <%= inline_svg_tag('bell.svg', class: "h-4 w-4") %>
+  <%= inline_svg_tag('bell.svg', class: "h-5 w-5") %>
   <% if user.notifications.unread.exists? %>
-    <div class="absolute -top-0.5 -right-0.5">
-      <div class="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-[9px] font-semibold" style="background: #f87171; color: #0e0e10;">
+    <div class="absolute -right-2 -top-2">
+      <div class="inline-flex h-6 min-w-6 items-center justify-center rounded-full border-4 border-black bg-ck-accent px-1 text-[10px] font-black leading-none text-ck-ink">
         <%= user.notifications.unread.count %>
       </div>
     </div>

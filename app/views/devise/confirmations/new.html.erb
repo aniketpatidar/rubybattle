@@ -1,16 +1,25 @@
-<h2>Resend confirmation instructions</h2>
+<div class="flex items-center justify-center min-h-screen px-4">
+  <div class="w-full max-w-md">
+    <div class="ck-meta mb-1 text-center">Account setup</div>
+    <div class="ck-heading text-center mb-8">Resend Confirmation</div>
 
-<%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+    <div class="ck-card" style="padding: 32px;">
+      <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
+        <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
+        <div class="space-y-4">
+          <div>
+            <%= f.label :email, class: "ck-meta block mb-1" %>
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), class: "ck-input" %>
+          </div>
+
+          <%= f.submit "Resend confirmation instructions", class: "ck-btn-primary w-full mt-2", style: "cursor: pointer;" %>
+        </div>
+      <% end %>
+
+      <div class="mt-6 space-y-2 text-center">
+        <%= render "devise/shared/links" %>
+      </div>
+    </div>
   </div>
-
-  <div class="actions">
-    <%= f.submit "Resend confirmation instructions" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>

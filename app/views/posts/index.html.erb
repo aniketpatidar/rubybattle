@@ -1,16 +1,18 @@
-<div class="w-full">
-  <div class="flex justify-between items-center">
-    <h1 class="font-bold text-4xl">Posts</h1>
-    <%= link_to "New post",
-      new_post_path,
-      class: "rounded-lg py-3 px-5 bg-gray-700 text-white block font-medium",
-      data: {
-        action: "click->slideover#open",
-        remote: true
-      } %>
-  </div>
+<div class="ck-page overflow-hidden">
+  <section class="relative mb-8 border-4 border-black bg-ck-accent p-5 shadow-[8px_8px_0_0_#000] sm:p-8 lg:p-10">
+    <div class="absolute -right-8 -top-8 hidden h-28 w-28 rotate-12 border-4 border-black bg-ck-secondary shadow-[6px_6px_0_0_#000] lg:block"></div>
+    <div class="relative flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <div class="ck-sticker mb-5">Archive</div>
+        <h1 class="ck-heading max-w-4xl">Posts</h1>
+      </div>
+      <%= link_to "New Post", new_post_path,
+            class: "ck-btn-primary",
+            data: { action: "click->slideover#open", remote: true } %>
+    </div>
+  </section>
 
-  <div id="posts" class="min-w-full">
+  <div id="posts" class="space-y-5">
     <%= render @posts %>
   </div>
 </div>

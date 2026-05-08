@@ -10,17 +10,25 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', ...defaultTheme.fontFamily.sans],
+        sans: ['"Space Grotesk"', ...defaultTheme.fontFamily.sans],
         mono: ['"JetBrains Mono"', ...defaultTheme.fontFamily.mono],
       },
       colors: {
         ck: {
-          bg:     '#0e0e10',
-          card:   '#17171a',
-          raised: '#1f1f23',
-          ink:    '#f5f5f7',
-          accent: '#a6d6ff',
+          bg:        '#FFFDF5',
+          card:      '#FFFFFF',
+          raised:    '#FFD93D',
+          ink:       '#000000',
+          accent:    '#FF6B6B',
+          secondary: '#FFD93D',
+          muted:     '#C4B5FD',
         }
+      },
+      boxShadow: {
+        'neo-sm': '4px 4px 0 0 #000',
+        'neo': '8px 8px 0 0 #000',
+        'neo-lg': '12px 12px 0 0 #000',
+        'neo-xl': '16px 16px 0 0 #000',
       }
     },
   },

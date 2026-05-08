@@ -1,27 +1,57 @@
-<div class="container mx-auto px-4 py-2 flex justify-between">
-  <div class="w-1/4">
-    <div class="bg-white rounded-lg shadow-md p-6 mb-4">
-      <h3 class="text-lg font-semibold mb-2">Related Tags</h3>
-      <ul class="flex flex-wrap gap-2"><%= render @categories %></ul>
+<%= turbo_stream_from @category %>
+
+<div class="ck-page overflow-hidden">
+  <section class="relative mb-8 border-4 border-black bg-ck-muted p-5 shadow-[8px_8px_0_0_#000] sm:p-8 lg:p-10">
+    <div class="absolute -right-8 -top-8 hidden h-28 w-28 rotate-12 border-4 border-black bg-ck-accent shadow-[6px_6px_0_0_#000] lg:block"></div>
+    <div class="relative">
+      <div class="ck-sticker mb-5">Category</div>
+      <h1 class="ck-heading max-w-5xl"><%= @category.name %></h1>
     </div>
-  </div>
-  <div class="w-3/4 pr-8">
-    <% if notice.present? %>
-      <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
-    <% end %>
-    <%= turbo_stream_from @category %>
-    <main class="container mx-auto px-5 flex flex-col inline-block">
+  </section>
+
+  <% if notice.present? %>
+    <div class="ck-card bg-ck-secondary mb-6 flex items-center gap-3">
+      <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <p class="text-sm font-black uppercase"><%= notice %></p>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_280px]">
+    <main class="space-y-5">
       <%= turbo_frame_tag dom_id(@category) do %>
-        <div class="bg-white shadow-md rounded-lg my-4">
-          <div class="p-4 flex items-center justify-between border-b border-gray-200">
-            <h1 class="text-2xl font-bold text-gray-800"><%= @category.name %></h1>
+        <div class="ck-card bg-ck-secondary">
+          <div class="flex items-center justify-between gap-4">
+            <span class="text-2xl font-black uppercase"><%= @category.name %></span>
+            <span class="rounded-full border-4 border-black bg-white px-4 py-2 text-sm font-black shadow-[3px_3px_0_0_#000]">
+              <%= @category.discussions.count %> discussions
+            </span>
           </div>
         </div>
       <% end %>
-      <%= render @category.discussions %>
+
+      <% if @category.discussions.any? %>
+        <div class="space-y-4">
+          <%= render @category.discussions %>
+        </div>
+      <% else %>
+        <div class="ck-card bg-ck-muted text-center">
+          <div class="ck-meta mb-3">No discussions yet</div>
+          <p class="mb-5 text-lg font-black uppercase leading-snug">Be the first to start a discussion in this category.</p>
+          <%= link_to "Start a Discussion", new_discussion_path(category_id: @category.id), class: "ck-btn-primary" %>
+        </div>
+      <% end %>
     </main>
-    <div class="inline-block ml-2 mt-2">
-      <%= link_to "Back to categories", categories_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-    </div>
+
+    <aside class="space-y-4">
+      <div class="ck-card bg-white">
+        <div class="ck-meta mb-3">Related Tags</div>
+        <div class="flex flex-wrap gap-2">
+          <%= render @categories %>
+        </div>
+      </div>
+      <%= link_to "← Back to Categories", categories_path, class: "ck-btn-outline block text-center" %>
+    </aside>
   </div>
 </div>

@@ -5,15 +5,15 @@
    when :none %>
   <%= form_with(url: invitations_path, method: :post, local: true) do |form| %>
     <%= form.hidden_field :user_id, value: user.id %>
-    <%= form.submit "Connect", class: "px-4 py-2 text-gray-300 bg-gray-700 rounded-md cursor-pointer hover:bg-gray-600" %>
+    <%= form.submit "Connect", class: "ck-btn-primary", style: "cursor: pointer;" %>
   <% end %>
 <% when :invitation_sent %>
-  <span class="px-4 py-2 bg-gray-400 text-white rounded-md">Pending</span>
+  <span class="ck-chip ck-chip--outline">Pending</span>
 <% when :invitation_received %>
-  <div class="flex space-x-2">
-    <%= button_to "Accept", accept_invitation_path(received_invitation), method: :post, class: "px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600" %>
-    <%= button_to "Decline", decline_invitation_path(received_invitation), method: :post, class: "px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600" %>
+  <div class="flex gap-2">
+    <%= button_to "Accept", accept_invitation_path(received_invitation), method: :post, class: "ck-btn-primary", style: "cursor: pointer;" %>
+    <%= button_to "Decline", decline_invitation_path(received_invitation), method: :post, class: "ck-btn-outline", style: "cursor: pointer;" %>
   </div>
 <% when :friends %>
-  <span class="px-4 py-2 bg-green-500 text-white rounded-md">Connected</span>
+  <span class="ck-chip ck-chip--completed">Connected</span>
 <% end %>

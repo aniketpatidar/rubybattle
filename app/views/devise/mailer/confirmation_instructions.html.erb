@@ -1,5 +1,5 @@
 <p>Welcome <%= @email %>!</p>
 
-<p>You can confirm your account email through the link below:</p>
+<p>You're one step away from joining the arena. Confirm your account below:</p>
 
-<p><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token) %></p>
+<p><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token), style: 'display: inline-block; background: #FF6B6B; border: 3px solid #000; color: #000 !important; font-size: 14px; font-weight: 900; text-transform: uppercase; text-decoration: none; padding: 12px 24px; margin: 8px 0;' %></p>

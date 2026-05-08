@@ -30,7 +30,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test "profile shows 'Connected' badge when viewing a friend's profile" do
     get user_path(users(:two))
     assert_response :success
-    assert_select "button[disabled]", "Connected"
+    assert_select ".ck-chip--completed", text: /Connected/
     assert_select "button[type=submit]", text: "Send Friend Invitation", count: 0
   end
 
@@ -44,7 +44,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     users(:one).send_invitation(users(:three))
     get user_path(users(:three))
     assert_response :success
-    assert_select "button[disabled]", "Invitation Sent"
+    assert_select ".ck-chip--outline", text: "Invitation Sent"
     assert_select "button[type=submit]", text: "Send Friend Invitation", count: 0
   end
 
@@ -52,7 +52,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     users(:three).send_invitation(users(:one))
     get user_path(users(:three))
     assert_response :success
-    assert_select "button[disabled]", "Invitation Pending"
+    assert_select ".ck-chip--outline", text: "Invitation Pending"
     assert_select "button[type=submit]", text: "Send Friend Invitation", count: 0
   end
 end

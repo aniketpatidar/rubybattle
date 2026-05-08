@@ -1,41 +1,41 @@
-<header class="shadow-md mx-auto py-1 px-3">
-  <nav class="flex justify-between items-center">
-    <div class="text-2xl">RubyBattle</div>
-    <div class="space-x-8 flex items-center rounded-full px-3 py-1">
-      <%= link_to 'Home', "/", class: 'px-2 py-1' %>
-      <%= link_to 'Challenges', challenges_path, class: 'px-2 py-1' %>
-      <%= link_to 'Invitations', invitations_path, class: 'px-2 py-1' %>
-      <%= link_to 'Users', users_path, class: 'px-2 py-1' %>
-      <%= link_to 'Categories', categories_path, class: 'px-2 py-1' %>
-      <div class="">
-        <div class="dropdown inline-block relative">
-          <button class="py-2 px-4 rounded inline-flex items-center">
-            <span class="rounded-full border-2 border-black px-1 mr-1">
-              <%= current_user.initials %>
-            </span>
-            <span class="mr-1">Profile</span>
-            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/> </svg>
-          </button>
-          <ul class="dropdown-menu absolute hidden text-gray-700 pt-1">
-            <%= link_to 'View', "/users/#{current_user.slug}", class: 'rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap' %>
-            <%= link_to 'Edit', edit_user_registration_path, class: 'rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap' %>
-          </ul>
+<header class="border-b-4 border-black bg-ck-card shadow-[0_4px_0_0_#000]">
+  <nav class="mx-auto flex max-w-screen-2xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+    <div class="flex items-center gap-8">
+      <%= link_to "/", class: "flex items-center gap-2 font-black text-xl uppercase tracking-tight text-ck-ink" do %>
+        <span class="inline-block rotate-[-3deg] border-4 border-black bg-ck-accent px-3 py-1 text-sm shadow-[3px_3px_0_0_#000]">CK</span>
+        <span class="hidden sm:inline">CodeKata</span>
+      <% end %>
+    </div>
+
+    <div class="flex items-center gap-1 sm:gap-3">
+      <%= link_to "Home", "/", class: "px-3 py-2 text-sm font-black uppercase text-ck-ink hover:bg-ck-secondary transition-colors" %>
+      <%= link_to "Challenges", challenges_path, class: "px-3 py-2 text-sm font-black uppercase text-ck-ink hover:bg-ck-secondary transition-colors" %>
+      <%= link_to "Invitations", invitations_path, class: "px-3 py-2 text-sm font-black uppercase text-ck-ink hover:bg-ck-secondary transition-colors" %>
+      <%= link_to "Users", users_path, class: "px-3 py-2 text-sm font-black uppercase text-ck-ink hover:bg-ck-secondary transition-colors" %>
+      <%= link_to "Categories", categories_path, class: "px-3 py-2 text-sm font-black uppercase text-ck-ink hover:bg-ck-secondary transition-colors" %>
+
+      <div class="relative ml-2" data-controller="dropdown">
+        <button class="flex items-center gap-2 border-4 border-black bg-ck-secondary px-3 py-2 text-sm font-black uppercase shadow-[3px_3px_0_0_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-transform" data-action="click->dropdown#toggle">
+          <span class="flex h-6 w-6 items-center justify-center rounded-full border-2 border-black bg-white text-[9px] font-black">
+            <%= current_user.initials %>
+          </span>
+          <span class="hidden sm:inline"><%= current_user.first_name %></span>
+          <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/>
+          </svg>
+        </button>
+        <div class="absolute right-0 top-full z-50 mt-1 hidden w-48 border-4 border-black bg-white shadow-[6px_6px_0_0_#000]" data-dropdown-target="menu">
+          <%= link_to "View Profile", "/users/#{current_user.slug}", class: "block border-b-4 border-black px-4 py-3 text-sm font-black uppercase text-ck-ink hover:bg-ck-secondary" %>
+          <%= link_to "Edit Profile", edit_user_registration_path, class: "block border-b-4 border-black px-4 py-3 text-sm font-black uppercase text-ck-ink hover:bg-ck-secondary" %>
+          <%= link_to "Ask a Question", new_discussion_path, class: "block border-b-4 border-black px-4 py-3 text-sm font-black uppercase text-ck-ink hover:bg-ck-secondary" %>
+          <%= link_to "Sign Out", destroy_user_session_path, data: { turbo_method: "delete" }, class: "block px-4 py-3 text-sm font-black uppercase text-ck-ink hover:bg-ck-secondary" %>
         </div>
       </div>
-      <div class="rounded-full flex items-center justify-center">
+
+      <div class="flex items-center justify-center">
         <%= turbo_stream_from current_user, :notifications %>
         <%= render "nav/notifications", user: current_user %>
       </div>
-      <%= link_to new_discussion_path do %>
-        <button class="rounded-md px-4 py-2 text-sm font-semibold focus:outline-none focus:ring hover:bg-blue-700 hover:text-white">
-          Ask a question
-        </button>
-      <% end %>
-      <%= link_to destroy_user_session_path, data: { turbo_method: "delete" } do %>
-        <button class="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700">
-          Logout
-        </button>
-      <% end %>
     </div>
   </nav>
 </header>

@@ -1,7 +1,14 @@
-<div class="mx-auto md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">New category</h1>
+<div class="ck-page">
+  <section class="mb-8 border-4 border-black bg-ck-secondary p-5 shadow-[8px_8px_0_0_#000] sm:p-8 lg:p-10">
+    <div class="ck-sticker mb-5">Categories</div>
+    <h1 class="ck-heading">New Category</h1>
+  </section>
 
-  <%= render "form", category: @category %>
+  <div class="ck-card max-w-2xl">
+    <%= render "form", category: @category %>
+  </div>
 
-  <%= link_to "Back to categories", categories_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+  <div class="mt-6">
+    <%= link_to "← Back to Categories", categories_path, class: "ck-btn-outline" %>
+  </div>
 </div>
