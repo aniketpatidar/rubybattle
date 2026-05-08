@@ -10,7 +10,7 @@ class HintsController < ApplicationController
     challenge = Challenge.find(params[:challenge_id])
     hint = GeminiService.new.hint(challenge.description, params[:code])
     render json: { hint: hint }
-  rescue RubyLLM::AuthenticationError => e
+  rescue RubyLLM::UnauthorizedError => e
     render json: { error: e.message }, status: :service_unavailable
   rescue => e
     Rails.logger.error("Hint failed: #{e.message}")

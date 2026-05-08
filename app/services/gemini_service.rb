@@ -5,32 +5,19 @@ class GeminiService
     raise ArgumentError, "Challenge description cannot be empty" if challenge_description.blank?
     raise ArgumentError, "Code cannot be empty" if user_code.blank?
 
-    api_key = gemini_api_key
+    api_key = ENV["GEMINI_API_KEY"]
     raise KeyError, "GEMINI_API_KEY is not set" if api_key.nil?
 
-    client = create_client
+    RubyLLM.configure { |c| c.gemini_api_key = api_key }
 
-    prompt = build_prompt(challenge_description, user_code)
-
-    response = client.chat(
-      model: GEMINI_MODEL,
-      messages: [{ role: "user", content: prompt }]
-    )
-
+    chat = RubyLLM.chat(model: GEMINI_MODEL)
+    response = chat.ask(build_prompt(challenge_description, user_code))
     response.content
-  rescue RubyLLM::AuthenticationError
-    raise RubyLLM::AuthenticationError, "GEMINI_API_KEY is not configured or invalid"
+  rescue RubyLLM::UnauthorizedError
+    raise RubyLLM::UnauthorizedError, "GEMINI_API_KEY is not configured or invalid"
   end
 
   private
-
-  def create_client
-    RubyLLM::Client.new(api_key: gemini_api_key)
-  end
-
-  def gemini_api_key
-    ENV["GEMINI_API_KEY"]
-  end
 
   def build_prompt(challenge_description, user_code)
     <<~PROMPT
