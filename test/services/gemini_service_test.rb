@@ -75,13 +75,13 @@ class GeminiServiceTest < Minitest::Test
     end
   end
 
-  def test_hint_handles_RubyLLM_AuthenticationError_gracefully
+  def test_hint_handles_RubyLLM_UnauthorizedError_gracefully
     challenge_desc = "Test challenge"
     code = "test code"
 
-    mock_client_with_error(RubyLLM::AuthenticationError.new("Invalid API key"))
+    mock_client_with_error(RubyLLM::UnauthorizedError.new("Invalid API key"))
 
-    assert_raises(RubyLLM::AuthenticationError) do
+    assert_raises(RubyLLM::UnauthorizedError) do
       @service.hint(challenge_desc, code)
     end
   end
@@ -101,8 +101,8 @@ class GeminiServiceTest < Minitest::Test
     mock_client = Object.new
     mock_client.instance_variable_set(:@captured_prompt, nil)
 
-    def mock_client.chat(model:, messages:)
-      @captured_prompt = messages[0][:content]
+    def mock_client.ask(message)
+      @captured_prompt = message
       mock_response_obj = Object.new
       def mock_response_obj.content
         "Your hint here"
@@ -135,7 +135,7 @@ class GeminiServiceTest < Minitest::Test
     mock_response.instance_variable_set(:@response_text, response_text)
 
     mock_client = Object.new
-    def mock_client.chat(model:, messages:)
+    def mock_client.ask(message)
       @mock_response
     end
     mock_client.instance_variable_set(:@mock_response, mock_response)
@@ -148,7 +148,7 @@ class GeminiServiceTest < Minitest::Test
   def mock_client_with_error(error)
     mock_client = Object.new
     mock_client.instance_variable_set(:@error, error)
-    def mock_client.chat(model:, messages:)
+    def mock_client.ask(message)
       raise @error
     end
 

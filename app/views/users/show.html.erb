@@ -95,11 +95,14 @@
     <div class="space-y-4">
       <% if current_user && current_user.id != @user.id %>
         <div class="ck-card space-y-2" style="border-radius: 10px;">
-          <% if current_user.pending_invitations.exists?(user_id: @user.id) %>
+          <% case friendship_state(current_user, @user)
+             when :friends %>
+            <button class="ck-btn-outline w-full" disabled style="opacity: 0.4; cursor: default;">Connected</button>
+          <% when :invitation_received %>
             <button class="ck-btn-outline w-full" disabled style="opacity: 0.4; cursor: default;">Invitation Pending</button>
-          <% elsif current_user.sent_invitations.exists?(friend_id: @user.id) %>
+          <% when :invitation_sent %>
             <button class="ck-btn-outline w-full" disabled style="opacity: 0.4; cursor: default;">Invitation Sent</button>
-          <% else %>
+          <% when :none %>
             <%= button_to "Send Friend Invitation", invitations_path, params: { user_id: @user.id },
                 method: :post, class: "ck-btn-primary w-full", style: "cursor: pointer;" %>
           <% end %>

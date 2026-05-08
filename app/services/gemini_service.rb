@@ -10,7 +10,7 @@ class GeminiService
 
     RubyLLM.configure { |c| c.gemini_api_key = api_key }
 
-    chat = RubyLLM.chat(model: GEMINI_MODEL)
+    chat = create_client
     response = chat.ask(build_prompt(challenge_description, user_code))
     response.content
   rescue RubyLLM::UnauthorizedError
@@ -18,6 +18,10 @@ class GeminiService
   end
 
   private
+
+  def create_client
+    RubyLLM.chat(model: GEMINI_MODEL)
+  end
 
   def build_prompt(challenge_description, user_code)
     <<~PROMPT
