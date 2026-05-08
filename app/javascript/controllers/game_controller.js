@@ -122,11 +122,21 @@ export default class extends Controller {
         if (this.hasOpponentScoreTarget) this.opponentScoreTarget.textContent = parseInt(this.opponentScoreTarget.textContent) + 1
       }
       if (data.next_round_number) {
-        setTimeout(() => window.location.reload(), 1500)
+        this.showRoundInterstitial(data.round_number, data.winner_name)
       }
     } else if (data.type === "game_completed") {
       this.showGameResult(data.winner_id, data.winner_name)
     }
+  }
+
+  showRoundInterstitial(roundNumber, winnerName) {
+    const banner = document.getElementById("game-banner")
+    if (!banner) return
+    banner.textContent = `Round ${roundNumber} complete — ${winnerName} won`
+    banner.style.color = "var(--ck-ink)"
+    banner.classList.remove("hidden")
+    banner.scrollIntoView({ behavior: "smooth" })
+    setTimeout(() => window.location.reload(), 2000)
   }
 
   showGameResult(winnerId, winnerName) {

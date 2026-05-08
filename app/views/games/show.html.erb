@@ -70,6 +70,23 @@
         <div class="text-[20px] font-semibold mb-1"><%= @game.winner.full_name %> won</div>
         <div class="ck-meta">Better luck next time.</div>
       <% end %>
+      <% deltas = @game.score_deltas %>
+      <% if deltas.present? %>
+        <div class="flex justify-center gap-8 mt-4 pt-4" style="border-top: 0.5px solid var(--ck-line);">
+          <div class="text-center">
+            <div class="ck-meta text-[11px] mb-0.5"><%= @game.challenger == current_user ? "You" : @game.challenger.first_name %></div>
+            <div class="text-[16px] font-semibold" style="color: <%= deltas[:winner_id] == @game.challenger.id ? '#4ade80' : 'var(--ck-muted)' %>;">
+              <%= deltas[:winner_id] == @game.challenger.id ? "+#{deltas[:winner_delta]}" : "+#{deltas[:loser_delta]}" %>
+            </div>
+          </div>
+          <div class="text-center">
+            <div class="ck-meta text-[11px] mb-0.5"><%= @game.opponent == current_user ? "You" : @game.opponent.first_name %></div>
+            <div class="text-[16px] font-semibold" style="color: <%= deltas[:winner_id] == @game.opponent.id ? '#4ade80' : 'var(--ck-muted)' %>;">
+              <%= deltas[:winner_id] == @game.opponent.id ? "+#{deltas[:winner_delta]}" : "+#{deltas[:loser_delta]}" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
     </div>
 
     <div class="ck-card" style="max-width: 480px;">

@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_many :posts, dependent: :destroy
   has_one_attached :avatar
   validates :slug, uniqueness: true
+  validates :score, numericality: { greater_than_or_equal_to: 0, only_integer: true }
   validate :avatar_must_be_image, if: -> { avatar.attached? && avatar.changed? }
 
   IMAGE_CONTENT_TYPES = %w[image/jpeg image/png image/gif image/webp].freeze

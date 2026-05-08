@@ -26,6 +26,31 @@ class Game < ApplicationRecord
     [ challenger, opponent ].find { |u| u.id == winner_id }
   end
 
+  def score_deltas
+    game_winner = winner_of_game
+    return {} unless game_winner
+
+    loser = game_winner == challenger ? opponent : challenger
+    completed = game_rounds.where.not(round_winner_id: nil)
+
+    winner_rounds = completed.where(round_winner_id: game_winner.id).count
+    loser_rounds  = completed.where(round_winner_id: loser.id).count
+
+    loser_delta = [loser_rounds, 0].max
+    original_loser_score = loser.score - loser_delta
+
+    winner_delta = GameScorer.score_for_winner(
+      rounds_won: winner_rounds, rounds_lost: loser_rounds, opponent_score: original_loser_score
+    )
+
+    {
+      winner_id: game_winner.id,
+      winner_delta: winner_delta,
+      loser_id: loser.id,
+      loser_delta: loser_delta
+    }
+  end
+
   def apply_scores!
     game_winner = winner_of_game
     return unless game_winner
@@ -42,8 +67,8 @@ class Game < ApplicationRecord
     loser_delta = GameScorer.score_for_loser(rounds_won: loser_rounds)
 
     Game.transaction do
-      game_winner.increment!(:score, winner_delta)
-      loser.increment!(:score, loser_delta) if loser_delta > 0
+      game_winner.update!(score: game_winner.score + winner_delta)
+      loser.update!(score: loser.score + loser_delta) if loser_delta > 0
     end
   end
 end
