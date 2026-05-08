@@ -1,4 +1,4 @@
-<% tests = JSON.parse(@challenge.tests) rescue [] %>
+<% tests = @challenge.tests.is_a?(String) ? (JSON.parse(@challenge.tests) rescue []) : Array(@challenge.tests) %>
 <% completed = user_signed_in? && ChallengeCompletion.exists?(user: current_user, challenge: @challenge) %>
 
 <div class="ck-page overflow-hidden">

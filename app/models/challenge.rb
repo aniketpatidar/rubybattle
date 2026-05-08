@@ -12,7 +12,8 @@ class Challenge < ApplicationRecord
   end
 
   def parsed_tests
-    tests.is_a?(String) ? JSON.parse(tests) : Array(tests)
+    raw = tests.is_a?(String) ? JSON.parse(tests) : tests
+    Array(raw).map { |t| t.is_a?(Hash) ? t.deep_symbolize_keys : t }
   end
 
   def to_param

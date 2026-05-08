@@ -3,7 +3,7 @@ require "json"
 
 class Judge0Service
   BASE_URL = "https://judge0-ce.p.rapidapi.com"
-  LANGUAGE_ID = 71  # Ruby language ID in Judge0
+  LANGUAGE_ID = 72  # Ruby language ID in Judge0
   RAPIDAPI_HOST = "judge0-ce.p.rapidapi.com"
   JUDGE0_PROCESSING_STATUS_ID = 2
   POLL_INTERVAL_SECONDS = 0.5
@@ -67,8 +67,8 @@ class Judge0Service
 
     response = http.request(request)
     parsed = JSON.parse(response.body)
-    submission_id = parsed.dig("id")
-    Rails.logger.debug("Judge0 submission successful: submission_id=#{submission_id}")
+    submission_id = parsed.dig("token")
+    Rails.logger.debug("Judge0 submission successful: token=#{submission_id}")
     submission_id
   rescue JSON::JSONError, StandardError => e
     Rails.logger.error("Judge0 submission failed: #{e.message}")

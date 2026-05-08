@@ -72,8 +72,8 @@ export default class extends Controller {
     if (error) return this.renderError(new Error(error))
 
     const lines = Object.entries(output).map(
-      ([input, { expected, actual, passed }]) =>
-        `Test case: ${input}\nExpected: ${expected}\nActual: ${actual}\nPassed: ${passed ? "✅" : "❌"}\n`
+      ([_key, { expected, output: actual, passed }]) =>
+        `Expected: ${expected}\nActual: ${actual}\nPassed: ${passed ? "✅" : "❌"}\n`
     ).join("\n")
     this.outputTarget.textContent = lines || "No output"
   }
