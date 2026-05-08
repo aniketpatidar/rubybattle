@@ -1,6 +1,22 @@
 require "test_helper"
 
 class NotificationTest < ActiveSupport::TestCase
+  test "GameInviteNotification message" do
+    notification = GameInviteNotification.new(
+      user: users(:one),
+      params: { game_id: 1, challenger_name: "Alice", round_count: 3 }
+    )
+    assert_equal "Alice challenged you to a 3-round Game", notification.message
+  end
+
+  test "GameInviteNotification url" do
+    notification = GameInviteNotification.new(
+      user: users(:one),
+      params: { game_id: 42, challenger_name: "Alice", round_count: 3 }
+    )
+    assert_equal "/games/42", notification.url
+  end
+
   test "GameResultNotification message for winner" do
     notification = GameResultNotification.new(
       user: users(:one),
