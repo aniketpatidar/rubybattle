@@ -12,6 +12,6 @@ class UsersController < ApplicationController
                         .where(status: Game.statuses[:completed])
                         .includes(:challenger, :opponent, :winner, game_rounds: :challenge)
                         .order(completed_at: :desc)
-                        .limit(10)
+                        .limit(5)
   end
 end

@@ -122,9 +122,18 @@
               <% won = game.winner == @user %>
               <a href="/games/<%= game.id %>" class="block" style="border-bottom: 0.5px solid var(--ck-line); padding-bottom: 10px; text-decoration: none;">
                 <div class="flex items-center justify-between">
-                  <div>
-                    <div class="text-[12px] font-medium" style="color: var(--ck-ink);">vs <%= opp.full_name %></div>
-                    <div class="ck-meta text-[10px]"><%= Game::ROUND_COUNT_NUM[game.round_count] %> rounds · <%= game.difficulty.capitalize %></div>
+                  <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 rounded-full flex items-center justify-center text-[8px] font-semibold shrink-0" style="background: var(--ck-raised); color: var(--ck-ink);">
+                      <% if opp.avatar.attached? %>
+                        <%= image_tag opp.avatar, class: "w-6 h-6 object-cover rounded-full" %>
+                      <% else %>
+                        <%= opp.initials %>
+                      <% end %>
+                    </div>
+                    <div>
+                      <div class="text-[12px] font-medium" style="color: var(--ck-ink);"><%= opp.full_name %></div>
+                      <div class="ck-meta text-[10px]"><%= Game::ROUND_COUNT_NUM[game.round_count] %> rounds · <%= game.difficulty.capitalize %> · <%= game.completed_at.strftime("%b %d, %Y") %></div>
+                    </div>
                   </div>
                   <span class="ck-chip text-[10px]" style="<%= won ? 'color: #4ade80; background: rgba(74,222,128,0.1);' : '' %>">
                     <%= won ? "W" : "L" %>
