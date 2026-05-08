@@ -46,7 +46,7 @@
       <% if @leaderboard.any? %>
         <div class="space-y-3">
           <% @leaderboard.each_with_index do |player, i| %>
-            <div class="flex items-center gap-3" style="<%= i < @leaderboard.size - 1 ? 'border-bottom: 0.5px solid var(--ck-line); padding-bottom: 10px;' : '' %>">
+            <div class="flex items-center gap-3" style="<%= 'background: var(--ck-raised); border-radius: 6px; padding: 6px 8px; margin: -6px -8px; ' if player == current_user %><%= i < @leaderboard.size - 1 && player != current_user ? 'border-bottom: 0.5px solid var(--ck-line); padding-bottom: 10px;' : '' %>">
               <div class="text-[12px] font-mono w-4 shrink-0" style="color: var(--ck-muted);"><%= i + 1 %></div>
               <div class="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-semibold shrink-0" style="background: var(--ck-raised); color: var(--ck-ink);">
                 <%= player.initials %>

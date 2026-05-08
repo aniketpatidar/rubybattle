@@ -11,4 +11,17 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
     get home_url
     assert_response :success
   end
+
+  test "leaderboard shows top 10 users by score descending" do
+    get home_url
+    assert_select ".ck-card" do
+      assert_select ".flex.items-center.gap-3", minimum: 1
+    end
+  end
+
+  test "leaderboard highlights signed-in user when they are in top 10" do
+    get home_url
+    assert_select ".flex.items-center.gap-3[style*='ck-raised']", count: 1
+  end
+
 end

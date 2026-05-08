@@ -6,6 +6,7 @@ one:
   first_name: John
   last_name: Doe
   slug: john-doe
+  score: 42
 
 two:
   email: user2@example.com
@@ -13,6 +14,7 @@ two:
   first_name: Jane
   last_name: Smith
   slug: jane-smith
+  score: 100
 
 three:
   email: user3@example.com
@@ -20,3 +22,4 @@ three:
   first_name: Alex
   last_name: Jones
   slug: alex-jones
+  score: 15
