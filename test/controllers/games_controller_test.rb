@@ -41,4 +41,48 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
     assert_equal "You can only challenge friends.", flash[:alert]
   end
+
+  test "accept: opponent transitions game to active and sets started_at" do
+    sign_in users(:two)
+    game = games(:pending_game)
+
+    post accept_game_path(game)
+
+    game.reload
+    assert game.active?
+    assert_not_nil game.started_at
+    assert_redirected_to game_path(game)
+  end
+
+  test "decline: opponent destroys game and associated rounds" do
+    sign_in users(:two)
+    game = games(:pending_game)
+
+    assert_difference ["Game.count", "GameRound.count"], -1 do
+      post decline_game_path(game)
+    end
+
+    assert_redirected_to root_path
+    assert_equal "Game declined.", flash[:notice]
+  end
+
+  test "accept: challenger cannot accept their own game" do
+    game = games(:pending_game)
+
+    post accept_game_path(game)
+
+    game.reload
+    assert game.pending?
+    assert_redirected_to game_path(game)
+  end
+
+  test "accept: non-pending game cannot be accepted" do
+    sign_in users(:two)
+    game = games(:pending_game)
+    game.update!(status: :active, started_at: Time.current)
+
+    post accept_game_path(game)
+
+    assert_redirected_to game_path(game)
+  end
 end

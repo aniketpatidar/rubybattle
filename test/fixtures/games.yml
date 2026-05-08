@@ -1,0 +1,6 @@
+pending_game:
+  challenger: one
+  opponent: two
+  status: 0
+  round_count: 0
+  difficulty: 0
