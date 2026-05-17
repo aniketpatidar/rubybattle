@@ -9,11 +9,17 @@ class ApplicationController < ActionController::Base
   protected
 
   def configure_permitted_parameters
+    discard_blank_avatar_param
+
     devise_parameter_sanitizer.permit(:sign_up, keys: [:first_name, :last_name, :slug, :avatar])
     devise_parameter_sanitizer.permit(:account_update, keys: [:first_name, :last_name, :slug, :avatar])
   end
 
   private
+
+  def discard_blank_avatar_param
+    params[:user]&.delete(:avatar) if params.dig(:user, :avatar).blank?
+  end
 
   def set_current_user
     Current.user = current_user

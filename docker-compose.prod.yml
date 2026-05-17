@@ -1,0 +1,62 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-chaiaurcode}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-chaiaurcode}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-chaiaurcode}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    command: ./bin/rails server -b 0.0.0.0
+    tmpfs:
+      - /rails/tmp/pids
+    volumes:
+      - bundle:/usr/local/bundle
+      - rails_storage:/rails/storage
+    environment:
+      RAILS_ENV: production
+      RAILS_LOG_TO_STDOUT: "true"
+      DATABASE_URL: postgresql://${POSTGRES_USER:-chaiaurcode}:${POSTGRES_PASSWORD:-chaiaurcode}@db:5432/${POSTGRES_DB:-battle_production}
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+      JUDGE0_API_KEY: ${JUDGE0_API_KEY}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      RAILS_SERVE_STATIC_FILES: "true"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    network_mode: host
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  bundle:
+  rails_storage:

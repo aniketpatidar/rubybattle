@@ -26,6 +26,10 @@ config.session_store :redis_session_store,
   # Show full error reports.
   config.consider_all_requests_local = true
 
+  config.hosts << "codekata.aniketpatidar.com"
+  config.hosts << /.*\.aniketpatidar\.com/
+  config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
   # Enable server timing
   config.server_timing = true
 
