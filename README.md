@@ -1,31 +1,70 @@
 # CodeKata
 
-A competitive coding platform for Ruby developers. Solve challenges, compete in multi-round games against friends, collaborate in real-time, and discuss solutions in the community forum.
+> [!NOTE]
+> CodeKata is a coding platform for Ruby developers. 
 
-## Stack
+This project helps you improve your Ruby skills. You can solve coding challenges and play games against friends. You can also write code together in real-time and talk about answers in the forum. It makes coding practice fun.
 
-- Ruby on Rails 7, PostgreSQL
-- Hotwire (Turbo + Stimulus), ActionCable
-- CodeMirror 6, Judge0
+## Features
 
-## Setup
+- Real-time code editor (CodeMirror 6)
+- Live updates and web sockets via ActionCable
+- Code evaluation against Judge0 API
 
-**Requirements:** Ruby 3.2.2, PostgreSQL, Redis, Node.js
+## Installation
 
+Follow these steps to install CodeKata.
+
+> [!IMPORTANT]
+> You must install Ruby 3.2.2, PostgreSQL, Redis, and Node.js first.
+
+1. Get the code:
+   ```bash
+   git clone https://github.com/aniketpatidar/codekata.git
+   cd codekata
+   ```
+2. Set up your settings:
+   ```bash
+   cp .env.example .env
+   ```
+3. Run the setup script:
+   ```bash
+   bin/setup
+   ```
+
+## Usage
+
+Start the server to use CodeKata locally:
 ```bash
-git clone https://github.com/aniketpatidar/codekata
+$ bin/rails server
 ```
-```bash
-cd codekata
-```
-```bash
-cp .env.example .env
-```
-```bash
-bin/setup
-```
+Then, open `http://localhost:3000` in your web browser.
 
-Open `http://localhost:3000`.
+## Configuration Options
+
+CodeKata uses environment variables for settings. You can find these in the `.env` file. Common options include:
+
+- Database settings for PostgreSQL.
+- Redis settings for live updates.
+- Judge0 API keys to run code.
+
+> [!TIP]
+> Look at the `.env.example` file. It shows all the settings you can use.
+
+## Source Code Guide
+
+CodeKata is a normal Ruby on Rails 7 app. These folders will help you understand the code:
+
+- `app/javascript/`: Holds the code editor files (CodeMirror 6).
+- `app/channels/`: Manages live updates and web sockets (ActionCable).
+- `lib/`: Contains the code that sends tests to Judge0.
+
+## Contributing
+
+We want your help! Please read `CONTRIBUTING.md` to learn how to add code.
+
+> [!WARNING]
+> You must run the tests before you share your changes. Also, you must run Redis on your computer so the tests can pass.
 
 ## License
 
